@@ -48,6 +48,13 @@ describe("Variable", () => {
             }
         });
 
+        assertNode(Variable, {
+            input: "$1",
+            shouldBe: {
+                json: {variable: "1"}
+            }
+        });
+
     });
 
 });
