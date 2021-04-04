@@ -474,6 +474,100 @@ describe("StringLiteral", () => {
             }
         });
 
+        assertNode(StringLiteral, {
+            input: "$$hello$$",
+            shouldBe: {
+                json: {
+                    tag: "",
+                    string: "hello"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$$$$",
+            shouldBe: {
+                json: {
+                    tag: "",
+                    string: ""
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$tag$hello$tag$",
+            shouldBe: {
+                json: {
+                    tag: "tag",
+                    string: "hello"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$tag$$tag$",
+            shouldBe: {
+                json: {
+                    tag: "tag",
+                    string: ""
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$TAG$he$$llo$TAG$",
+            shouldBe: {
+                json: {
+                    tag: "TAG",
+                    string: "he$$llo"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$Tag_1$$tag_1$$Tag_1$",
+            shouldBe: {
+                json: {
+                    tag: "Tag_1",
+                    string: "$tag_1$"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$$\n\r$$",
+            shouldBe: {
+                json: {
+                    tag: "",
+                    string: "\n\r"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$q$[\\t\\r\\n\\v\\\\]$q$",
+            shouldBe: {
+                json: {
+                    tag: "q",
+                    string: "[\\t\\r\\n\\v\\\\]"
+                }
+            }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$$''\\$$",
+            shouldBe: {
+                json: {
+                    tag: "",
+                    string: "''\\"
+                },
+
+                parsed(node) {
+                    assert.strictEqual(node.toValue(), "''\\");
+                }
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
@@ -512,6 +606,16 @@ describe("StringLiteral", () => {
                     );
                 }
             }
+        });
+
+        assertNode(StringLiteral, {
+            input: "$0x$xx$0x$",
+            throws: /dollar tag should starts with alphabet char, invalid tag: 0x/
+        });
+
+        assertNode(StringLiteral, {
+            input: "$x*$xx$x*$",
+            throws: /unexpected token: "\*", expected: "\$"/
         });
 
     });

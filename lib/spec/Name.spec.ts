@@ -43,7 +43,7 @@ describe("Name", () => {
         });
 
         assertNode(Name, {
-            input: "XYZ1ABC",
+            input: "XYZ1ABC ",
             shouldBe: {
                 json: {name: "xyz1abc"},
                 pretty: "xyz1abc",

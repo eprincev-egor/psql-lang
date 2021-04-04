@@ -1,4 +1,5 @@
 import { AbstractNode, Cursor, EndOfLineToken, SpaceToken } from "abstract-lang";
+import { DollarStringTag } from "./DollarStringTag";
 import { UEscape } from "./UEscape";
 import { escapeUnicodes, escapeSpecials } from "./utils";
 
@@ -10,6 +11,9 @@ export type StringLiteralRow = {
 } | {
     string: string;
     unicodeEscape: string;
+} | {
+    string: string;
+    tag: string;
 }
 
 export class StringLiteral extends AbstractNode<StringLiteralRow> {
@@ -20,11 +24,20 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
             cursor.beforeValue("u") ||
             cursor.beforeValue("U") ||
             cursor.beforeValue("e") ||
-            cursor.beforeValue("E")
+            cursor.beforeValue("E") ||
+            cursor.before(DollarStringTag)
         );
     }
 
     static parse(cursor: Cursor): StringLiteralRow {
+
+        if ( cursor.before(DollarStringTag) ) {
+            const tag = cursor.parse(DollarStringTag).row.tag;
+            const string = this.parseDollarString(cursor, tag);
+
+            return {string, tag};
+        }
+
         let unicodeEscape: string | undefined;
         let escape = false;
 
@@ -98,8 +111,34 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
         return string;
     }
 
+    private static parseDollarString(cursor: Cursor, tag: string) {
+
+        let string = "";
+        while ( !cursor.beforeEnd() ) {
+
+            if ( cursor.before(DollarStringTag) ) {
+                const tagNode = cursor.parse(DollarStringTag);
+                if ( tagNode.row.tag === tag ) {
+                    break;
+                }
+
+                string += tagNode.toString();
+                continue;
+            }
+
+            string += cursor.nextToken.value;
+            cursor.skipOne();
+        }
+
+        return string;
+    }
+
     template(): string {
-        if ( "escape" in this.row ) {
+        if ( "tag" in this.row ) {
+            const {tag, string} = this.row;
+            return `$${tag}$${string}$${tag}$`;
+        }
+        else if ( "escape" in this.row ) {
             return `E'${this.row.string}'`;
         }
         else if ( "unicodeEscape" in this.row ) {
@@ -114,7 +153,10 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
     }
 
     toValue(): string {
-        if ( "escape" in this.row ) {
+        if ( "tag" in this.row ) {
+            return this.row.string;
+        }
+        else if ( "escape" in this.row ) {
             return escapeSpecials(this.row.string);
         }
         else if ( "unicodeEscape" in this.row ) {
