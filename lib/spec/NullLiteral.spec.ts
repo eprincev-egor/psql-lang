@@ -4,6 +4,7 @@ import { NullLiteral } from "../NullLiteral";
 describe("NullLiteral", () => {
 
     it("valid inputs", () => {
+
         assertNode(NullLiteral, {
             input: "null",
             shouldBe: {
@@ -19,6 +20,7 @@ describe("NullLiteral", () => {
                 minify: "null"
             }
         });
+
     });
 
 });
