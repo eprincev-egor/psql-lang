@@ -47,6 +47,13 @@ describe("NumberLiteral", () => {
         });
 
         assertNode(NumberLiteral, {
+            input: "-.1",
+            shouldBe: {
+                json: {number: "-.1"}
+            }
+        });
+
+        assertNode(NumberLiteral, {
             input: "1e10",
             shouldBe: {
                 json: {number: "1e10"}

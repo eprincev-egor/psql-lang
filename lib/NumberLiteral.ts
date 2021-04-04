@@ -15,8 +15,9 @@ export class NumberLiteral extends AbstractNode<NumberRow> {
     static entry(cursor: Cursor): boolean {
         return (
             cursor.beforeToken(DigitsToken) ||
-            cursor.beforeValue(".") ||
-            cursor.beforeValue("-")
+            cursor.beforeSequence(".", DigitsToken) ||
+            cursor.beforeSequence("-", DigitsToken) ||
+            cursor.beforeSequence("-", ".", DigitsToken)
         );
     }
 
@@ -26,7 +27,9 @@ export class NumberLiteral extends AbstractNode<NumberRow> {
             numb += cursor.readValue("-");
         }
 
-        numb += cursor.read(DigitsToken).value;
+        if ( cursor.beforeToken(DigitsToken) ) {
+            numb += cursor.read(DigitsToken).value;
+        }
 
         if ( cursor.beforeValue(".") ) {
             numb += cursor.readValue(".");

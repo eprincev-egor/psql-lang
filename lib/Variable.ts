@@ -7,23 +7,19 @@ export interface VariableRow {
 export class Variable extends AbstractNode<VariableRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforeValue("$");
+        return (
+            cursor.beforeSequence("$", WordToken) ||
+            cursor.beforeSequence("$", DigitsToken)
+        );
     }
 
     static parse(cursor: Cursor): VariableRow {
         cursor.readValue("$");
 
-        let variable = "";
-        while ( !cursor.beforeEnd() ) {
-            if ( cursor.beforeToken(WordToken) ) {
-                variable += cursor.read(WordToken).value;
-            }
-            else if ( cursor.beforeToken(DigitsToken) ) {
-                variable += cursor.read(DigitsToken).value;
-            }
-            else {
-                break;
-            }
+        const variable = cursor.readAll(WordToken, DigitsToken).join("");
+
+        if ( !variable ) {
+            cursor.throwError("expected variable name");
         }
 
         return {variable};

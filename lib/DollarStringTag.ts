@@ -7,7 +7,11 @@ export interface DollarStringTagRow {
 export class DollarStringTag extends AbstractNode<DollarStringTagRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforeValue("$");
+        return (
+            cursor.beforeSequence("$", "$") ||
+            cursor.beforeSequence("$", WordToken, "$") ||
+            cursor.beforeSequence("$", WordToken, DigitsToken, "$")
+        );
     }
 
     static parse(cursor: Cursor): DollarStringTagRow {
@@ -19,17 +23,7 @@ export class DollarStringTag extends AbstractNode<DollarStringTagRow> {
             cursor.readValue("$");
         }
         else {
-            while ( !cursor.beforeEnd() ) {
-                if ( cursor.beforeToken(WordToken) ) {
-                    tag += cursor.read(WordToken).value;
-                }
-                else if ( cursor.beforeToken(DigitsToken) ) {
-                    tag += cursor.read(DigitsToken).value;
-                }
-                else {
-                    break;
-                }
-            }
+            tag += cursor.readAll(WordToken, DigitsToken).join("");
             cursor.readValue("$");
         }
 

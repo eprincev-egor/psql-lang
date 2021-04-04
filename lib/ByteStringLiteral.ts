@@ -10,11 +10,10 @@ export class ByteStringLiteral extends AbstractNode<ByteStringLiteralRow> {
 
     static entry(cursor: Cursor): boolean {
         return (
-            cursor.beforeValue("b") ||
-            cursor.beforeValue("B") ||
-            cursor.beforeValue("x") ||
-            cursor.beforeValue("X")
-            // string[1] === "'"
+            cursor.beforeSequence("b", "'") ||
+            cursor.beforeSequence("B", "'") ||
+            cursor.beforeSequence("x", "'") ||
+            cursor.beforeSequence("X", "'")
         );
     }
 
@@ -23,18 +22,7 @@ export class ByteStringLiteral extends AbstractNode<ByteStringLiteralRow> {
 
         cursor.readValue("'");
 
-        let byteString = "";
-        while ( !cursor.beforeEnd() ) {
-            if ( cursor.beforeToken(WordToken) ) {
-                byteString += cursor.read(WordToken).value;
-            }
-            else if ( cursor.beforeToken(DigitsToken) ) {
-                byteString += cursor.read(DigitsToken).value;
-            }
-            else {
-                break;
-            }
-        }
+        const byteString = cursor.readAll(WordToken, DigitsToken).join("");
 
         cursor.readValue("'");
 

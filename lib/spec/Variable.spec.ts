@@ -57,4 +57,13 @@ describe("Variable", () => {
 
     });
 
+    it("invalid inputs", () => {
+
+        assertNode(Variable, {
+            input: "$",
+            throws: /expected variable name/
+        });
+
+    });
+
 });

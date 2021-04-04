@@ -1,4 +1,4 @@
-import { AbstractNode, Cursor, EndOfLineToken, SpaceToken } from "abstract-lang";
+import { AbstractNode, Cursor } from "abstract-lang";
 import { DollarStringTag } from "./DollarStringTag";
 import { UEscape } from "./UEscape";
 import { escapeUnicodes, escapeSpecials } from "./utils";
@@ -21,17 +21,17 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
     static entry(cursor: Cursor): boolean {
         return (
             cursor.beforeValue("'") ||
-            cursor.beforeValue("u") ||
-            cursor.beforeValue("U") ||
-            cursor.beforeValue("e") ||
-            cursor.beforeValue("E") ||
-            cursor.before(DollarStringTag)
+            cursor.before(DollarStringTag) ||
+            cursor.beforeSequence("E", "'") ||
+            cursor.beforeSequence("e", "'") ||
+            cursor.beforeSequence("u", "&", "'") ||
+            cursor.beforeSequence("U", "&", "'")
         );
     }
 
     static parse(cursor: Cursor): StringLiteralRow {
 
-        if ( cursor.before(DollarStringTag) ) {
+        if ( cursor.beforeValue("$") ) {
             const tag = cursor.parse(DollarStringTag).row.tag;
             const string = this.parseDollarString(cursor, tag);
 
@@ -79,10 +79,8 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
         while ( !cursor.beforeEnd() ) {
 
             if ( cursor.beforeValue("\\") && escape ) {
-                cursor.skipOne();
-                string += "\\";
-                string += cursor.nextToken.value;
-                cursor.skipOne();
+                string += cursor.readAnyOne().value;
+                string += cursor.readAnyOne().value;
                 continue;
             }
 
@@ -98,11 +96,10 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
                 break;
             }
 
-            string += cursor.nextToken.value;
-            cursor.skipOne();
+            string += cursor.readAnyOne().value;
         }
 
-        cursor.skipAll(EndOfLineToken, SpaceToken);
+        cursor.skipSpaces();
 
         if ( cursor.beforeValue("'") ) {
             string += this.pareString(cursor, escape);
@@ -126,8 +123,7 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
                 continue;
             }
 
-            string += cursor.nextToken.value;
-            cursor.skipOne();
+            string += cursor.readAnyOne().value;
         }
 
         return string;

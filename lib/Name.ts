@@ -15,8 +15,8 @@ export class Name extends AbstractNode<NameRow> {
         return (
             cursor.beforeToken(WordToken) ||
             cursor.beforeValue("\"") ||
-            cursor.beforeValue("u") ||
-            cursor.beforeValue("U")
+            cursor.beforeSequence("u", "&", "\"") ||
+            cursor.beforeSequence("U", "&", "\"")
         );
     }
 
@@ -77,8 +77,7 @@ export class Name extends AbstractNode<NameRow> {
                 break;
             }
 
-            strictName += cursor.nextToken.value;
-            cursor.skipOne();
+            strictName += cursor.readAnyOne().value;
         }
 
         return strictName;
@@ -86,18 +85,7 @@ export class Name extends AbstractNode<NameRow> {
 
     private static parseLowerName(cursor: Cursor): NameRow {
 
-        let name = "";
-        while ( !cursor.beforeEnd() ) {
-            if ( cursor.beforeToken(WordToken) ) {
-                name += cursor.read(WordToken).value;
-            }
-            else if ( cursor.beforeToken(DigitsToken) ) {
-                name += cursor.read(DigitsToken).value;
-            }
-            else {
-                break;
-            }
-        }
+        const name = cursor.readAll(WordToken, DigitsToken).join("");
 
         if ( /^\d/.test(name) ) {
             cursor.throwError(`name should starts with alphabet char, invalid name: ${name}`);
