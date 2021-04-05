@@ -7,7 +7,8 @@ const BINARY_OPERATORS = [
     "#<=", "#>=", "<?>", "|/", "||/", "|", "<#>", "~", "!~", "#", "?#", "@-@", "?-", "?|", "^",
     "~~", "!~~", "~*", "!~*", "|>>", "<<|", "?||", "?-|", "##", "&", "<<=", ">>=", "~~*",
     "!~~*", "~<~", "~<=~", "~>=~", "~>~", "&<|", "|&>", "@@@", "*=", "*<>", "*<", "*>", "*<=",
-    "*>=", "-|-", "->", "->>", "#>>", "?", "?&", "#-", "::"
+    "*>=", "-|-", "->", "->>", "#>>", "?", "?&", "#-", "::",
+    "or", "and"
 ] as const;
 export type BinaryOperatorType = (typeof BINARY_OPERATORS)[number];
 
@@ -21,6 +22,9 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
 
     template(): TemplateElement[] {
         const {left, operator, right} = this.row;
+        if ( operator === "or" || operator === "and" ) {
+            return [left, ` ${operator} `, right];
+        }
         return [left, _, operator, _, right];
     }
 }

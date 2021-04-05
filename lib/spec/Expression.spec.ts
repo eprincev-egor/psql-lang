@@ -6,6 +6,99 @@ describe("Expression", () => {
     it("valid inputs", () => {
 
         assertNode(Expression, {
+            input: "100",
+            shouldBe: {
+                json: {
+                    operand: {number: "100"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "-4",
+            shouldBe: {
+                json: {
+                    operand: {number: "-4"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "'string'",
+            shouldBe: {
+                json: {
+                    operand: {string: "string"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "E'Estring'",
+            shouldBe: {
+                json: {
+                    operand: {string: "Estring", escape: true}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "U&'Ustring'",
+            shouldBe: {
+                json: {
+                    operand: {string: "Ustring", unicodeEscape: "\\"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "$dol1lar$dollar\nstring$dol1lar$",
+            shouldBe: {
+                json: {
+                    operand: {string: "dollar\nstring", tag: "dol1lar"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.inn",
+            shouldBe: {
+                json: {
+                    operand: {column: [
+                        {name: "company"},
+                        {name: "inn"}
+                    ]}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "false",
+            shouldBe: {
+                json: {
+                    operand: {boolean: false}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "null",
+            shouldBe: {
+                json: {
+                    operand: {null: true}
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "$lang",
+            shouldBe: {
+                json: {
+                    operand: {variable: "lang"}
+                }
+            }
+        });
+
+        assertNode(Expression, {
             input: "1 + 2",
             shouldBe: {
                 json: {
@@ -138,6 +231,200 @@ describe("Expression", () => {
                     }
                 },
                 minify: "E'hello'||U&'world'"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.incoming_date is not null",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "incoming_date"}
+                        ]},
+                        postOperator: "is not null"
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "true or false",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {boolean: true},
+                        operator: "or",
+                        right: {boolean: false}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "FALSE \r OR \n TRUE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {boolean: false},
+                        operator: "or",
+                        right: {boolean: true}
+                    }
+                },
+                minify: "false or true",
+                pretty: "false or true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "true and false",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {boolean: true},
+                        operator: "and",
+                        right: {boolean: false}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "FALSE \n AND \t\r TRUE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {boolean: false},
+                        operator: "and",
+                        right: {boolean: true}
+                    }
+                },
+                minify: "false and true",
+                pretty: "false and true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "@ -1",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "@",
+                        operand: {number: "-1"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "+ -1",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "+",
+                        operand: {number: "-1"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "- + -1",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "-",
+                        operand: {
+                            preOperator: "+",
+                            operand: {number: "-1"}
+                        }
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "-   +   -.2",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "-",
+                        operand: {
+                            preOperator: "+",
+                            operand: {number: "-.2"}
+                        }
+                    }
+                },
+                minify: "- + -.2",
+                pretty: "- + -.2"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "not true",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "not",
+                        operand: {boolean: true}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "NOT  \t\n  NOT \r   TRUE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        preOperator: "not",
+                        operand: {
+                            preOperator: "not",
+                            operand: {boolean: true}
+                        }
+                    }
+                },
+                pretty: "not not true",
+                minify: "not not true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "not true or not false",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            preOperator: "not",
+                            operand: {boolean: true}
+                        },
+                        operator: "or",
+                        right: {
+                            preOperator: "not",
+                            operand: {boolean: false}
+                        }
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "not false and not true",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            preOperator: "not",
+                            operand: {boolean: false}
+                        },
+                        operator: "and",
+                        right: {
+                            preOperator: "not",
+                            operand: {boolean: true}
+                        }
+                    }
+                }
             }
         });
 

@@ -1,4 +1,5 @@
-import { AbstractNode, Cursor, OperatorsToken, TemplateElement } from "abstract-lang";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { AbstractNode, Cursor, OperatorsToken, TemplateElement, WordToken } from "abstract-lang";
 import { BinaryOperator, BinaryOperatorType } from "./BinaryOperator";
 import { BooleanLiteral } from "./BooleanLiteral";
 import { ByteStringLiteral } from "./ByteStringLiteral";
@@ -7,6 +8,8 @@ import { IntervalLiteral } from "./IntervalLiteral";
 import { NullLiteral } from "./NullLiteral";
 import { NumberLiteral } from "./NumberLiteral";
 import { Operand } from "./Operand";
+import { PostUnaryOperator } from "./PostUnaryOperator";
+import { PreUnaryOperator } from "./PreUnaryOperator";
 import { StringLiteral } from "./StringLiteral";
 import { Variable } from "./Variable";
 
@@ -22,19 +25,42 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.before(NumberLiteral) ||
             cursor.before(StringLiteral) ||
             cursor.before(ByteStringLiteral) ||
-            cursor.before(Variable)
+            cursor.before(Variable) ||
+            cursor.before(PreUnaryOperator)
         );
     }
 
     static parse(cursor: Cursor): ExpressionRow {
-        const operand: Operand = this.parseSimpleOperand(cursor);
+        const operand: Operand = this.parseOperand(cursor);
 
-        const binary = Expression.parseBinary(cursor, operand);
+        const binary = this.parseBinary(cursor, operand);
         if ( binary ) {
             return {operand: binary};
         }
 
         return {operand};
+    }
+
+    static parseOperand(cursor: Cursor): Operand {
+        let operand = cursor.before(PreUnaryOperator) ?
+            cursor.parse(PreUnaryOperator) :
+            this.parseSimpleOperand(cursor) ;
+
+        if ( PostUnaryOperator.entryOperator(cursor) ) {
+            const postOperator = PostUnaryOperator.parseOperator(cursor);
+            operand = new PostUnaryOperator({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: {
+                    operand,
+                    postOperator
+                }
+            });
+        }
+
+        return operand;
     }
 
     private static parseSimpleOperand(cursor: Cursor): Operand {
@@ -72,15 +98,28 @@ export class Expression extends AbstractNode<ExpressionRow> {
     ): BinaryOperator | undefined {
         cursor.skipSpaces();
 
-        if ( !cursor.beforeToken(OperatorsToken) ) {
+        if (
+            !cursor.beforeToken(OperatorsToken) &&
+            !cursor.beforeWord("or") &&
+            !cursor.beforeWord("and")
+        ) {
             return;
         }
 
-        const operator = cursor.readAll(OperatorsToken).join("") as BinaryOperatorType;
+        const operator = (
+            cursor.beforeToken(WordToken) ?
+                cursor.read(WordToken).value.toLowerCase() :
+                cursor.readAll(OperatorsToken).join("")
+        ) as BinaryOperatorType;
+
         cursor.skipSpaces();
-        const right = this.parseSimpleOperand(cursor);
+        const right = this.parseOperand(cursor);
 
         const binary = new BinaryOperator({
+            position: {
+                start: left.position!.start,
+                end: right.position!.end
+            },
             row: {
                 left,
                 operator,

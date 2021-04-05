@@ -7,11 +7,25 @@ export interface DollarStringTagRow {
 export class DollarStringTag extends AbstractNode<DollarStringTagRow> {
 
     static entry(cursor: Cursor): boolean {
-        return (
-            cursor.beforeSequence("$", "$") ||
-            cursor.beforeSequence("$", WordToken, "$") ||
-            cursor.beforeSequence("$", WordToken, DigitsToken, "$")
-        );
+        // little speedup
+        if ( !cursor.beforeValue("$") ) {
+            return false;
+        }
+        if ( cursor.beforeSequence("$", "$") ) {
+            return true;
+        }
+        if ( !cursor.beforeSequence("$", WordToken) ) {
+            return false;
+        }
+
+        const startToken = cursor.nextToken;
+        cursor.readValue("$");
+        cursor.readAll(WordToken, DigitsToken);
+
+        const hasClose$ = cursor.beforeValue("$");
+        cursor.setPositionBefore(startToken);
+
+        return hasClose$;
     }
 
     static parse(cursor: Cursor): DollarStringTagRow {
