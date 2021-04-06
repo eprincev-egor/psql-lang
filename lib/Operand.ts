@@ -9,6 +9,10 @@ import { Variable } from "./Variable";
 import { BinaryOperator } from "./BinaryOperator";
 import { PostUnaryOperator } from "./PostUnaryOperator";
 import { PreUnaryOperator } from "./PreUnaryOperator";
+import { SubExpression } from "./SubExpression";
+import { Expression } from "./Expression";
+import { InOperator } from "./InOperator";
+import { NotInOperator } from "./NotInOperator";
 
 export type Operand = (
     NumberLiteral |
@@ -21,5 +25,27 @@ export type Operand = (
     IntervalLiteral |
     BinaryOperator |
     PostUnaryOperator |
-    PreUnaryOperator
-)
+    PreUnaryOperator |
+    SubExpression |
+    InOperator |
+    NotInOperator
+);
+
+// fix infinity recursion
+export const cycle: Partial<{
+    NumberLiteral: typeof NumberLiteral;
+    StringLiteral: typeof StringLiteral;
+    Variable: typeof Variable;
+    ColumnReference: typeof ColumnReference;
+    NullLiteral: typeof NullLiteral;
+    BooleanLiteral: typeof BooleanLiteral;
+    ByteStringLiteral: typeof ByteStringLiteral;
+    IntervalLiteral: typeof IntervalLiteral;
+    BinaryOperator: typeof BinaryOperator;
+    PostUnaryOperator: typeof PostUnaryOperator;
+    PreUnaryOperator: typeof PreUnaryOperator;
+    SubExpression: typeof SubExpression;
+    Expression: typeof Expression;
+    InOperator: typeof InOperator;
+    NotInOperator: typeof NotInOperator;
+}> = {};

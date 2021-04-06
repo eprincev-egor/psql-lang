@@ -1,17 +1,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { AbstractNode, Cursor, OperatorsToken, TemplateElement, WordToken } from "abstract-lang";
-import { BinaryOperator, BinaryOperatorType } from "./BinaryOperator";
+import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
+import { Operand, cycle } from "./Operand";
+import { BinaryOperator } from "./BinaryOperator";
 import { BooleanLiteral } from "./BooleanLiteral";
 import { ByteStringLiteral } from "./ByteStringLiteral";
 import { ColumnReference } from "./ColumnReference";
 import { IntervalLiteral } from "./IntervalLiteral";
 import { NullLiteral } from "./NullLiteral";
 import { NumberLiteral } from "./NumberLiteral";
-import { Operand } from "./Operand";
 import { PostUnaryOperator } from "./PostUnaryOperator";
 import { PreUnaryOperator } from "./PreUnaryOperator";
 import { StringLiteral } from "./StringLiteral";
 import { Variable } from "./Variable";
+import { InOperator } from "./InOperator";
+import { NotInOperator } from "./NotInOperator";
 
 export interface ExpressionRow {
     operand: Operand;
@@ -26,7 +28,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.before(StringLiteral) ||
             cursor.before(ByteStringLiteral) ||
             cursor.before(Variable) ||
-            cursor.before(PreUnaryOperator)
+            cursor.before(PreUnaryOperator) ||
+            cursor.before(cycle.SubExpression!)
         );
     }
 
@@ -44,7 +47,53 @@ export class Expression extends AbstractNode<ExpressionRow> {
     static parseOperand(cursor: Cursor): Operand {
         let operand = cursor.before(PreUnaryOperator) ?
             cursor.parse(PreUnaryOperator) :
-            this.parseSimpleOperand(cursor) ;
+            this.parseSimpleOperand(cursor);
+
+        if ( cursor.beforeWord("in") ) {
+            cursor.readWord("in");
+            cursor.readValue("(");
+            cursor.skipSpaces();
+
+            const inElements = cursor.parseChainOf(Expression, ",");
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+
+            const inOperator = new InOperator({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: {
+                    operand,
+                    in: inElements
+                }
+            });
+            return inOperator;
+        }
+        else if ( cursor.beforePhrase("not", "in") ) {
+            cursor.readPhrase("not", "in");
+            cursor.readValue("(");
+            cursor.skipSpaces();
+
+            const notInElements = cursor.parseChainOf(Expression, ",");
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+
+            const notInOperator = new NotInOperator({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: {
+                    operand,
+                    notIn: notInElements
+                }
+            });
+            return notInOperator;
+        }
+
 
         if ( PostUnaryOperator.entryOperator(cursor) ) {
             const postOperator = PostUnaryOperator.parseOperator(cursor);
@@ -64,7 +113,12 @@ export class Expression extends AbstractNode<ExpressionRow> {
     }
 
     private static parseSimpleOperand(cursor: Cursor): Operand {
-        if ( cursor.before(BooleanLiteral) ) {
+        const SubExpression = cycle.SubExpression!;
+
+        if ( cursor.before(SubExpression) ) {
+            return cursor.parse(SubExpression);
+        }
+        else if ( cursor.before(BooleanLiteral) ) {
             return cursor.parse(BooleanLiteral);
         }
         else if ( cursor.before(NullLiteral) ) {
@@ -98,19 +152,11 @@ export class Expression extends AbstractNode<ExpressionRow> {
     ): BinaryOperator | undefined {
         cursor.skipSpaces();
 
-        if (
-            !cursor.beforeToken(OperatorsToken) &&
-            !cursor.beforeWord("or") &&
-            !cursor.beforeWord("and")
-        ) {
+        if ( !BinaryOperator.entryOperator(cursor) ) {
             return;
         }
 
-        const operator = (
-            cursor.beforeToken(WordToken) ?
-                cursor.read(WordToken).value.toLowerCase() :
-                cursor.readAll(OperatorsToken).join("")
-        ) as BinaryOperatorType;
+        const operator = BinaryOperator.parseOperator(cursor);
 
         cursor.skipSpaces();
         const right = this.parseOperand(cursor);
@@ -126,10 +172,18 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 right
             }
         });
+
+        const nextBinary = this.parseBinary(cursor, binary);
+        if ( nextBinary ) {
+            return nextBinary;
+        }
         return binary;
     }
 
-    template(): TemplateElement {
-        return this.row.operand;
+    template(): TemplateElement[] {
+        return [this.row.operand];
     }
 }
+
+cycle.Expression = Expression;
+require("./SubExpression");

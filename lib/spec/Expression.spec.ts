@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { assertNode } from "abstract-lang";
 import { Expression } from "../Expression";
 
@@ -250,6 +251,55 @@ describe("Expression", () => {
         });
 
         assertNode(Expression, {
+            input: "orders.incoming_date is null",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "incoming_date"}
+                        ]},
+                        postOperator: "is null"
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.incoming_date isnull",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "incoming_date"}
+                        ]},
+                        postOperator: "is null"
+                    }
+                },
+                pretty: "orders.incoming_date is null",
+                minify: "orders.incoming_date is null"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.incoming_date notnull",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "incoming_date"}
+                        ]},
+                        postOperator: "is not null"
+                    }
+                },
+                pretty: "orders.incoming_date is not null",
+                minify: "orders.incoming_date is not null"
+            }
+        });
+
+        assertNode(Expression, {
             input: "true or false",
             shouldBe: {
                 json: {
@@ -425,6 +475,208 @@ describe("Expression", () => {
                         }
                     }
                 }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 + 2 + 3",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            left: {number: "1"},
+                            operator: "+",
+                            right: {number: "2"}
+                        },
+                        operator: "+",
+                        right: {number: "3"}
+                    }
+                },
+                minify: "1+2+3"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 +2 + 3+4",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            left: {
+                                left: {number: "1"},
+                                operator: "+",
+                                right: {number: "2"}
+                            },
+                            operator: "+",
+                            right: {number: "3"}
+                        },
+                        operator: "+",
+                        right: {number: "4"}
+                    }
+                },
+                minify: "1+2+3+4",
+                pretty: "1 + 2 + 3 + 4"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name ilike '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "ilike",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name like '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "like",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name not ilike '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "not ilike",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name not like '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "not like",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name is distinct from 'hello'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "is distinct from",
+                        right: {string: "hello"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name is not distinct from 'hello'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "is not distinct from",
+                        right: {string: "hello"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "(1 + 2) - (3 + 4)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            operand: {
+                                left: {number: "1"},
+                                operator: "+",
+                                right: {number: "2"}
+                            }
+                        },
+                        operator: "-",
+                        right: {
+                            operand: {
+                                left: {number: "3"},
+                                operator: "+",
+                                right: {number: "4"}
+                            }
+                        }
+                    }
+                },
+                minify: "(1+2)-(3+4)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.type in (1, 2)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "type"}
+                        ]},
+                        in: [
+                            {operand: {number: "1"}},
+                            {operand: {number: "2"}}
+                        ]
+                    }
+                },
+                minify: "orders.type in(1,2)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.type not in (3, 4, 5)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "type"}
+                        ]},
+                        notIn: [
+                            {operand: {number: "3"}},
+                            {operand: {number: "4"}},
+                            {operand: {number: "5"}}
+                        ]
+                    }
+                },
+                minify: "orders.type not in(3,4,5)"
             }
         });
 
