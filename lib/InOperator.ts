@@ -1,4 +1,7 @@
-import { AbstractNode, TemplateElement, _ } from "abstract-lang";
+import {
+    AbstractNode,
+    TemplateElement, _, printChain
+} from "abstract-lang";
 import { Expression } from "./Expression";
 import { Operand } from "./Operand";
 
@@ -13,20 +16,8 @@ export class InOperator extends AbstractNode<InOperatorRow> {
         return [
             this.row.operand,
             " in", _, "(",
-            ...this.printInElements(),
+            ...printChain(this.row.in, ",", _),
             ")"
         ];
-    }
-
-    private printInElements() {
-        const inElements: TemplateElement[] = [];
-        for (const element of this.row.in) {
-            if ( inElements.length > 0 ) {
-                inElements.push(",", _);
-            }
-            inElements.push(element);
-        }
-
-        return inElements;
     }
 }
