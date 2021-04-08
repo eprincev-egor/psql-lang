@@ -1,7 +1,7 @@
 import { Cursor, TemplateElement } from "abstract-lang";
 import { ExpressionRow } from "./Expression";
 import assert from "assert";
-import { cycle } from "./Operand";
+import { cycle } from "./cycle";
 
 assert.ok( cycle.Expression );
 

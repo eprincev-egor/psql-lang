@@ -773,6 +773,120 @@ describe("Expression", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "now_utc()",
+            shouldBe: {
+                json: {
+                    operand: {
+                        call: {function: [
+                            {name: "now_utc"}
+                        ]},
+                        arguments: []
+                    }
+                },
+                minify: "now_utc()"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "now ( )",
+            shouldBe: {
+                json: {
+                    operand: {
+                        call: {function: [
+                            {name: "now"}
+                        ]},
+                        arguments: []
+                    }
+                },
+                pretty: "now()",
+                minify: "now()"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "public.some_func(1, 2)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        call: {function: [
+                            {name: "public"},
+                            {name: "some_func"}
+                        ]},
+                        arguments: [
+                            {operand: {number: "1"}},
+                            {operand: {number: "2"}}
+                        ]
+                    }
+                },
+                minify: "public.some_func(1,2)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "2 = any(company.roles_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "2"},
+                        anyArray: {operand: {
+                            column: [
+                                {name: "company"},
+                                {name: "roles_ids"}
+                            ]
+                        }}
+                    }
+                },
+                minify: "2=any(company.roles_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "3 = any(array[2, 1]) = any(array[false])",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {
+                            operand: {number: "3"},
+                            anyArray: {operand: {
+                                array: [
+                                    {operand: {number: "2"}},
+                                    {operand: {number: "1"}}
+                                ]
+                            }}
+                        },
+                        anyArray: {operand: {
+                            array: [
+                                {operand: {boolean: false}}
+                            ]
+                        }}
+                    }
+                },
+                minify: "3=any(array[2,1])=any(array[false])"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id = some(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        someArray: {operand: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }}
+                    }
+                },
+                minify: "unit.id=some(orders.units_ids)"
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
@@ -780,6 +894,21 @@ describe("Expression", () => {
         assertNode(Expression, {
             input: "::",
             throws: /expected expression operand/
+        });
+
+        assertNode(Expression, {
+            input: "2 = any()",
+            throws: /expected array argument/
+        });
+
+        assertNode(Expression, {
+            input: "2 = any(array[1], array[2])",
+            throws: /expected only one argument/
+        });
+
+        assertNode(Expression, {
+            input: "2 = some(array[1], array[2])",
+            throws: /expected only one argument/
         });
 
     });

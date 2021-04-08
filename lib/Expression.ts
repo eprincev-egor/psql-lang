@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
-import { Operand, cycle } from "./Operand";
+import { Operand } from "./Operand";
+import { cycle } from "./cycle";
 import { BinaryOperator } from "./BinaryOperator";
 import { BooleanLiteral } from "./BooleanLiteral";
 import { ByteStringLiteral } from "./ByteStringLiteral";
@@ -16,6 +17,10 @@ import { InOperator } from "./InOperator";
 import { NotInOperator } from "./NotInOperator";
 import { ArrayLiteral } from "./ArrayLiteral";
 import { CaseWhen } from "./CaseWhen";
+import { FunctionNameReference } from "./FunctionNameReference";
+import { FunctionCall } from "./FunctionCall";
+import { EqualAnyArray } from "./EqualAnyArray";
+import { EqualSomeArray } from "./EqualSomeArray";
 
 export interface ExpressionRow {
     operand: Operand;
@@ -117,47 +122,29 @@ export class Expression extends AbstractNode<ExpressionRow> {
     private static parseSimpleOperand(cursor: Cursor): Operand {
         const SubExpression = cycle.SubExpression!;
 
-        if ( cursor.before(SubExpression) ) {
-            return cursor.parse(SubExpression);
-        }
-        else if ( cursor.before(BooleanLiteral) ) {
-            return cursor.parse(BooleanLiteral);
-        }
-        else if ( cursor.before(NullLiteral) ) {
-            return cursor.parse(NullLiteral);
-        }
-        else if ( cursor.before(IntervalLiteral) ) {
-            return cursor.parse(IntervalLiteral);
-        }
-        else if ( cursor.before(StringLiteral) ) {
-            return cursor.parse(StringLiteral);
-        }
-        else if ( cursor.before(ByteStringLiteral) ) {
-            return cursor.parse(ByteStringLiteral);
-        }
-        else if ( cursor.before(NumberLiteral) ) {
-            return cursor.parse(NumberLiteral);
-        }
-        else if ( cursor.before(Variable) ) {
-            return cursor.parse(Variable);
-        }
-        else if ( cursor.before(ArrayLiteral) ) {
-            return cursor.parse(ArrayLiteral);
-        }
-        else if ( cursor.before(CaseWhen) ) {
-            return cursor.parse(CaseWhen);
-        }
-        else if ( cursor.before(ColumnReference) ) {
-            return cursor.parse(ColumnReference);
+        const operand = cursor.parseOneOf([
+            SubExpression, IntervalLiteral,
+            BooleanLiteral, NullLiteral,
+            StringLiteral, ByteStringLiteral,
+            NumberLiteral, Variable,
+            ArrayLiteral, CaseWhen,
+            ColumnReference
+        ], "expected expression operand");
+
+        cursor.skipSpaces();
+        if ( operand instanceof ColumnReference && cursor.beforeValue("(") ) {
+            const functionName = FunctionNameReference.from(operand);
+            const functionCall = FunctionCall.parseAfterName(cursor, functionName);
+            return functionCall;
         }
 
-        cursor.throwError("expected expression operand");
+        return operand;
     }
 
     private static parseBinary(
         cursor: Cursor,
         left: Operand
-    ): BinaryOperator | undefined {
+    ): Operand | undefined {
         cursor.skipSpaces();
 
         if ( !BinaryOperator.entryOperator(cursor) ) {
@@ -169,17 +156,60 @@ export class Expression extends AbstractNode<ExpressionRow> {
         cursor.skipSpaces();
         const right = this.parseOperand(cursor);
 
-        const binary = new BinaryOperator({
-            position: {
+        let binary!: Operand;
+
+        const equalAny = (
+            right.is(FunctionCall) &&
+            ["any", "all", "some"].includes(right.row.call.toString()) &&
+            operator === "="
+        );
+        if ( equalAny && right.is(FunctionCall) ) {
+            if ( right.row.arguments.length === 0 ) {
+                cursor.throwError("expected array argument");
+            }
+            if ( right.row.arguments.length > 1 ) {
+                cursor.throwError("expected only one argument");
+            }
+            const type = right.row.call.toString();
+            const arrayExpression = right.row.arguments[0];
+
+            const position = {
                 start: left.position!.start,
                 end: right.position!.end
-            },
-            row: {
-                left,
-                operator,
-                right
+            };
+            if ( type === "any" ) {
+                binary = new EqualAnyArray({
+                    position,
+                    row: {
+                        operand: left,
+                        anyArray: arrayExpression
+                    }
+                });
             }
-        });
+            else if ( type === "some" ) {
+                binary = new EqualSomeArray({
+                    position,
+                    row: {
+                        operand: left,
+                        someArray: arrayExpression
+                    }
+                });
+            }
+        }
+        else {
+            binary = new BinaryOperator({
+                position: {
+                    start: left.position!.start,
+                    end: right.position!.end
+                },
+                row: {
+                    left,
+                    operator,
+                    right
+                }
+            });
+        }
+
 
         const nextBinary = this.parseBinary(cursor, binary);
         if ( nextBinary ) {
