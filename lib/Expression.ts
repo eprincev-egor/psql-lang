@@ -14,6 +14,8 @@ import { StringLiteral } from "./StringLiteral";
 import { Variable } from "./Variable";
 import { InOperator } from "./InOperator";
 import { NotInOperator } from "./NotInOperator";
+import { ArrayLiteral } from "./ArrayLiteral";
+import { CaseWhen } from "./CaseWhen";
 
 export interface ExpressionRow {
     operand: Operand;
@@ -138,6 +140,12 @@ export class Expression extends AbstractNode<ExpressionRow> {
         }
         else if ( cursor.before(Variable) ) {
             return cursor.parse(Variable);
+        }
+        else if ( cursor.before(ArrayLiteral) ) {
+            return cursor.parse(ArrayLiteral);
+        }
+        else if ( cursor.before(CaseWhen) ) {
+            return cursor.parse(CaseWhen);
         }
         else if ( cursor.before(ColumnReference) ) {
             return cursor.parse(ColumnReference);

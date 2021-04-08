@@ -100,6 +100,20 @@ describe("Expression", () => {
         });
 
         assertNode(Expression, {
+            input: "$1 > $2",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {variable: "1"},
+                        operator: ">",
+                        right: {variable: "2"}
+                    }
+                },
+                minify: "$1>$2"
+            }
+        });
+
+        assertNode(Expression, {
             input: "1 + 2",
             shouldBe: {
                 json: {
@@ -110,6 +124,20 @@ describe("Expression", () => {
                     }
                 },
                 minify: "1+2"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "2 - 1",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {number: "2"},
+                        operator: "-",
+                        right: {number: "1"}
+                    }
+                },
+                minify: "2-1"
             }
         });
 
@@ -677,6 +705,71 @@ describe("Expression", () => {
                     }
                 },
                 minify: "orders.type not in(3,4,5)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "ARRAY[1,2,3]",
+            shouldBe: {
+                json: {
+                    operand: {array: [
+                        {operand: {number: "1"}},
+                        {operand: {number: "2"}},
+                        {operand: {number: "3"}}
+                    ]}
+                },
+                pretty: "array[1, 2, 3]",
+                minify: "array[1,2,3]"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "ARRAY[1,2] || ARRAY[ 3, 4 ] || ARRAY[5, 6]",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            left: {array: [
+                                {operand: {number: "1"}},
+                                {operand: {number: "2"}}
+                            ]},
+                            operator: "||",
+                            right: {array: [
+                                {operand: {number: "3"}},
+                                {operand: {number: "4"}}
+                            ]}
+                        },
+                        operator: "||",
+                        right: {array: [
+                            {operand: {number: "5"}},
+                            {operand: {number: "6"}}
+                        ]}
+                    }
+                },
+                pretty: "array[1, 2] || array[3, 4] || array[5, 6]",
+                minify: "array[1,2]||array[3,4]||array[5,6]"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "case when true then 1 else 0 end",
+            shouldBe: {
+                json: {
+                    operand: {
+                        case: [{
+                            when: {operand: {boolean: true}},
+                            then: {operand: {number: "1"}}
+                        }],
+                        else: {operand: {number: "0"}}
+                    }
+                },
+                pretty: [
+                    "case",
+                    "    when true",
+                    "    then 1",
+                    "    else 0",
+                    "end"
+                ].join("\n")
             }
         });
 

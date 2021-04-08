@@ -13,6 +13,8 @@ import { SubExpression } from "./SubExpression";
 import { Expression } from "./Expression";
 import { InOperator } from "./InOperator";
 import { NotInOperator } from "./NotInOperator";
+import { ArrayLiteral } from "./ArrayLiteral";
+import { CaseWhen } from "./CaseWhen";
 
 export type Operand = (
     NumberLiteral |
@@ -28,7 +30,9 @@ export type Operand = (
     PreUnaryOperator |
     SubExpression |
     InOperator |
-    NotInOperator
+    NotInOperator |
+    ArrayLiteral |
+    CaseWhen
 );
 
 // fix infinity recursion
@@ -48,4 +52,6 @@ export const cycle: Partial<{
     Expression: typeof Expression;
     InOperator: typeof InOperator;
     NotInOperator: typeof NotInOperator;
+    ArrayLiteral: typeof ArrayLiteral;
+    CaseWhen: typeof CaseWhen;
 }> = {};
