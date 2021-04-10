@@ -16,10 +16,14 @@ export class UEscape extends AbstractNode<UEscapeRow> {
         cursor.readWord("uescape");
 
         cursor.readValue("'");
-        escape = cursor.nextToken.value;
+        const escapeToken = cursor.nextToken;
+        escape = escapeToken.value;
 
         if ( /[\d"'+-\sa-f]/.test(escape) ) {
-            cursor.throwError("The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character");
+            cursor.throwError([
+                "The escape character can be any single character other than a hexadecimal digit,",
+                "the plus sign, a single quote, a double quote, or a whitespace character"
+            ].join(" "), escapeToken);
         }
 
         cursor.skipOne();

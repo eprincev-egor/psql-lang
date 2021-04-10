@@ -52,6 +52,7 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
         }
 
         const string = this.pareString(cursor, escape);
+        cursor.skipSpaces();
 
         if ( cursor.before(UEscape) ) {
             if ( !unicodeEscape ) {

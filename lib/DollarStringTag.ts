@@ -37,12 +37,18 @@ export class DollarStringTag extends AbstractNode<DollarStringTagRow> {
             cursor.readValue("$");
         }
         else {
-            tag += cursor.readAll(WordToken, DigitsToken).join("");
+            const tagTokens = cursor.readAll(WordToken, DigitsToken);
             cursor.readValue("$");
-        }
 
-        if ( /^\d/.test(tag) ) {
-            cursor.throwError(`dollar tag should starts with alphabet char, invalid tag: ${tag}`);
+            tag = tagTokens.join("");
+
+            if ( /^\d/.test(tag) ) {
+                cursor.throwError(
+                    `dollar tag should starts with alphabet char, invalid tag: ${tag}`,
+                    tagTokens[0]
+                );
+            }
+
         }
 
         return {tag};

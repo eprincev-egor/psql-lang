@@ -22,27 +22,33 @@ export class ByteStringLiteral extends AbstractNode<ByteStringLiteralRow> {
 
         cursor.readValue("'");
 
-        const byteString = cursor.readAll(WordToken, DigitsToken).join("");
+        const byteStringTokens = cursor.readAll(WordToken, DigitsToken);
 
         cursor.readValue("'");
 
-        if ( base === "binary" ) {
-            const notValidChar = /[^01]/.exec(byteString);
-            if ( notValidChar ) {
-                cursor.throwError(`"${notValidChar[0]}" is not a valid binary digit`);
+        for (const token of byteStringTokens) {
+            let notValidChar: RegExpExecArray | null | undefined;
+
+            if ( base === "binary" ) {
+                notValidChar = /[^01]/.exec(token.value);
             }
-        }
-        if ( base === "hexadecimal" ) {
-            const notValidChar = /[^\da-f]/i.exec(byteString);
+            if ( base === "hexadecimal" ) {
+                notValidChar = /[^\da-f]/i.exec(token.value);
+            }
+
             if ( notValidChar ) {
-                cursor.throwError(`"${notValidChar[0]}" is not a valid hexadecimal digit`);
+                cursor.throwError(
+                    `"${notValidChar[0]}" is not a valid ${base} digit`,
+                    token
+                );
             }
         }
 
-        return {
-            base,
-            byteString: byteString.toLowerCase()
-        };
+        const byteString = byteStringTokens
+            .join("")
+            .toLowerCase();
+
+        return {base, byteString};
     }
 
     private static parseBase(cursor: Cursor): ByteStringBase {

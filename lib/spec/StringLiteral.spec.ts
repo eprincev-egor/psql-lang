@@ -573,22 +573,26 @@ describe("StringLiteral", () => {
     it("invalid inputs", () => {
         assertNode(StringLiteral, {
             input: "'1' uescape",
-            throws: /unexpected uescape, use u& before quotes/
+            throws: /unexpected uescape, use u& before quotes/,
+            target: "uescape"
         });
 
         assertNode(StringLiteral, {
             input: "E'1' uescape",
-            throws: /unexpected uescape, use u& before quotes/
+            throws: /unexpected uescape, use u& before quotes/,
+            target: "uescape"
         });
 
         assertNode(StringLiteral, {
             input: "U&'d!0061t!+000061' UESCAPE '+'",
-            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/
+            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
+            target: "+"
         });
 
         assertNode(StringLiteral, {
             input: "u&'' uescape '+'",
-            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/
+            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
+            target: "+"
         });
 
         assertNode(StringLiteral, {
@@ -610,12 +614,14 @@ describe("StringLiteral", () => {
 
         assertNode(StringLiteral, {
             input: "$0x$xx$0x$",
-            throws: /dollar tag should starts with alphabet char, invalid tag: 0x/
+            throws: /dollar tag should starts with alphabet char, invalid tag: 0x/,
+            target: "0"
         });
 
         assertNode(StringLiteral, {
             input: "$x*$xx$x*$",
-            throws: /unexpected token: "\*", expected: "\$"/
+            throws: /unexpected token: "\*", expected: "\$"/,
+            target: "*"
         });
 
     });

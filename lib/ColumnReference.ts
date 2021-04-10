@@ -23,10 +23,16 @@ export class ColumnReference extends AbstractNode<ColumnReferenceRow> {
     static parse(cursor: Cursor): ColumnReferenceRow {
         const names = cursor.parseChainOf(NameOrStar, ".");
         if ( names.length === 4 ) {
-            cursor.throwError(`cross-database references are not implemented: ${names.join(".")}`);
+            cursor.throwError(
+                `cross-database references are not implemented: ${names.join(".")}`,
+                names[0]
+            );
         }
         else if ( names.length > 4 ) {
-            cursor.throwError(`improper qualified name (too many dotted names): ${names.join(".")}`);
+            cursor.throwError(
+                `improper qualified name (too many dotted names): ${names.join(".")}`,
+                names[ names.length - 1 ]
+            );
         }
 
         const column = names
@@ -35,10 +41,13 @@ export class ColumnReference extends AbstractNode<ColumnReferenceRow> {
                 (nameOrStar.row as {name: Name}).name
             ) as ColumnReferenceNames;
 
-        const hasInvalidStar = names.slice(0, -1)
-            .some((nameOrStar) => nameOrStar.isStar());
-        if ( hasInvalidStar ) {
-            cursor.throwError("improper use of \"*\"");
+        const invalidStar = names.slice(0, -1)
+            .find((nameOrStar) => nameOrStar.isStar());
+        if ( invalidStar ) {
+            cursor.throwError(
+                "improper use of \"*\"",
+                invalidStar
+            );
         }
 
         const allColumns = names[ names.length - 1 ].isStar();

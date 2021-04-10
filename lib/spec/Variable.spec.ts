@@ -61,7 +61,8 @@ describe("Variable", () => {
 
         assertNode(Variable, {
             input: "$",
-            throws: /expected variable name/
+            throws: /expected variable name/,
+            target: "$"
         });
 
     });

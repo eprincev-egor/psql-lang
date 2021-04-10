@@ -194,22 +194,26 @@ describe("Name", () => {
 
         assertNode(Name, {
             input: "0a",
-            throws: /name should starts with alphabet char, invalid name: 0a/
+            throws: /name should starts with alphabet char, invalid name: 0a/,
+            target: "0"
         });
 
         assertNode(Name, {
             input: "\"1\" uescape",
-            throws: /unexpected uescape, use u& before quotes/
+            throws: /unexpected uescape, use u& before quotes/,
+            target: "uescape"
         });
 
         assertNode(Name, {
             input: "U&\"d!0061t!+000061\" UESCAPE '+'",
-            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/
+            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
+            target: "+"
         });
 
         assertNode(Name, {
             input: "u&\"\" uescape '+'",
-            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/
+            throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
+            target: "+"
         });
 
         assertNode(Name, {

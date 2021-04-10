@@ -42,6 +42,7 @@ export class Name extends AbstractNode<NameRow> {
         }
 
         const strictName = this.parseQuotedName(cursor);
+        cursor.skipSpaces();
 
         if ( cursor.before(UEscape) ) {
             if ( !unicodeEscape ) {
@@ -85,10 +86,14 @@ export class Name extends AbstractNode<NameRow> {
 
     private static parseLowerName(cursor: Cursor): NameRow {
 
-        const name = cursor.readAll(WordToken, DigitsToken).join("");
+        const nameTokens = cursor.readAll(WordToken, DigitsToken);
+        const name = nameTokens.join("");
 
         if ( /^\d/.test(name) ) {
-            cursor.throwError(`name should starts with alphabet char, invalid name: ${name}`);
+            cursor.throwError(
+                `name should starts with alphabet char, invalid name: ${name}`,
+                nameTokens[0]
+            );
         }
 
         return {name: name.toLowerCase()};

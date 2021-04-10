@@ -14,12 +14,13 @@ export class Variable extends AbstractNode<VariableRow> {
     }
 
     static parse(cursor: Cursor): VariableRow {
+        const $token = cursor.nextToken;
         cursor.readValue("$");
 
         const variable = cursor.readAll(WordToken, DigitsToken).join("");
 
         if ( !variable ) {
-            cursor.throwError("expected variable name");
+            cursor.throwError("expected variable name", $token);
         }
 
         return {variable};
