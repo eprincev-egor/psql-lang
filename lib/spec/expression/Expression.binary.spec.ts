@@ -76,6 +76,20 @@ describe("Expression.binary.spec.ts", () => {
         });
 
         assertNode(Expression, {
+            input: "3 ^ 5",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {number: "3"},
+                        operator: "^",
+                        right: {number: "5"}
+                    }
+                },
+                minify: "3^5"
+            }
+        });
+
+        assertNode(Expression, {
             input: "'hello' || 'world'",
             shouldBe: {
                 json: {
