@@ -2,7 +2,7 @@
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
 import { Operand } from "./Operand";
 import { cycle } from "./cycle";
-import { BinaryOperator } from "./BinaryOperator";
+import { BinaryOperator, BinaryOperatorType } from "./BinaryOperator";
 import { BooleanLiteral } from "./BooleanLiteral";
 import { ByteStringLiteral } from "./ByteStringLiteral";
 import { ColumnReference } from "./ColumnReference";
@@ -156,66 +156,110 @@ export class Expression extends AbstractNode<ExpressionRow> {
         cursor.skipSpaces();
         const right = this.parseOperand(cursor);
 
-        let binary!: Operand;
-
-        const equalAny = (
-            right.is(FunctionCall) &&
-            ["any", "all", "some"].includes(right.row.call.toString()) &&
-            operator === "="
+        const binary = this.createBinaryOperator(
+            cursor,
+            left, operator, right
         );
-        if ( equalAny && right.is(FunctionCall) ) {
-            if ( right.row.arguments.length === 0 ) {
-                cursor.throwError("expected array argument");
-            }
-            if ( right.row.arguments.length > 1 ) {
-                cursor.throwError("expected only one argument");
-            }
-            const type = right.row.call.toString();
-            const arrayExpression = right.row.arguments[0];
-
-            const position = {
-                start: left.position!.start,
-                end: right.position!.end
-            };
-            if ( type === "any" ) {
-                binary = new EqualAnyArray({
-                    position,
-                    row: {
-                        operand: left,
-                        anyArray: arrayExpression
-                    }
-                });
-            }
-            else if ( type === "some" ) {
-                binary = new EqualSomeArray({
-                    position,
-                    row: {
-                        operand: left,
-                        someArray: arrayExpression
-                    }
-                });
-            }
-        }
-        else {
-            binary = new BinaryOperator({
-                position: {
-                    start: left.position!.start,
-                    end: right.position!.end
-                },
-                row: {
-                    left,
-                    operator,
-                    right
-                }
-            });
-        }
-
 
         const nextBinary = this.parseBinary(cursor, binary);
         if ( nextBinary ) {
             return nextBinary;
         }
         return binary;
+    }
+
+    private static createBinaryOperator(
+        cursor: Cursor,
+        left: Operand,
+        operator: BinaryOperatorType,
+        right: Operand
+    ) {
+        const equalAny = (
+            right.is(FunctionCall) &&
+            ["any", "all", "some"].includes(right.row.call.toString()) &&
+            operator === "="
+        );
+        if ( equalAny && right.is(FunctionCall) ) {
+            return this.createEqualAny(cursor, left, right);
+        }
+
+        if (
+            left.is(BinaryOperator) &&
+            left.lessPrecedence(operator)
+        ) {
+            return new BinaryOperator({
+                position: {
+                    start: left.row.left.position!.start,
+                    end: right.position!.end
+                },
+                row: {
+                    left: left.row.left,
+                    operator: left.row.operator,
+                    right: new BinaryOperator({
+                        position: {
+                            start: left.row.right.position!.start,
+                            end: right.position!.end
+                        },
+                        row: {
+                            left: left.row.right,
+                            operator,
+                            right
+                        }
+                    })
+                }
+            });
+        }
+
+        return new BinaryOperator({
+            position: {
+                start: left.position!.start,
+                end: right.position!.end
+            },
+            row: {
+                left,
+                operator,
+                right
+            }
+        });
+    }
+
+    private static createEqualAny(
+        cursor: Cursor,
+        left: Operand,
+        right: FunctionCall
+    ) {
+        if ( right.row.arguments.length === 0 ) {
+            cursor.throwError("expected array argument", right);
+        }
+        if ( right.row.arguments.length > 1 ) {
+            cursor.throwError("expected only one argument", right);
+        }
+        const type = right.row.call.toString();
+        const arrayExpression = right.row.arguments[0];
+
+        const position = {
+            start: left.position!.start,
+            end: right.position!.end
+        };
+
+        if ( type === "any" ) {
+            return new EqualAnyArray({
+                position,
+                row: {
+                    operand: left,
+                    anyArray: arrayExpression
+                }
+            });
+        }
+        else {
+            return new EqualSomeArray({
+                position,
+                row: {
+                    operand: left,
+                    someArray: arrayExpression
+                }
+            });
+        }
     }
 
     template(): TemplateElement[] {

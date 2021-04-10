@@ -9,12 +9,33 @@ const BINARY_OPERATORS = [
     "!~~*", "~<~", "~<=~", "~>=~", "~>~", "&<|", "|&>", "@@@", "*=", "*<>", "*<", "*>", "*<=",
     "*>=", "-|-", "->", "->>", "#>>", "?", "?&", "#-", "::",
     "or", "and",
-    "like", "ilike",
+    "like", "ilike", "similar",
     "not ilike", "not like",
     "is distinct from",
     "is not distinct from"
 ] as const;
 export type BinaryOperatorType = (typeof BINARY_OPERATORS)[number];
+
+// https://www.postgresql.org/docs/9.6/sql-syntax-lexical.html
+// Table 4-2. Operator Precedence (highest to lowest)
+const OPERATORS_PRECEDENCE: BinaryOperatorType[][] = [
+    ["or"],
+    ["and"],
+    ["=", "!=", "<>"],
+    ["like", "ilike", "similar"],
+    ["<", "<=", ">=", ">"],
+    ["+", "-"],
+    ["*", "%", "/"]
+];
+
+function precedence(operator: BinaryOperatorType) {
+    const index = OPERATORS_PRECEDENCE.findIndex((operators) =>
+        operators.some((someOperator) =>
+            someOperator === operator
+        )
+    );
+    return index;
+}
 
 export interface BinaryOperatorRow {
     left: Operand;
@@ -65,6 +86,10 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
                 cursor.readAll(OperatorsToken).join("")
         ) as BinaryOperatorType;
         return operator;
+    }
+
+    lessPrecedence(someOperator: BinaryOperatorType): boolean {
+        return precedence(this.row.operator) < precedence(someOperator);
     }
 
     template(): TemplateElement[] {

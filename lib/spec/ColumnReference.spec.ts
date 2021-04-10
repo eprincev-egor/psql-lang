@@ -174,22 +174,26 @@ describe("ColumnReference", () => {
 
         assertNode(ColumnReference, {
             input: "a.b.c.d",
-            throws: /cross-database references are not implemented: a\.b\.c\.d/
+            throws: /cross-database references are not implemented: a\.b\.c\.d/,
+            target: "a"
         });
 
         assertNode(ColumnReference, {
             input: "a.b.c.d.e",
-            throws: /improper qualified name \(too many dotted names\): a\.b\.c\.d\.e/
+            throws: /improper qualified name \(too many dotted names\): a\.b\.c\.d\.e/,
+            target: "e"
         });
 
         assertNode(ColumnReference, {
             input: "*.*",
-            throws: /improper use of "\*"/
+            throws: /improper use of "\*"/,
+            target: "*"
         });
 
         assertNode(ColumnReference, {
             input: "a.*.*",
-            throws: /improper use of "\*"/
+            throws: /improper use of "\*"/,
+            target: "*"
         });
 
     });

@@ -77,22 +77,26 @@ describe("ByteStringLiteral", () => {
 
         assertNode(ByteStringLiteral, {
             input: "x'zz'",
-            throws: /"z" is not a valid hexadecimal digit/
+            throws: /"z" is not a valid hexadecimal digit/,
+            target: "zz"
         });
 
         assertNode(ByteStringLiteral, {
             input: "b'zz'",
-            throws: /"z" is not a valid binary digit/
+            throws: /"z" is not a valid binary digit/,
+            target: "zz"
         });
 
         assertNode(ByteStringLiteral, {
             input: "b'a'",
-            throws: /"a" is not a valid binary digit/
+            throws: /"a" is not a valid binary digit/,
+            target: "a"
         });
 
         assertNode(ByteStringLiteral, {
             input: "b'2'",
-            throws: /"2" is not a valid binary digit/
+            throws: /"2" is not a valid binary digit/,
+            target: "2"
         });
 
     });
