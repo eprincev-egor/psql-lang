@@ -17,7 +17,7 @@ import { InOperator } from "./InOperator";
 import { NotInOperator } from "./NotInOperator";
 import { ArrayLiteral } from "./ArrayLiteral";
 import { CaseWhen } from "./CaseWhen";
-import { FunctionNameReference } from "./FunctionNameReference";
+import { FunctionReference } from "./FunctionReference";
 import { FunctionCall } from "./FunctionCall";
 import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
@@ -133,7 +133,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
         cursor.skipSpaces();
         if ( operand instanceof ColumnReference && cursor.beforeValue("(") ) {
-            const functionName = FunctionNameReference.from(operand);
+            const functionName = FunctionReference.fromColumn(cursor, operand);
             const functionCall = FunctionCall.parseAfterName(cursor, functionName);
             return functionCall;
         }

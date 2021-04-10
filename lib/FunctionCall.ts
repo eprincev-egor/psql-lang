@@ -2,11 +2,11 @@ import {
     AbstractNode, Cursor,
     printChain, TemplateElement, _
 } from "abstract-lang";
-import { FunctionNameReference } from "./FunctionNameReference";
+import { FunctionReference } from "./FunctionReference";
 import { Expression } from "./Expression";
 
 export interface FunctionCallRow {
-    call: FunctionNameReference;
+    call: FunctionReference;
     arguments: Expression[];
 }
 
@@ -18,7 +18,7 @@ export class FunctionCall extends AbstractNode<FunctionCallRow> {
 
     static parseAfterName(
         cursor: Cursor,
-        functionName: FunctionNameReference
+        functionName: FunctionReference
     ): FunctionCall {
         cursor.readValue("(");
         cursor.skipSpaces();

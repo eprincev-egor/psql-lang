@@ -117,6 +117,29 @@ describe("Select", () => {
             }
         });
 
+        assertNode(Select, {
+            input: "select 1 where false",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {operand: {
+                            number: "1"
+                        }}}
+                    ],
+                    from: [],
+                    where: {operand: {
+                        boolean: false
+                    }}
+                },
+                pretty: [
+                    "select",
+                    "    1",
+                    "where",
+                    "    false"
+                ].join("\n")
+            }
+        });
+
     });
 
 });

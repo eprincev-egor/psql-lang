@@ -140,9 +140,9 @@ describe("Expression.operand.spec.ts", () => {
             shouldBe: {
                 json: {
                     operand: {
-                        call: {function: [
-                            {name: "now"}
-                        ]},
+                        call: {
+                            name: {name: "now"}
+                        },
                         arguments: []
                     }
                 },
@@ -156,10 +156,10 @@ describe("Expression.operand.spec.ts", () => {
             shouldBe: {
                 json: {
                     operand: {
-                        call: {function: [
-                            {name: "public"},
-                            {name: "some_func"}
-                        ]},
+                        call: {
+                            schema: {name: "public"},
+                            name: {name: "some_func"}
+                        },
                         arguments: [
                             {operand: {number: "1"}},
                             {operand: {number: "2"}}
@@ -175,9 +175,9 @@ describe("Expression.operand.spec.ts", () => {
             shouldBe: {
                 json: {
                     operand: {
-                        call: {function: [
-                            {name: "now_utc"}
-                        ]},
+                        call: {
+                            name: {name: "now_utc"}
+                        },
                         arguments: []
                     }
                 },
@@ -193,6 +193,12 @@ describe("Expression.operand.spec.ts", () => {
             input: "::",
             throws: /expected expression operand/,
             target: ":"
+        });
+
+        assertNode(Expression, {
+            input: "a.b.c()",
+            throws: /improper qualified name \(too many dotted names\): a\.b\.c/,
+            target: "c"
         });
 
     });
