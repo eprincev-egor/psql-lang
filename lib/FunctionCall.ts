@@ -12,10 +12,6 @@ export interface FunctionCallRow {
 
 export class FunctionCall extends AbstractNode<FunctionCallRow> {
 
-    static entry(cursor: Cursor): boolean {
-        return cursor.beforeWord("null");
-    }
-
     static parseAfterName(
         cursor: Cursor,
         functionName: FunctionReference

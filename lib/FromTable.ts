@@ -1,22 +1,43 @@
-import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
+import {
+    Cursor,
+    TemplateElement,
+    printChain, eol
+} from "abstract-lang";
+import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
+import { Join } from "./Join";
 import { TableReference } from "./TableReference";
 
-export interface FromRow {
+export interface FromTableRow extends FromItemRow {
     table: TableReference;
 }
 
-export class FromTable extends AbstractNode<FromRow> {
+export class FromTable extends AbstractFromItem<FromTableRow> {
 
     static entry(cursor: Cursor): boolean {
         return cursor.before(TableReference);
     }
 
-    static parse(cursor: Cursor): FromRow {
+    static parse(cursor: Cursor): FromTableRow {
         const table = cursor.parse(TableReference);
-        return {table};
+        const row: FromTableRow = {
+            table
+        };
+
+        if ( cursor.before(Join) ) {
+            row.joins = cursor.parseChainOf(Join);
+        }
+
+        return row;
     }
 
-    template(): TemplateElement {
-        return this.row.table;
+    template(): TemplateElement[] {
+        if ( !this.row.joins ) {
+            return [this.row.table];
+        }
+
+        return [
+            this.row.table, eol, eol,
+            ...printChain(this.row.joins, eol, eol)
+        ];
     }
 }

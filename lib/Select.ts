@@ -5,12 +5,14 @@ import {
 } from "abstract-lang";
 import { Expression } from "./Expression";
 import { SelectColumn } from "./SelectColumn";
-import { FromTable } from "./FromTable";
+import { OrderByItem } from "./OrderByItem";
+import { FromItemType, parseFromItem } from "./FromItem";
 
 export interface SelectRow {
     select: SelectColumn[];
-    from: FromTable[];
+    from: FromItemType[];
     where?: Expression;
+    orderBy?: OrderByItem[];
 }
 
 export class Select extends AbstractNode<SelectRow> {
@@ -37,8 +39,7 @@ export class Select extends AbstractNode<SelectRow> {
         }
 
         if ( cursor.beforeWord("from") ) {
-            cursor.readWord("from");
-            selectRow.from = cursor.parseChainOf(FromTable, ",");
+            selectRow.from = this.parseFrom(cursor);
         }
 
         if ( cursor.beforeWord("where") ) {
@@ -46,7 +47,34 @@ export class Select extends AbstractNode<SelectRow> {
             selectRow.where = cursor.parse(Expression);
         }
 
+        if ( cursor.beforeWord("order") ) {
+            cursor.readPhrase("order", "by");
+            selectRow.orderBy = cursor.parseChainOf(OrderByItem, ",");
+        }
+
         return selectRow;
+    }
+
+    private static parseFrom(cursor: Cursor) {
+        cursor.readWord("from");
+
+        const fromItems: FromItemType[] = [];
+
+        do {
+            const fromItem = parseFromItem(cursor);
+            fromItems.push(fromItem);
+
+            cursor.skipSpaces();
+
+            if ( !cursor.beforeValue(",") ) {
+                break;
+            }
+            cursor.readValue(",");
+            cursor.skipSpaces();
+
+        } while ( !cursor.beforeEnd() );
+
+        return fromItems;
     }
 
     template(): TemplateElement[] {
@@ -60,7 +88,7 @@ export class Select extends AbstractNode<SelectRow> {
         }
 
         if ( this.row.from.length > 0 ) {
-            output.push(eol, keyword("from"));
+            output.push(eol, keyword("from"), _);
             output.push(...printChain(this.row.from, ",", _));
         }
 
@@ -69,6 +97,16 @@ export class Select extends AbstractNode<SelectRow> {
                 eol,
                 keyword("where"), eol,
                 tab, this.row.where
+            );
+        }
+
+        if ( this.row.orderBy ) {
+            output.push(
+                eol,
+                keyword("order"), keyword("by")
+            );
+            output.push(
+                ...printChain(this.row.orderBy, ",")
             );
         }
 
