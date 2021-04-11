@@ -1,6 +1,6 @@
 import {
     AbstractNode, Cursor,
-    TemplateElement, printChain,
+    TemplateElement, printTabChain,
     eol, tab, _, keyword
 } from "abstract-lang";
 import { CaseWhenElement } from "./CaseWhenElement";
@@ -52,7 +52,7 @@ export class CaseWhen extends AbstractNode<CaseWhenRow> {
     template(): TemplateElement[] {
         return [
             keyword("case"), ...this.printSwitch(), eol,
-            tab, ...printChain(this.row.case, eol, tab), eol,
+            ...printTabChain(this.row.case, eol), eol,
             ...this.printElse(),
             keyword("end")
         ];
