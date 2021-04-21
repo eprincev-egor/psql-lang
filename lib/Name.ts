@@ -89,7 +89,7 @@ export class Name extends AbstractNode<NameRow> {
         const nameTokens = cursor.readAll(WordToken, DigitsToken);
         const name = nameTokens.join("");
 
-        if ( /^\d/.test(name) ) {
+        if ( /\d/.test(name[0]) ) {
             cursor.throwError(
                 `name should starts with alphabet char, invalid name: ${name}`,
                 nameTokens[0]

@@ -20,6 +20,7 @@ export class WithQuery extends AbstractNode<WithQueryRow> {
     static parse(cursor: Cursor): WithQueryRow {
         const name = cursor.parse(Name);
 
+        cursor.skipSpaces();
         cursor.readWord("as");
         cursor.readValue("(");
         cursor.skipSpaces();

@@ -30,6 +30,7 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
 
         cursor.skipSpaces();
         cursor.readValue(")");
+        cursor.skipSpaces();
 
         cursor.readWord("as");
         const as = cursor.parse(Name);

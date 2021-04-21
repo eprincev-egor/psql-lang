@@ -34,6 +34,8 @@ export class OrderByItem extends AbstractNode<OrderByItemRow> {
             const operatorTokens = cursor.readAll(OperatorsToken);
             const operator = operatorTokens.join("");
 
+            cursor.skipSpaces();
+
             if ( operator === ">" ) {
                 return "desc";
             }
