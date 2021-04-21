@@ -48,6 +48,7 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
     static entryOperator(cursor: Cursor): boolean {
         return (
             cursor.beforeToken(OperatorsToken) ||
+            cursor.beforeValue(":") ||
             cursor.beforeWord("or") ||
             cursor.beforeWord("and") ||
             cursor.beforeWord("ilike") ||
@@ -60,6 +61,12 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
     }
 
     static parseOperator(cursor: Cursor): BinaryOperatorType {
+        if ( cursor.beforeSequence(":", ":") ) {
+            cursor.readValue(":");
+            cursor.readValue(":");
+            return "::";
+        }
+
         if ( cursor.beforePhrase("not", "ilike") ) {
             cursor.readPhrase("not", "ilike");
             return "not ilike";

@@ -21,6 +21,7 @@ import { FunctionReference } from "./FunctionReference";
 import { FunctionCall } from "./FunctionCall";
 import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
+import { SubQuery } from "./SubQuery";
 
 export interface ExpressionRow {
     operand: Operand;
@@ -123,7 +124,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
         const SubExpression = cycle.SubExpression!;
 
         const operand = cursor.parseOneOf([
-            SubExpression, IntervalLiteral,
+            SubQuery, SubExpression,
+            IntervalLiteral,
             BooleanLiteral, NullLiteral,
             StringLiteral, ByteStringLiteral,
             NumberLiteral, Variable,

@@ -17,6 +17,7 @@ import { CaseWhen } from "./CaseWhen";
 import { FunctionCall } from "./FunctionCall";
 import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
+import { SubQuery } from "./SubQuery";
 
 export type Operand = (
     NumberLiteral |
@@ -37,5 +38,6 @@ export type Operand = (
     CaseWhen |
     EqualAnyArray |
     EqualSomeArray |
-    FunctionCall
+    FunctionCall |
+    SubQuery
 );

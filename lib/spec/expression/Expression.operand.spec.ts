@@ -185,6 +185,28 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        subQuery: {
+                            select: [{expression: {
+                                operand: {number: "1"}
+                            }}],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "(",
+                    "    select",
+                    "        1",
+                    ")"
+                ].join("\n")
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
@@ -199,6 +221,18 @@ describe("Expression.operand.spec.ts", () => {
             input: "a.b.c()",
             throws: /improper qualified name \(too many dotted names\): a\.b\.c/,
             target: "c"
+        });
+
+        assertNode(Expression, {
+            input: "(select) + 1",
+            throws: /expected one column for subquery/,
+            target: "select"
+        });
+
+        assertNode(Expression, {
+            input: "(select hello, world as x) + 1",
+            throws: /subquery must return only one column/,
+            target: "world as x"
         });
 
     });

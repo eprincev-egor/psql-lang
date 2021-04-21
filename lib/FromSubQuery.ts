@@ -12,6 +12,10 @@ export interface FromSubQueryRow extends FromItemRow {
     as: Name;
 }
 
+// TODO:
+// select *
+// from (values (1, 'hello')) as company(id, name)
+
 export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
 
     static entry(cursor: Cursor): boolean {

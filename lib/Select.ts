@@ -1,33 +1,43 @@
 import {
     AbstractNode, Cursor,
     TemplateElement,
-    _, eol, tab, keyword, printChain
+    _, eol, tab, keyword, printChain, DigitsToken
 } from "abstract-lang";
 import { Expression } from "./Expression";
 import { SelectColumn } from "./SelectColumn";
 import { OrderByItem } from "./OrderByItem";
 import { FromItemType, parseFromItem } from "./FromItem";
+import { With } from "./With";
 
 export interface SelectRow {
+    with?: With;
     select: SelectColumn[];
     from: FromItemType[];
     where?: Expression;
     orderBy?: OrderByItem[];
+    limit?: number;
 }
 
 export class Select extends AbstractNode<SelectRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforeWord("select");
+        return (
+            cursor.beforeWord("select") ||
+            cursor.before(With)
+        );
     }
 
     static parse(cursor: Cursor): SelectRow {
-        cursor.readWord("select");
-
         const selectRow: SelectRow = {
             select: [],
             from: []
         };
+
+        if ( cursor.before(With) ) {
+            selectRow.with = cursor.parse(With);
+        }
+
+        cursor.readWord("select");
 
         const beforeColumns = (
             !cursor.beforeWord("from") &&
@@ -50,6 +60,11 @@ export class Select extends AbstractNode<SelectRow> {
         if ( cursor.beforeWord("order") ) {
             cursor.readPhrase("order", "by");
             selectRow.orderBy = cursor.parseChainOf(OrderByItem, ",");
+        }
+
+        if ( cursor.beforeWord("limit") ) {
+            cursor.readWord("limit");
+            selectRow.limit = +cursor.readAll(DigitsToken).join("");
         }
 
         return selectRow;
@@ -78,7 +93,13 @@ export class Select extends AbstractNode<SelectRow> {
     }
 
     template(): TemplateElement[] {
-        const output: TemplateElement[] = [keyword("select")];
+        const output: TemplateElement[] = [];
+
+        if ( this.row.with ) {
+            output.push( this.row.with, eol );
+        }
+
+        output.push( keyword("select") );
 
         if ( this.row.select.length > 0 ) {
             output.push(eol, tab);
