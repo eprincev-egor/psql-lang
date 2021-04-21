@@ -67,6 +67,27 @@ describe("Select.base.spec.ts: base select variants", () => {
         });
 
         assertNode(Select, {
+            input: "select * from users",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {operand: {
+                            column: [],
+                            allColumns: true
+                        }}}
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "users"}
+                        }
+                    }]
+                },
+                pretty: "select\n    *\nfrom users",
+                minify: "select*from users"
+            }
+        });
+
+        assertNode(Select, {
             input: "select from users, companies",
             shouldBe: {
                 json: {

@@ -13,7 +13,8 @@ export class PreUnaryOperator extends AbstractNode<PreUnaryOperatorRow> {
     static entry(cursor: Cursor): boolean {
         return (
             cursor.beforeToken(OperatorsToken) &&
-            !cursor.before(NumberLiteral) ||
+            !cursor.before(NumberLiteral) &&
+            !cursor.beforeValue("*") ||
             cursor.beforeWord("not")
         );
     }
