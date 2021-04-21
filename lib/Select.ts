@@ -8,6 +8,7 @@ import { SelectColumn } from "./SelectColumn";
 import { OrderByItem } from "./OrderByItem";
 import { FromItemType, parseFromItem } from "./FromItem";
 import { With } from "./With";
+import { Fetch } from "./Fetch";
 
 export interface SelectRow {
     with?: With;
@@ -17,6 +18,7 @@ export interface SelectRow {
     orderBy?: OrderByItem[];
     offset?: Expression;
     limit?: Expression;
+    fetch?: Fetch;
 }
 
 export class Select extends AbstractNode<SelectRow> {
@@ -63,21 +65,7 @@ export class Select extends AbstractNode<SelectRow> {
             selectRow.orderBy = cursor.parseChainOf(OrderByItem, ",");
         }
 
-        if ( cursor.beforeWord("offset") ) {
-            cursor.readWord("offset");
-            selectRow.offset = cursor.parse(Expression);
-        }
-
-        if ( cursor.beforeWord("limit") ) {
-            cursor.readWord("limit");
-
-            if ( cursor.beforeWord("all") ) {
-                cursor.readWord("all");
-            }
-            else {
-                selectRow.limit = cursor.parse(Expression);
-            }
-        }
+        this.parseOffsetLimit(cursor, selectRow);
 
         return selectRow;
     }
@@ -102,6 +90,58 @@ export class Select extends AbstractNode<SelectRow> {
         } while ( !cursor.beforeEnd() );
 
         return fromItems;
+    }
+
+    private static parseOffsetLimit(cursor: Cursor, selectRow: SelectRow) {
+        while ( !cursor.beforeEnd() ) {
+            if ( cursor.beforeWord("offset") ) {
+                this.parseOffset(cursor, selectRow);
+            }
+            else if ( cursor.beforeWord("limit") ) {
+                this.parseLimit(cursor, selectRow);
+            }
+            else if ( cursor.before(Fetch) ) {
+                if ( selectRow.limit ) {
+                    cursor.throwError("unexpected fetch, limit already exists");
+                }
+
+                selectRow.fetch = cursor.parse(Fetch);
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    private static parseOffset(cursor: Cursor, selectRow: SelectRow) {
+        if ( selectRow.offset ) {
+            cursor.throwError("duplicated offset");
+        }
+
+        cursor.readWord("offset");
+        selectRow.offset = cursor.parse(Expression);
+
+        cursor.skipSpaces();
+    }
+
+    private static parseLimit(cursor: Cursor, selectRow: SelectRow) {
+        if ( selectRow.limit ) {
+            cursor.throwError("duplicated limit");
+        }
+        if ( selectRow.fetch ) {
+            cursor.throwError("unexpected limit, fetch already exists");
+        }
+
+        cursor.readWord("limit");
+
+        if ( cursor.beforeWord("all") ) {
+            cursor.readWord("all");
+        }
+        else {
+            selectRow.limit = cursor.parse(Expression);
+        }
+
+        cursor.skipSpaces();
     }
 
     template(): TemplateElement[] {
@@ -154,6 +194,12 @@ export class Select extends AbstractNode<SelectRow> {
             output.push(
                 eol, keyword("limit"),
                 this.row.limit
+            );
+        }
+
+        if ( this.row.fetch ) {
+            output.push(
+                eol, this.row.fetch
             );
         }
 
