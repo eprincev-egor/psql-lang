@@ -53,3 +53,4 @@
   - with (delete) select
 - scope methods
 - get type
+- expression not required as Node ?? maybe need use Operand anywhere ?

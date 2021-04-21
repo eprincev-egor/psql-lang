@@ -1,7 +1,7 @@
 import {
     AbstractNode, Cursor,
     TemplateElement,
-    _, eol, tab, keyword, printChain, DigitsToken
+    _, eol, tab, keyword, printChain
 } from "abstract-lang";
 import { Expression } from "./Expression";
 import { SelectColumn } from "./SelectColumn";
@@ -15,7 +15,8 @@ export interface SelectRow {
     from: FromItemType[];
     where?: Expression;
     orderBy?: OrderByItem[];
-    limit?: number;
+    offset?: Expression;
+    limit?: Expression;
 }
 
 export class Select extends AbstractNode<SelectRow> {
@@ -62,9 +63,20 @@ export class Select extends AbstractNode<SelectRow> {
             selectRow.orderBy = cursor.parseChainOf(OrderByItem, ",");
         }
 
+        if ( cursor.beforeWord("offset") ) {
+            cursor.readWord("offset");
+            selectRow.offset = cursor.parse(Expression);
+        }
+
         if ( cursor.beforeWord("limit") ) {
             cursor.readWord("limit");
-            selectRow.limit = +cursor.readAll(DigitsToken).join("");
+
+            if ( cursor.beforeWord("all") ) {
+                cursor.readWord("all");
+            }
+            else {
+                selectRow.limit = cursor.parse(Expression);
+            }
         }
 
         return selectRow;
@@ -128,6 +140,20 @@ export class Select extends AbstractNode<SelectRow> {
             );
             output.push(
                 ...printChain(this.row.orderBy, ",")
+            );
+        }
+
+        if ( this.row.offset ) {
+            output.push(
+                eol, keyword("offset"),
+                this.row.offset
+            );
+        }
+
+        if ( this.row.limit ) {
+            output.push(
+                eol, keyword("limit"),
+                this.row.limit
             );
         }
 
