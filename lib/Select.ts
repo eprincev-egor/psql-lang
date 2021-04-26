@@ -10,7 +10,9 @@ import { FromItemType, parseFromItem } from "./FromItem";
 import { With } from "./With";
 import { Fetch } from "./Fetch";
 
+export type SelectDistinctType = {all: true} | {on: Expression[]};
 export interface SelectRow {
+    distinct?: SelectDistinctType;
     with?: With;
     select: SelectColumn[];
     from: FromItemType[];
@@ -42,6 +44,10 @@ export class Select extends AbstractNode<SelectRow> {
 
         cursor.readWord("select");
 
+        if ( cursor.beforeWord("distinct") ) {
+            this.parseDistinct(cursor, selectRow);
+        }
+
         const beforeColumns = (
             !cursor.beforeWord("from") &&
             !cursor.beforeWord("where") &&
@@ -68,6 +74,29 @@ export class Select extends AbstractNode<SelectRow> {
         this.parseOffsetLimit(cursor, selectRow);
 
         return selectRow;
+    }
+
+    private static parseDistinct(cursor: Cursor, selectRow: SelectRow) {
+        cursor.readWord("distinct");
+
+        if ( cursor.beforeWord("on") ) {
+            cursor.readWord("on");
+
+            cursor.readValue("(");
+            cursor.skipSpaces();
+
+            selectRow.distinct = {
+                on: cursor.parseChainOf(Expression, ",")
+            };
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+        }
+        else {
+            selectRow.distinct = {all: true};
+        }
+
+        cursor.skipSpaces();
     }
 
     private static parseFrom(cursor: Cursor) {
@@ -152,6 +181,18 @@ export class Select extends AbstractNode<SelectRow> {
         }
 
         output.push( keyword("select") );
+
+        if ( this.row.distinct ) {
+            output.push( keyword("distinct") );
+
+            if ( "on" in this.row.distinct ) {
+                output.push( keyword("on"), _, "(" );
+                output.push(
+                    ...printChain( this.row.distinct.on, ",", _ )
+                );
+                output.push( ")" );
+            }
+        }
 
         if ( this.row.select.length > 0 ) {
             output.push(eol, tab);
