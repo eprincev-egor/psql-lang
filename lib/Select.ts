@@ -10,7 +10,6 @@ import { FromItemType, parseFromItem } from "./FromItem";
 import { With } from "./With";
 import { Fetch } from "./Fetch";
 
-export type SelectDistinctType = {all: true} | {on: Expression[]};
 export interface SelectRow {
     distinct?: SelectDistinctType;
     with?: With;
@@ -22,7 +21,17 @@ export interface SelectRow {
     offset?: Expression;
     limit?: Expression;
     fetch?: Fetch;
+    union?: SelectUnion;
 }
+
+export type SelectDistinctType = {all: true} | {on: Expression[]};
+export interface SelectUnion {
+    type: SelectUnionType;
+    option?: SelectUnionOption;
+    select: Select;
+}
+export type SelectUnionType = "union" | "intersect" | "except";
+export type SelectUnionOption = "all" | "distinct";
 
 export class Select extends AbstractNode<SelectRow> {
 
@@ -78,6 +87,14 @@ export class Select extends AbstractNode<SelectRow> {
         }
 
         this.parseOffsetLimit(cursor, selectRow);
+
+        if (
+            cursor.beforeWord("union") ||
+            cursor.beforeWord("intersect") ||
+            cursor.beforeWord("except")
+        ) {
+            this.parseUnion(cursor, selectRow);
+        }
 
         return selectRow;
     }
@@ -179,6 +196,40 @@ export class Select extends AbstractNode<SelectRow> {
         cursor.skipSpaces();
     }
 
+    private static parseUnion(cursor: Cursor, selectRow: SelectRow) {
+        let type: SelectUnionType = "union";
+
+        if ( cursor.beforeWord("intersect") ) {
+            cursor.readWord("intersect");
+            type = "intersect";
+        }
+        else if ( cursor.beforeWord("except") ) {
+            cursor.readWord("except");
+            type = "except";
+        }
+        else {
+            cursor.readWord("union");
+        }
+
+        let option: SelectUnionOption | undefined;
+        if ( cursor.beforeWord("all") ) {
+            cursor.readWord("all");
+            option = "all";
+        }
+        else if ( cursor.beforeWord("distinct") ) {
+            cursor.readWord("distinct");
+            option = "distinct";
+        }
+
+        selectRow.union = {
+            type,
+            select: cursor.parse(Select)
+        };
+        if ( option ) {
+            selectRow.union.option = option;
+        }
+    }
+
     template(): TemplateElement[] {
         const output: TemplateElement[] = [];
 
@@ -256,6 +307,18 @@ export class Select extends AbstractNode<SelectRow> {
             output.push(
                 eol, this.row.fetch
             );
+        }
+
+        if ( this.row.union ) {
+            output.push( eol, keyword(this.row.union.type) );
+
+            if ( this.row.union.option ) {
+                output.push(
+                    keyword(this.row.union.option)
+                );
+            }
+
+            output.push( eol, this.row.union.select );
         }
 
         return output;
