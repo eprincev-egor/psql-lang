@@ -60,6 +60,128 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
+        assertNode(Select, {
+            input: `
+                select
+                    max(orders.profit)
+                from orders
+                having
+                    sum(orders.profit) > 1000
+            `.trim(),
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {operand: {
+                            call: {
+                                name: {name: "max"}
+                            },
+                            arguments: [{operand: {
+                                column: [
+                                    {name: "orders"},
+                                    {name: "profit"}
+                                ]
+                            }}]
+                        }}}
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "orders"}
+                        }
+                    }],
+                    having: {operand: {
+                        left: {
+                            call: {
+                                name: {name: "sum"}
+                            },
+                            arguments: [{operand: {
+                                column: [
+                                    {name: "orders"},
+                                    {name: "profit"}
+                                ]
+                            }}]
+                        },
+                        operator: ">",
+                        right: {number: "1000"}
+                    }}
+                },
+                pretty: [
+                    "select",
+                    "    max(orders.profit)",
+                    "from orders",
+                    "having",
+                    "    sum(orders.profit) > 1000"
+                ].join("\n"),
+                minify: "select max(orders.profit)from orders having sum(orders.profit)>1000"
+            }
+        });
+
+        assertNode(Select, {
+            input: `
+                select
+                    max(orders.profit)
+                from orders
+                where
+                    orders.year > 2010
+                having
+                    sum(orders.profit) > 1000
+            `.trim(),
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {operand: {
+                            call: {
+                                name: {name: "max"}
+                            },
+                            arguments: [{operand: {
+                                column: [
+                                    {name: "orders"},
+                                    {name: "profit"}
+                                ]
+                            }}]
+                        }}}
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "orders"}
+                        }
+                    }],
+                    where: {operand: {
+                        left: {column: [
+                            {name: "orders"},
+                            {name: "year"}
+                        ]},
+                        operator: ">",
+                        right: {number: "2010"}
+                    }},
+                    having: {operand: {
+                        left: {
+                            call: {
+                                name: {name: "sum"}
+                            },
+                            arguments: [{operand: {
+                                column: [
+                                    {name: "orders"},
+                                    {name: "profit"}
+                                ]
+                            }}]
+                        },
+                        operator: ">",
+                        right: {number: "1000"}
+                    }}
+                },
+                pretty: [
+                    "select",
+                    "    max(orders.profit)",
+                    "from orders",
+                    "where",
+                    "    orders.year > 2010",
+                    "having",
+                    "    sum(orders.profit) > 1000"
+                ].join("\n"),
+                minify: "select max(orders.profit)from orders where orders.year>2010 having sum(orders.profit)>1000"
+            }
+        });
+
     });
 
 });

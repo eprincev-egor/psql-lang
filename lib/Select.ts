@@ -17,6 +17,7 @@ export interface SelectRow {
     select: SelectColumn[];
     from: FromItemType[];
     where?: Expression;
+    having?: Expression;
     orderBy?: OrderByItem[];
     offset?: Expression;
     limit?: Expression;
@@ -64,6 +65,11 @@ export class Select extends AbstractNode<SelectRow> {
         if ( cursor.beforeWord("where") ) {
             cursor.readWord("where");
             selectRow.where = cursor.parse(Expression);
+        }
+
+        if ( cursor.beforeWord("having") ) {
+            cursor.readWord("having");
+            selectRow.having = cursor.parse(Expression);
         }
 
         if ( cursor.beforeWord("order") ) {
@@ -211,6 +217,14 @@ export class Select extends AbstractNode<SelectRow> {
                 eol,
                 keyword("where"), eol,
                 tab, this.row.where
+            );
+        }
+
+        if ( this.row.having ) {
+            output.push(
+                eol,
+                keyword("having"), eol,
+                tab, this.row.having
             );
         }
 
