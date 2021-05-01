@@ -9,6 +9,7 @@ import { OrderByItem } from "./OrderByItem";
 import { FromItemType, parseFromItem } from "./FromItem";
 import { With } from "./With";
 import { Fetch } from "./Fetch";
+import { GroupByElement } from "./GroupByElement";
 
 export interface SelectRow {
     distinct?: SelectDistinctType;
@@ -16,6 +17,7 @@ export interface SelectRow {
     select: SelectColumn[];
     from: FromItemType[];
     where?: Expression;
+    groupBy?: GroupByElement[];
     having?: Expression;
     orderBy?: OrderByItem[];
     offset?: Expression;
@@ -74,6 +76,11 @@ export class Select extends AbstractNode<SelectRow> {
         if ( cursor.beforeWord("where") ) {
             cursor.readWord("where");
             selectRow.where = cursor.parse(Expression);
+        }
+
+        if ( cursor.beforeWord("group") ) {
+            cursor.readPhrase("group", "by");
+            selectRow.groupBy = cursor.parseChainOf(GroupByElement, ",");
         }
 
         if ( cursor.beforeWord("having") ) {
@@ -268,6 +275,14 @@ export class Select extends AbstractNode<SelectRow> {
                 eol,
                 keyword("where"), eol,
                 tab, this.row.where
+            );
+        }
+
+        if ( this.row.groupBy ) {
+            output.push(
+                eol,
+                keyword("group"), keyword("by"), eol,
+                tab, ...printChain(this.row.groupBy, ",", eol, tab)
             );
         }
 
