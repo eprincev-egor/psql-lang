@@ -26,6 +26,8 @@ export class With extends AbstractNode<WithRow> {
         }
 
         const queries = cursor.parseChainOf(WithQuery, ",");
+        this.validate(cursor, queries);
+
         if ( recursive ) {
             return {recursive, queries};
         }
@@ -33,10 +35,35 @@ export class With extends AbstractNode<WithRow> {
         return {queries};
     }
 
+    private static validate(cursor: Cursor, queries: WithQuery[]) {
+        // query name must be unique
+        const existsName: {[key: string]: boolean} = {};
+        for (const query of queries) {
+            const name = query.row.name.toString();
+
+            if ( name in existsName ) {
+                cursor.throwError(
+                    `WITH query name "${ name }" specified more than once`,
+                    query.row.name
+                );
+            }
+
+            existsName[ name ] = true;
+        }
+    }
+
     template(): TemplateElement[] {
-        return [
-            keyword("with"), eol,
-            ...printTabChain(this.row.queries, ",", eol)
+        const output: TemplateElement[] = [
+            keyword("with")
         ];
+
+        if ( this.row.recursive ) {
+            output.push( keyword("recursive") );
+        }
+        output.push(eol);
+        output.push(
+            ...printTabChain(this.row.queries, ",", eol)
+        );
+        return output;
     }
 }
