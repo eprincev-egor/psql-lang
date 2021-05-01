@@ -246,6 +246,20 @@ export class Select extends AbstractNode<SelectRow> {
 
         output.push( keyword("select") );
 
+        this.printDistinct(output);
+        this.printSelectColumns(output);
+        this.printFrom(output);
+        this.printWhere(output);
+        this.printGroupBy(output);
+        this.printHaving(output);
+        this.printOrderBy(output);
+        this.printFetch(output);
+        this.printUnion(output);
+
+        return output;
+    }
+
+    private printDistinct(output: TemplateElement[]) {
         if ( this.row.distinct ) {
             output.push( keyword("distinct") );
 
@@ -257,19 +271,26 @@ export class Select extends AbstractNode<SelectRow> {
                 output.push( ")" );
             }
         }
+    }
 
+    private printSelectColumns(output: TemplateElement[]) {
         if ( this.row.select.length > 0 ) {
             output.push(eol, tab);
             output.push(
                 ...printChain(this.row.select, ",", eol, tab)
             );
         }
+    }
 
+    private printFrom(output: TemplateElement[]) {
         if ( this.row.from.length > 0 ) {
             output.push(eol, keyword("from"), _);
             output.push(...printChain(this.row.from, ",", _));
         }
 
+    }
+
+    private printWhere(output: TemplateElement[]) {
         if ( this.row.where ) {
             output.push(
                 eol,
@@ -277,7 +298,9 @@ export class Select extends AbstractNode<SelectRow> {
                 tab, this.row.where
             );
         }
+    }
 
+    private printGroupBy(output: TemplateElement[]) {
         if ( this.row.groupBy ) {
             output.push(
                 eol,
@@ -285,7 +308,9 @@ export class Select extends AbstractNode<SelectRow> {
                 tab, ...printChain(this.row.groupBy, ",", eol, tab)
             );
         }
+    }
 
+    private printHaving(output: TemplateElement[]) {
         if ( this.row.having ) {
             output.push(
                 eol,
@@ -293,7 +318,9 @@ export class Select extends AbstractNode<SelectRow> {
                 tab, this.row.having
             );
         }
+    }
 
+    private printOrderBy(output: TemplateElement[]) {
         if ( this.row.orderBy ) {
             output.push(
                 eol,
@@ -303,7 +330,9 @@ export class Select extends AbstractNode<SelectRow> {
                 ...printChain(this.row.orderBy, ",")
             );
         }
+    }
 
+    private printFetch(output: TemplateElement[]) {
         if ( this.row.offset ) {
             output.push(
                 eol, keyword("offset"),
@@ -323,7 +352,9 @@ export class Select extends AbstractNode<SelectRow> {
                 eol, this.row.fetch
             );
         }
+    }
 
+    private printUnion(output: TemplateElement[]) {
         if ( this.row.union ) {
             output.push( eol, keyword(this.row.union.type) );
 
@@ -335,7 +366,5 @@ export class Select extends AbstractNode<SelectRow> {
 
             output.push( eol, this.row.union.select );
         }
-
-        return output;
     }
 }
