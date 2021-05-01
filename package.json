@@ -6,7 +6,8 @@
   "types": "lib/index.ts",
   "scripts": {
     "build": "tsc",
-    "test": "nyc mocha",
+    "test": "mocha",
+    "coverage": "nyc mocha",
     "eslint": "eslint --ext .js,.ts lib",
     "eslint-fix": "eslint --fix --ext .js,.ts lib",
     "postinstall": "node postinstall/postinstall.js"
@@ -18,10 +19,6 @@
     "reporter": [
       "html",
       "text-summary"
-    ],
-    "require": [
-      "source-map-support/register",
-      "ts-node/register"
     ],
     "all": true,
     "exclude": [

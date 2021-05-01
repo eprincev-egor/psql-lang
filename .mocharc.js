@@ -5,6 +5,10 @@ const config = {
     exit: true,
     spec: [
         "lib/**/*.spec.ts"
+    ],
+    require: [
+      "source-map-support/register",
+      "ts-node/register"
     ]
 };
 
