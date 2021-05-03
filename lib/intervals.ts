@@ -47,6 +47,7 @@ export function tryParseInterval(cursor: Cursor): IntervalType | undefined {
         const interval = intervalsAliases[ alias ];
 
         cursor.next();
+        cursor.skipSpaces();
         return interval;
     }
 
@@ -54,6 +55,7 @@ export function tryParseInterval(cursor: Cursor): IntervalType | undefined {
         const interval = token as IntervalType;
 
         cursor.next();
+        cursor.skipSpaces();
         return interval;
     }
 }

@@ -23,6 +23,7 @@ import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
 import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./MakeInterval";
+import { Extract } from "./Extract";
 
 export {Operand};
 
@@ -140,10 +141,12 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
         cursor.skipSpaces();
         if ( operand instanceof ColumnReference && cursor.beforeValue("(") ) {
-            const functionName = FunctionReference.fromColumn(cursor, operand);
+            const functionNameReference = FunctionReference.fromColumn(cursor, operand);
+            const functionName = functionNameReference.toLowerCase();
 
-            if ( functionName.toString() === "make_interval" ) {
+            if ( functionName === "make_interval" ) {
                 cursor.readValue("(");
+                cursor.skipSpaces();
                 const intervalArguments = MakeInterval.parseArguments(cursor);
                 cursor.skipSpaces();
                 cursor.readValue(")");
@@ -158,7 +161,24 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 return makeInterval;
             }
 
-            const functionCall = FunctionCall.parseAfterName(cursor, functionName);
+            if ( functionName === "extract" ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+                const row = Extract.parseContent(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const extract = new Extract({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row
+                });
+                return extract;
+            }
+
+            const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);
             return functionCall;
         }
 

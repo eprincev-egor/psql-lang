@@ -65,6 +65,24 @@ describe("Expression.makeInterval.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "MAKE_INTERVAL(  HOURS => 24  )",
+            shouldBe: {
+                json: {
+                    operand: {
+                        intervalArguments: [
+                            {
+                                interval: "hour",
+                                value: {number: "24"}
+                            }
+                        ]
+                    }
+                },
+                pretty: "make_interval(hour => 24)",
+                minify: "make_interval(hour=>24)"
+            }
+        });
+
     });
 
 });
