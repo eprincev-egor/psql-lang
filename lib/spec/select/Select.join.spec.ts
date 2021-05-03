@@ -47,7 +47,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
+                            on: {
                                 left: {column: [
                                     {name: "countries"},
                                     {name: "id"}
@@ -57,7 +57,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                                     {name: "companies"},
                                     {name: "id_country"}
                                 ]}
-                            }}
+                            }
                         }]
                     }]
                 },
@@ -90,9 +90,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
-                                boolean: true
-                            }}
+                            on: {boolean: true}
                         }]
                     }]
                 },
@@ -123,9 +121,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
-                                boolean: true
-                            }}
+                            on: {boolean: true}
                         }]
                     }]
                 },
@@ -156,9 +152,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
-                                boolean: true
-                            }}
+                            on: {boolean: true}
                         }]
                     }]
                 },
@@ -189,9 +183,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
-                                boolean: true
-                            }}
+                            on: {boolean: true}
                         }]
                     }]
                 },
@@ -222,9 +214,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
                             from: {table: {
                                 name: {name: "countries"}
                             }},
-                            on: {operand: {
-                                boolean: true
-                            }}
+                            on: {boolean: true}
                         }]
                     }]
                 },

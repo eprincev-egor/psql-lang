@@ -1,10 +1,10 @@
 import { AbstractNode, Cursor, keyword, OperatorsToken, TemplateElement, WordToken } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export type OrderByVectorType = "asc" | "desc";
 export type OrderByNullsType = "first" | "last";
 export interface OrderByItemRow {
-    expression: Expression;
+    expression: Operand;
     vector: OrderByVectorType;
     nulls?: OrderByNullsType;
 }
@@ -17,7 +17,7 @@ export class OrderByItem extends AbstractNode<OrderByItemRow> {
 
     static parse(cursor: Cursor): OrderByItemRow {
         const itemRow: OrderByItemRow = {
-            expression: cursor.parse(Expression),
+            expression: cursor.parse(Expression).operand(),
             vector: this.parseVector(cursor)
         };
 

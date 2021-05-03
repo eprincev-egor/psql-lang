@@ -3,7 +3,7 @@ import {
     TemplateElement,
     keyword, eol, tab
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 import { FromItemType, parseFromItem } from "./FromItem";
 
 export type JoinType = (
@@ -22,7 +22,7 @@ export type JoinType = (
 export interface JoinRow {
     type: JoinType;
     from: FromItemType;
-    on: Expression;
+    on: Operand;
 }
 
 export class Join extends AbstractNode<JoinRow> {
@@ -43,7 +43,7 @@ export class Join extends AbstractNode<JoinRow> {
         const from = parseFromItem(cursor);
 
         cursor.readWord("on");
-        const on = cursor.parse(Expression);
+        const on = cursor.parse(Expression).operand();
 
         return {type,from, on};
     }

@@ -31,9 +31,9 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             shouldBe: {
                 json: {
                     distinct: {on: [
-                        {operand: {
-                            column: [{name: "name"}]
-                        }}
+                        {column: [
+                            {name: "name"}
+                        ]}
                     ]},
                     select: [
                         {expression: {operand: {
@@ -59,9 +59,7 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             shouldBe: {
                 json: {
                     distinct: {on: [
-                        {operand: {
-                            number: "2"
-                        }}
+                        {number: "2"}
                     ]},
                     select: [
                         {expression: {operand: {
@@ -87,12 +85,8 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             shouldBe: {
                 json: {
                     distinct: {on: [
-                        {operand: {
-                            number: "1"
-                        }},
-                        {operand: {
-                            number: "2"
-                        }}
+                        {number: "1"},
+                        {number: "2"}
                     ]},
                     select: [
                         {expression: {operand: {
@@ -118,16 +112,16 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             shouldBe: {
                 json: {
                     distinct: {on: [
-                        {operand: {
+                        {
                             left: {
                                 column: [{name: "id"}]
                             },
                             operator: "%",
                             right: {number: "2"}
-                        }},
-                        {operand: {
-                            column: [{name: "name"}]
-                        }}
+                        },
+                        {column: [
+                            {name: "name"}
+                        ]}
                     ]},
                     select: [
                         {expression: {operand: {

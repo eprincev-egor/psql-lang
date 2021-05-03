@@ -20,11 +20,11 @@ describe("Select.orderBy.spec.ts: select ... order by ...", () => {
                         }
                     }],
                     orderBy: [{
-                        expression: {operand: {
+                        expression: {
                             column: [
                                 {name: "id"}
                             ]
-                        }},
+                        },
                         vector: "asc"
                     }]
                 },
@@ -48,11 +48,11 @@ describe("Select.orderBy.spec.ts: select ... order by ...", () => {
                         }
                     }],
                     orderBy: [{
-                        expression: {operand: {
+                        expression: {
                             column: [
                                 {name: "id"}
                             ]
-                        }},
+                        },
                         vector: "desc"
                     }]
                 },

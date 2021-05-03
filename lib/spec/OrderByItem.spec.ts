@@ -9,11 +9,11 @@ describe("OrderByItem", () => {
             input: "id",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "asc"
                 },
                 pretty: "id asc",
@@ -25,11 +25,11 @@ describe("OrderByItem", () => {
             input: "id asc",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "asc"
                 }
             }
@@ -39,11 +39,11 @@ describe("OrderByItem", () => {
             input: "id desc",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "desc"
                 }
             }
@@ -53,11 +53,11 @@ describe("OrderByItem", () => {
             input: "id desc",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "desc"
                 }
             }
@@ -67,11 +67,11 @@ describe("OrderByItem", () => {
             input: "id using >",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "desc"
                 },
                 pretty: "id desc",
@@ -83,11 +83,11 @@ describe("OrderByItem", () => {
             input: "id using <",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "asc"
                 },
                 pretty: "id asc",
@@ -99,11 +99,11 @@ describe("OrderByItem", () => {
             input: "name nulls first",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "name"}
                         ]
-                    }},
+                    },
                     vector: "asc",
                     nulls: "first"
                 },
@@ -116,11 +116,11 @@ describe("OrderByItem", () => {
             input: "name nulls last",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "name"}
                         ]
-                    }},
+                    },
                     vector: "asc",
                     nulls: "last"
                 },
@@ -133,11 +133,11 @@ describe("OrderByItem", () => {
             input: "name desc nulls last",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "name"}
                         ]
-                    }},
+                    },
                     vector: "desc",
                     nulls: "last"
                 },
@@ -150,11 +150,11 @@ describe("OrderByItem", () => {
             input: "name asc nulls last",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "name"}
                         ]
-                    }},
+                    },
                     vector: "asc",
                     nulls: "last"
                 },
@@ -167,11 +167,11 @@ describe("OrderByItem", () => {
             input: "name asc nulls first",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "name"}
                         ]
-                    }},
+                    },
                     vector: "asc",
                     nulls: "first"
                 },
@@ -184,11 +184,11 @@ describe("OrderByItem", () => {
             input: "id using < nulls first",
             shouldBe: {
                 json: {
-                    expression: {operand: {
+                    expression: {
                         column: [
                             {name: "id"}
                         ]
-                    }},
+                    },
                     vector: "asc",
                     nulls: "first"
                 },

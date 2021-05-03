@@ -15,8 +15,8 @@ describe("Expression.in.spec.ts", () => {
                             {name: "type"}
                         ]},
                         in: [
-                            {operand: {number: "1"}},
-                            {operand: {number: "2"}}
+                            {number: "1"},
+                            {number: "2"}
                         ]
                     }
                 },
@@ -34,9 +34,9 @@ describe("Expression.in.spec.ts", () => {
                             {name: "type"}
                         ]},
                         notIn: [
-                            {operand: {number: "3"}},
-                            {operand: {number: "4"}},
-                            {operand: {number: "5"}}
+                            {number: "3"},
+                            {number: "4"},
+                            {number: "5"}
                         ]
                     }
                 },

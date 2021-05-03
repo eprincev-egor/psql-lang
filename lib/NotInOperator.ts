@@ -2,12 +2,11 @@ import {
     AbstractNode,
     TemplateElement, _, printChain
 } from "abstract-lang";
-import { Expression } from "./Expression";
-import { Operand } from "./Operand";
+import { Operand } from "./Expression";
 
 export interface NotInOperatorRow {
     operand: Operand;
-    notIn: Expression[];
+    notIn: Operand[];
 }
 
 export class NotInOperator extends AbstractNode<NotInOperatorRow> {

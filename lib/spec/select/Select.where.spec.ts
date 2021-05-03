@@ -19,13 +19,13 @@ describe("Select.with.spec.ts: with ... select", () => {
                             name: {name: "users"}
                         }
                     }],
-                    where: {operand: {
+                    where: {
                         operand: {column: [
                             {name: "users"},
                             {name: "name"}
                         ]},
                         postOperator: "is not null"
-                    }}
+                    }
                 },
                 pretty: [
                     "select",
@@ -47,9 +47,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                         }}}
                     ],
                     from: [],
-                    where: {operand: {
-                        boolean: false
-                    }}
+                    where: {boolean: false}
                 },
                 pretty: [
                     "select",
@@ -88,7 +86,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                             name: {name: "orders"}
                         }
                     }],
-                    having: {operand: {
+                    having: {
                         left: {
                             call: {
                                 name: {name: "sum"}
@@ -102,7 +100,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                         },
                         operator: ">",
                         right: {number: "1000"}
-                    }}
+                    }
                 },
                 pretty: [
                     "select",
@@ -145,15 +143,15 @@ describe("Select.with.spec.ts: with ... select", () => {
                             name: {name: "orders"}
                         }
                     }],
-                    where: {operand: {
+                    where: {
                         left: {column: [
                             {name: "orders"},
                             {name: "year"}
                         ]},
                         operator: ">",
                         right: {number: "2010"}
-                    }},
-                    having: {operand: {
+                    },
+                    having: {
                         left: {
                             call: {
                                 name: {name: "sum"}
@@ -167,7 +165,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                         },
                         operator: ">",
                         right: {number: "1000"}
-                    }}
+                    }
                 },
                 pretty: [
                     "select",

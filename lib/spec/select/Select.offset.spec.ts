@@ -19,9 +19,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    limit: {operand: {
-                        number: "10"
-                    }}
+                    limit: {number: "10"}
                 },
                 pretty: "select\n    name\nfrom users\nlimit 10"
             }
@@ -61,9 +59,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    offset: {operand: {
-                        number: "10"
-                    }}
+                    offset: {number: "10"}
                 },
                 pretty: "select\n    name\nfrom users\noffset 10"
             }
@@ -83,12 +79,8 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    offset: {operand: {
-                        number: "1000"
-                    }},
-                    limit: {operand: {
-                        number: "120"
-                    }}
+                    offset: {number: "1000"},
+                    limit: {number: "120"}
                 },
                 pretty: "select\n    name\nfrom users\noffset 1000\nlimit 120"
             }
@@ -108,12 +100,8 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    offset: {operand: {
-                        number: "1000"
-                    }},
-                    limit: {operand: {
-                        number: "120"
-                    }}
+                    offset: {number: "1000"},
+                    limit: {number: "120"}
                 },
                 pretty: "select\n    name\nfrom users\noffset 1000\nlimit 120",
                 minify: "select name from users offset 1000 limit 120"
@@ -204,7 +192,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    offset: {operand: {number: "10"}},
+                    offset: {number: "10"},
                     fetch: {type: "next"}
                 },
                 pretty: "select\n    name\nfrom users\noffset 10\nfetch next rows only",
@@ -226,11 +214,11 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                             name: {name: "users"}
                         }
                     }],
-                    offset: {operand: {
+                    offset: {
                         left: {number: "10"},
                         operator: "-",
                         right: {number: "3"}
-                    }},
+                    },
                     fetch: {type: "next"}
                 },
                 pretty: "select\n    name\nfrom users\noffset 10 - 3\nfetch next rows only",

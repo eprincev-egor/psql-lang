@@ -3,7 +3,7 @@ import {
     TemplateElement,
     _, eol, tab, keyword, printChain
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 import { SelectColumn } from "./SelectColumn";
 import { OrderByItem } from "./OrderByItem";
 import { FromItemType, parseFromItem } from "./FromItem";
@@ -16,17 +16,17 @@ export interface SelectRow {
     with?: With;
     select: SelectColumn[];
     from: FromItemType[];
-    where?: Expression;
+    where?: Operand;
     groupBy?: GroupByElement[];
-    having?: Expression;
+    having?: Operand;
     orderBy?: OrderByItem[];
-    offset?: Expression;
-    limit?: Expression;
+    offset?: Operand;
+    limit?: Operand;
     fetch?: Fetch;
     union?: SelectUnion;
 }
 
-export type SelectDistinctType = {all: true} | {on: Expression[]};
+export type SelectDistinctType = {all: true} | {on: Operand[]};
 export interface SelectUnion {
     type: SelectUnionType;
     option?: SelectUnionOption;
@@ -75,7 +75,7 @@ export class Select extends AbstractNode<SelectRow> {
 
         if ( cursor.beforeWord("where") ) {
             cursor.readWord("where");
-            selectRow.where = cursor.parse(Expression);
+            selectRow.where = cursor.parse(Expression).operand();
         }
 
         if ( cursor.beforeWord("group") ) {
@@ -85,7 +85,7 @@ export class Select extends AbstractNode<SelectRow> {
 
         if ( cursor.beforeWord("having") ) {
             cursor.readWord("having");
-            selectRow.having = cursor.parse(Expression);
+            selectRow.having = cursor.parse(Expression).operand();
         }
 
         if ( cursor.beforeWord("order") ) {
@@ -117,6 +117,7 @@ export class Select extends AbstractNode<SelectRow> {
 
             selectRow.distinct = {
                 on: cursor.parseChainOf(Expression, ",")
+                    .map((expr) => expr.operand())
             };
 
             cursor.skipSpaces();
@@ -178,7 +179,7 @@ export class Select extends AbstractNode<SelectRow> {
         }
 
         cursor.readWord("offset");
-        selectRow.offset = cursor.parse(Expression);
+        selectRow.offset = cursor.parse(Expression).operand();
 
         cursor.skipSpaces();
     }
@@ -197,7 +198,7 @@ export class Select extends AbstractNode<SelectRow> {
             cursor.readWord("all");
         }
         else {
-            selectRow.limit = cursor.parse(Expression);
+            selectRow.limit = cursor.parse(Expression).operand();
         }
 
         cursor.skipSpaces();

@@ -64,7 +64,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.readValue("(");
             cursor.skipSpaces();
 
-            const inElements = cursor.parseChainOf(Expression, ",");
+            const inElements = cursor.parseChainOf(Expression, ",")
+                .map((expr) => expr.operand());
 
             cursor.skipSpaces();
             cursor.readValue(")");
@@ -86,7 +87,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.readValue("(");
             cursor.skipSpaces();
 
-            const notInElements = cursor.parseChainOf(Expression, ",");
+            const notInElements = cursor.parseChainOf(Expression, ",")
+                .map((expr) => expr.operand());
 
             cursor.skipSpaces();
             cursor.readValue(")");
