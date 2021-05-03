@@ -26,6 +26,7 @@ import { MakeInterval } from "./MakeInterval";
 import { Extract } from "./Extract";
 import { SubString } from "./SubString";
 import { Position } from "./Position";
+import { Overlay } from "./Overlay";
 
 export {Operand};
 
@@ -220,6 +221,23 @@ export class Expression extends AbstractNode<ExpressionRow> {
                     row
                 });
                 return position;
+            }
+
+            if ( functionName === "overlay" ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+                const row = Overlay.parseContent(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const overlay = new Overlay({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row
+                });
+                return overlay;
             }
 
             const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);

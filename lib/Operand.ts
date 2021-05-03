@@ -22,6 +22,7 @@ import { MakeInterval } from "./MakeInterval";
 import { Extract } from "./Extract";
 import { SubString } from "./SubString";
 import { Position } from "./Position";
+import { Overlay } from "./Overlay";
 
 export type Operand = (
     NumberLiteral |
@@ -47,5 +48,6 @@ export type Operand = (
     MakeInterval |
     Extract |
     SubString |
-    Position
+    Position |
+    Overlay
 );

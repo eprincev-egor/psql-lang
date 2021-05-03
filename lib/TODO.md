@@ -53,3 +53,5 @@
   - with (delete) select
 - scope methods
 - get type
+- merge any/all/some to one syntax
+- in/not int to one syntax
