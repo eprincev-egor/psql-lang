@@ -4,6 +4,7 @@ import {
     TemplateElement
 } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface SubStringRow {
     subString: Operand;
@@ -74,3 +75,5 @@ export class SubString extends AbstractNode<SubStringRow> {
         return output;
     }
 }
+
+likeAreFunction.substring = SubString;

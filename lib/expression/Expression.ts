@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
 import { Operand } from "./Operand";
@@ -22,13 +24,10 @@ import { FunctionCall } from "./operand/FunctionCall";
 import { EqualAnyArray } from "./operator/EqualAnyArray";
 import { EqualSomeArray } from "./operator/EqualSomeArray";
 import { SubQuery } from "./operand/SubQuery";
-import { MakeInterval } from "./likeAreFunction/MakeInterval";
-import { Extract } from "./likeAreFunction/Extract";
-import { SubString } from "./likeAreFunction/SubString";
-import { Position } from "./likeAreFunction/Position";
-import { Overlay } from "./likeAreFunction/Overlay";
 import { Cast } from "./likeAreFunction/Cast";
 import { PgType } from "./PgType";
+
+import { likeAreFunction } from "./likeAreFunction";
 
 export {Operand};
 
@@ -155,106 +154,25 @@ export class Expression extends AbstractNode<ExpressionRow> {
             const functionNameReference = FunctionReference.fromColumn(cursor, operand);
             const functionName = functionNameReference.toLowerCase();
 
-            if ( functionName === "make_interval" ) {
+            if ( functionName in likeAreFunction ) {
+                const Syntax = likeAreFunction[ functionName ];
+
                 cursor.readValue("(");
                 cursor.skipSpaces();
-                const intervalArguments = MakeInterval.parseArguments(cursor);
+
+                const row = Syntax.parseContent(cursor);
+
                 cursor.skipSpaces();
                 cursor.readValue(")");
 
-                const makeInterval = new MakeInterval({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row: {intervalArguments}
-                });
-                return makeInterval;
-            }
-
-            if ( functionName === "extract" ) {
-                cursor.readValue("(");
-                cursor.skipSpaces();
-                const row = Extract.parseContent(cursor);
-                cursor.skipSpaces();
-                cursor.readValue(")");
-
-                const extract = new Extract({
+                const syntax = new Syntax({
                     position: {
                         start: operand.position!.start,
                         end: cursor.nextToken.position
                     },
                     row
                 });
-                return extract;
-            }
-
-            if ( functionName === "substring" ) {
-                cursor.readValue("(");
-                cursor.skipSpaces();
-                const row = SubString.parseContent(cursor);
-                cursor.skipSpaces();
-                cursor.readValue(")");
-
-                const subString = new SubString({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row
-                });
-                return subString;
-            }
-
-            if ( functionName === "position" ) {
-                cursor.readValue("(");
-                cursor.skipSpaces();
-                const row = Position.parseContent(cursor);
-                cursor.skipSpaces();
-                cursor.readValue(")");
-
-                const position = new Position({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row
-                });
-                return position;
-            }
-
-            if ( functionName === "overlay" ) {
-                cursor.readValue("(");
-                cursor.skipSpaces();
-                const row = Overlay.parseContent(cursor);
-                cursor.skipSpaces();
-                cursor.readValue(")");
-
-                const overlay = new Overlay({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row
-                });
-                return overlay;
-            }
-
-            if ( functionName === "cast" ) {
-                cursor.readValue("(");
-                cursor.skipSpaces();
-                const row = Cast.parseContent(cursor);
-                cursor.skipSpaces();
-                cursor.readValue(")");
-
-                const cast = new Cast({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row
-                });
-                return cast;
+                return syntax;
             }
 
             const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);

@@ -1,6 +1,7 @@
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
 import { PgType } from "../PgType";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface CastRow {
     cast: Operand;
@@ -24,3 +25,5 @@ export class Cast extends AbstractNode<CastRow> {
         return [this.row.cast, "::", this.row.as];
     }
 }
+
+likeAreFunction.cast = Cast;

@@ -3,6 +3,7 @@ import {
     TemplateElement, keyword, _
 } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface OverlayRow {
     overlay: Operand;
@@ -60,3 +61,5 @@ export class Overlay extends AbstractNode<OverlayRow> {
         return output;
     }
 }
+
+likeAreFunction.overlay = Overlay;

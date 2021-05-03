@@ -3,6 +3,7 @@ import {
     TemplateElement, keyword, _, printChain
 } from "abstract-lang";
 import { MakeIntervalArgument } from "./MakeIntervalArgument";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface MakeIntervalRow {
     intervalArguments: MakeIntervalArgument[];
@@ -10,9 +11,9 @@ export interface MakeIntervalRow {
 
 export class MakeInterval extends AbstractNode<MakeIntervalRow> {
 
-    static parseArguments(cursor: Cursor): MakeIntervalArgument[] {
-        const args = cursor.parseChainOf(MakeIntervalArgument, ",");
-        return args;
+    static parseContent(cursor: Cursor): MakeIntervalRow {
+        const intervalArguments = cursor.parseChainOf(MakeIntervalArgument, ",");
+        return {intervalArguments};
     }
 
     template(): TemplateElement[] {
@@ -23,3 +24,5 @@ export class MakeInterval extends AbstractNode<MakeIntervalRow> {
         ];
     }
 }
+
+likeAreFunction.make_interval = MakeInterval;

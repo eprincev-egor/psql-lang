@@ -4,6 +4,7 @@ import {
 } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
 import { IntervalType, tryParseInterval } from "./intervals";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface ExtractRow {
     extract: IntervalType;
@@ -36,3 +37,5 @@ export class Extract extends AbstractNode<ExtractRow> {
         ];
     }
 }
+
+likeAreFunction.extract = Extract;

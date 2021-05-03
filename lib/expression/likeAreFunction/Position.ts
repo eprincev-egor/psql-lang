@@ -3,6 +3,7 @@ import {
     TemplateElement, keyword, _
 } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
+import { likeAreFunction } from "./likeAreFunction";
 
 export interface PositionRow {
     position: Operand;
@@ -34,3 +35,5 @@ export class Position extends AbstractNode<PositionRow> {
         ];
     }
 }
+
+likeAreFunction.position = Position;
