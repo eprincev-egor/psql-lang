@@ -11,9 +11,9 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
                 json: {
                     distinct: {all: true},
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -36,12 +36,12 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
                         ]}
                     ]},
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "id"}]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [{name: "note"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -62,12 +62,12 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
                         {number: "2"}
                     ]},
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "id"}]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [{name: "note"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -89,12 +89,12 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
                         {number: "2"}
                     ]},
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "id"}]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [{name: "note"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -124,12 +124,12 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
                         ]}
                     ]},
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "id"}]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [{name: "note"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {

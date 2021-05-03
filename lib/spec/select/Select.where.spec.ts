@@ -10,9 +10,9 @@ describe("Select.with.spec.ts: with ... select", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -42,9 +42,9 @@ describe("Select.with.spec.ts: with ... select", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     where: {boolean: false}
@@ -69,7 +69,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             call: {
                                 name: {name: "max"}
                             },
@@ -79,7 +79,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                                     {name: "profit"}
                                 ]
                             }]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -126,7 +126,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             call: {
                                 name: {name: "max"}
                             },
@@ -136,7 +136,7 @@ describe("Select.with.spec.ts: with ... select", () => {
                                     {name: "profit"}
                                 ]
                             }]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {

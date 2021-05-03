@@ -20,7 +20,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             shouldBe: {
                 json: {
                     select: [{
-                        expression: {operand: {number: "1"}}
+                        expression: {number: "1"}
                     }],
                     from: []
                 },
@@ -33,12 +33,8 @@ describe("Select.base.spec.ts: base select variants", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
-                            number: "1"
-                        }}},
-                        {expression: {operand: {
-                            number: "2"
-                        }}}
+                        {expression: {number: "1"}},
+                        {expression: {number: "2"}}
                     ],
                     from: []
                 },
@@ -52,9 +48,9 @@ describe("Select.base.spec.ts: base select variants", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -71,10 +67,10 @@ describe("Select.base.spec.ts: base select variants", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [],
                             allColumns: true
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {

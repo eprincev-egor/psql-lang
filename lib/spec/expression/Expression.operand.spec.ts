@@ -191,9 +191,9 @@ describe("Expression.operand.spec.ts", () => {
                 json: {
                     operand: {
                         subQuery: {
-                            select: [{expression: {
-                                operand: {number: "1"}
-                            }}],
+                            select: [
+                                {expression: {number: "1"}}
+                            ],
                             from: []
                         }
                     }

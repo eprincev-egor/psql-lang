@@ -6,12 +6,12 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
     it("valid inputs", () => {
 
         const select: ReturnType< Select["toJSON"] >["select"] = [
-            {expression: {operand: {
+            {expression: {
                 arguments: [
                     {number: "1"}
                 ],
                 call: {name: {name: "sum"}}
-            }}}
+            }}
         ];
         const from: ReturnType< Select["toJSON"] >["from"] = [{
             table: {

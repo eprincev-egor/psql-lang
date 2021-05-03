@@ -10,18 +10,18 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
                         type: "union",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -42,18 +42,18 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
                         type: "intersect",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -74,18 +74,18 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
                         type: "except",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -106,9 +106,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
@@ -116,9 +116,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                         option: "all",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -139,9 +139,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
@@ -149,9 +149,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                         option: "distinct",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -172,9 +172,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
@@ -182,9 +182,9 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                         option: "distinct",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: []
                         }
@@ -205,27 +205,27 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             number: "1"
-                        }}}
+                        }}
                     ],
                     from: [],
                     union: {
                         type: "union",
                         select: {
                             select: [
-                                {expression: {operand: {
+                                {expression: {
                                     number: "2"
-                                }}}
+                                }}
                             ],
                             from: [],
                             union: {
                                 type: "union",
                                 select: {
                                     select: [
-                                        {expression: {operand: {
+                                        {expression: {
                                             number: "3"
-                                        }}}
+                                        }}
                                     ],
                                     from: []
                                 }

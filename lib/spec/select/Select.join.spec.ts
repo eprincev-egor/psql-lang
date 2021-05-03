@@ -19,24 +19,24 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [
                                 {name: "companies"},
                                 {name: "id"}
                             ]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [
                                 {name: "companies"},
                                 {name: "name"}
                             ]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [
                                 {name: "countries"},
                                 {name: "code"}
                             ]
-                        }}, as: {name: "country_code"}}
+                        }, as: {name: "country_code"}}
                     ],
                     from: [{
                         table: {

@@ -10,9 +10,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -30,9 +30,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -50,9 +50,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -70,9 +70,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -91,9 +91,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -113,9 +113,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -136,9 +136,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -160,9 +160,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -183,9 +183,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -205,9 +205,9 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {

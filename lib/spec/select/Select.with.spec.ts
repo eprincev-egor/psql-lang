@@ -7,20 +7,18 @@ describe("Select.with.spec.ts: with ... select", () => {
 
         const query = {
             select: [{
-                expression: {operand: {
-                    number: "1"
-                }},
+                expression: {number: "1"},
                 as: {name: "id"}
             }],
             from: []
         };
         const select = [{
-            expression: {operand: {
+            expression: {
                 allColumns: true,
                 column: [
                     {name: "companies"}
                 ]
-            }}
+            }
         }];
         const from = [{
             table: {

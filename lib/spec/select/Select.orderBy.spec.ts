@@ -10,9 +10,9 @@ describe("Select.orderBy.spec.ts: select ... order by ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {
@@ -38,9 +38,9 @@ describe("Select.orderBy.spec.ts: select ... order by ...", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [{name: "name"}]
-                        }}}
+                        }}
                     ],
                     from: [{
                         table: {

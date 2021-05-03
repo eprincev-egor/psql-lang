@@ -10,21 +10,17 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             shouldBe: {
                 json: {
                     select: [
-                        {
-                            expression: {operand: {
-                                column: [
-                                    {name: "id"}
-                                ]
-                            }}
-                        }
+                        {expression: {
+                            column: [
+                                {name: "id"}
+                            ]
+                        }}
                     ],
                     from: [{
                         subQuery: {
                             select: [
                                 {
-                                    expression: {operand: {
-                                        number: "1"
-                                    }},
+                                    expression: {number: "1"},
                                     as: {name: "id"}
                                 }
                             ],

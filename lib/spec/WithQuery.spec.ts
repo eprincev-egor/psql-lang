@@ -35,16 +35,12 @@ describe("WithQuery", () => {
                     name: {name: "items"},
                     query: {
                         select: [
-                            {
-                                expression: {operand: {
-                                    number: "1"
-                                }}
-                            },
-                            {
-                                expression: {operand: {
-                                    number: "2"
-                                }}
-                            }
+                            {expression: {
+                                number: "1"
+                            }},
+                            {expression: {
+                                number: "2"
+                            }}
                         ],
                         from: []
                     }
@@ -71,20 +67,12 @@ describe("WithQuery", () => {
                     name: {name: "items"},
                     values: [
                         {values: [
-                            {value: {operand: {
-                                number: "1"
-                            }}},
-                            {value: {operand: {
-                                number: "2"
-                            }}}
+                            {value: {number: "1"}},
+                            {value: {number: "2"}}
                         ]},
                         {values: [
-                            {value: {operand: {
-                                number: "3"
-                            }}},
-                            {value: {operand: {
-                                number: "4"
-                            }}}
+                            {value: {number: "3"}},
+                            {value: {number: "4"}}
                         ]}
                     ]
                 },
@@ -114,20 +102,12 @@ describe("WithQuery", () => {
                     ],
                     values: [
                         {values: [
-                            {value: {operand: {
-                                number: "1"
-                            }}},
-                            {value: {operand: {
-                                number: "2"
-                            }}}
+                            {value: {number: "1"}},
+                            {value: {number: "2"}}
                         ]},
                         {values: [
-                            {value: {operand: {
-                                number: "3"
-                            }}},
-                            {value: {operand: {
-                                number: "4"
-                            }}}
+                            {value: {number: "3"}},
+                            {value: {number: "4"}}
                         ]}
                     ]
                 },

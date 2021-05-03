@@ -1,10 +1,10 @@
 import { AbstractNode, Cursor, keyword, TemplateElement } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export type ValueItemRow = {
     default: true;
 } | {
-    value: Expression;
+    value: Operand;
 };
 
 export class ValueItem extends AbstractNode<ValueItemRow> {
@@ -19,7 +19,7 @@ export class ValueItem extends AbstractNode<ValueItemRow> {
             return {default: true};
         }
         else {
-            const value = cursor.parse(Expression);
+            const value = cursor.parse(Expression).operand();
             return {value};
         }
     }
