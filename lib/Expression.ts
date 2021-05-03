@@ -24,6 +24,7 @@ import { EqualSomeArray } from "./EqualSomeArray";
 import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./MakeInterval";
 import { Extract } from "./Extract";
+import { SubString } from "./SubString";
 
 export {Operand};
 
@@ -176,6 +177,23 @@ export class Expression extends AbstractNode<ExpressionRow> {
                     row
                 });
                 return extract;
+            }
+
+            if ( functionName === "substring" ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+                const row = SubString.parseContent(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const subString = new SubString({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row
+                });
+                return subString;
             }
 
             const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);
