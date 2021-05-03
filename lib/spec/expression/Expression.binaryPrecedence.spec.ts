@@ -110,7 +110,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
                 json: {
                     operand: {
                         left: {
-                            operand: {
+                            subExpression: {
                                 left: {number: "1"},
                                 operator: "+",
                                 right: {number: "2"}
@@ -118,7 +118,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
                         },
                         operator: "-",
                         right: {
-                            operand: {
+                            subExpression: {
                                 left: {number: "3"},
                                 operator: "+",
                                 right: {number: "4"}

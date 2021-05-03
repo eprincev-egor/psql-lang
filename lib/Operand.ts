@@ -21,6 +21,7 @@ import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./MakeInterval";
 import { Extract } from "./Extract";
 import { SubString } from "./SubString";
+import { Position } from "./Position";
 
 export type Operand = (
     NumberLiteral |
@@ -45,5 +46,6 @@ export type Operand = (
     SubQuery |
     MakeInterval |
     Extract |
-    SubString
+    SubString |
+    Position
 );

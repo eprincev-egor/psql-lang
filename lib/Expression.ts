@@ -25,11 +25,16 @@ import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./MakeInterval";
 import { Extract } from "./Extract";
 import { SubString } from "./SubString";
+import { Position } from "./Position";
 
 export {Operand};
 
 export interface ExpressionRow {
     operand: Operand;
+}
+
+export interface ParseExpressionOptions {
+    stopOnOperator?: string;
 }
 
 export class Expression extends AbstractNode<ExpressionRow> {
@@ -46,10 +51,13 @@ export class Expression extends AbstractNode<ExpressionRow> {
         );
     }
 
-    static parse(cursor: Cursor): ExpressionRow {
-        const operand: Operand = this.parseOperand(cursor);
+    static parse(
+        cursor: Cursor,
+        options: ParseExpressionOptions = {}
+    ): ExpressionRow {
+        const operand: Operand = this.parseOperand(cursor, options);
 
-        const binary = this.parseBinary(cursor, operand);
+        const binary = this.parseBinary(cursor, operand, options);
         if ( binary ) {
             return {operand: binary};
         }
@@ -57,14 +65,16 @@ export class Expression extends AbstractNode<ExpressionRow> {
         return {operand};
     }
 
-    static parseOperand(cursor: Cursor): Operand {
+    static parseOperand(
+        cursor: Cursor,
+        options: ParseExpressionOptions = {}
+    ): Operand {
         let operand = cursor.before(PreUnaryOperator) ?
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
 
-        if ( cursor.beforeWord("in") ) {
-            cursor.readWord("in");
-            cursor.readValue("(");
+        if ( cursor.beforePhrase("in", "(") && options.stopOnOperator !== "in" ) {
+            cursor.readPhrase("in", "(");
             cursor.skipSpaces();
 
             const inElements = cursor.parseChainOf(Expression, ",")
@@ -85,9 +95,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             });
             return inOperator;
         }
-        else if ( cursor.beforePhrase("not", "in") ) {
-            cursor.readPhrase("not", "in");
-            cursor.readValue("(");
+        else if ( cursor.beforePhrase("not", "in", "(") ) {
+            cursor.readPhrase("not", "in", "(");
             cursor.skipSpaces();
 
             const notInElements = cursor.parseChainOf(Expression, ",")
@@ -196,6 +205,23 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 return subString;
             }
 
+            if ( functionName === "position" ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+                const row = Position.parseContent(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const position = new Position({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row
+                });
+                return position;
+            }
+
             const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);
             return functionCall;
         }
@@ -205,7 +231,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
     private static parseBinary(
         cursor: Cursor,
-        left: Operand
+        left: Operand,
+        options: ParseExpressionOptions
     ): Operand | undefined {
         cursor.skipSpaces();
 
@@ -213,7 +240,13 @@ export class Expression extends AbstractNode<ExpressionRow> {
             return;
         }
 
+        const operatorToken = cursor.nextToken;
         const operator = BinaryOperator.parseOperator(cursor);
+
+        if ( options.stopOnOperator === operator ) {
+            cursor.setPositionBefore(operatorToken);
+            return;
+        }
 
         cursor.skipSpaces();
         const right = this.parseOperand(cursor);
@@ -223,7 +256,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
             left, operator, right
         );
 
-        const nextBinary = this.parseBinary(cursor, binary);
+        const nextBinary = this.parseBinary(cursor, binary, options);
         if ( nextBinary ) {
             return nextBinary;
         }

@@ -1,30 +1,30 @@
-import { Cursor, TemplateElement } from "abstract-lang";
-import { ExpressionRow } from "./Expression";
-import assert from "assert";
+import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
+import { Expression, Operand } from "./Expression";
 import { cycle } from "./cycle";
 
-assert.ok( cycle.Expression );
-
-export class SubExpression extends cycle.Expression {
+export interface SubExpressionRow {
+    subExpression: Operand;
+}
+export class SubExpression extends AbstractNode<SubExpressionRow> {
 
     static entry(cursor: Cursor): boolean {
         return cursor.beforeValue("(");
     }
 
-    static parse(cursor: Cursor): ExpressionRow {
+    static parse(cursor: Cursor): SubExpressionRow {
         cursor.readValue("(");
         cursor.skipSpaces();
 
-        const {operand} = super.parse(cursor);
+        const subExpression = cursor.parse(Expression).operand();
 
         cursor.skipSpaces();
         cursor.readValue(")");
 
-        return {operand};
+        return {subExpression};
     }
 
     template(): TemplateElement[] {
-        return ["(", this.row.operand, ")"];
+        return ["(", this.row.subExpression, ")"];
     }
 }
 
