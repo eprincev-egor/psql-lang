@@ -4,12 +4,12 @@ import {
     eol, tab, _, keyword
 } from "abstract-lang";
 import { CaseWhenElement } from "./CaseWhenElement";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface CaseWhenRow {
-    switch?: Expression;
+    switch?: Operand;
     case: CaseWhenElement[];
-    else?: Expression;
+    else?: Operand;
 }
 
 export class CaseWhen extends AbstractNode<CaseWhenRow> {
@@ -21,17 +21,17 @@ export class CaseWhen extends AbstractNode<CaseWhenRow> {
     static parse(cursor: Cursor): CaseWhenRow {
         cursor.readWord("case");
 
-        let switchExpression: Expression | undefined;
+        let switchExpression: Operand | undefined;
         if ( !cursor.before(CaseWhenElement) ) {
-            switchExpression = cursor.parse(Expression);
+            switchExpression = cursor.parse(Expression).operand();
         }
 
         const caseElements = cursor.parseChainOf(CaseWhenElement);
 
-        let elseExpression: Expression | undefined;
+        let elseExpression: Operand | undefined;
         if ( cursor.beforeWord("else") ) {
             cursor.readWord("else");
-            elseExpression = cursor.parse(Expression);
+            elseExpression = cursor.parse(Expression).operand();
         }
 
         cursor.readWord("end");

@@ -1,10 +1,10 @@
 import { AbstractNode, Cursor, keyword, TemplateElement } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export type FetchType = "first" | "next";
 export interface FetchRow {
     type: FetchType;
-    count?: Expression;
+    count?: Operand;
 }
 
 export class Fetch extends AbstractNode<FetchRow> {
@@ -21,7 +21,7 @@ export class Fetch extends AbstractNode<FetchRow> {
         };
 
         if ( !cursor.beforeWord("row") && !cursor.beforeWord("rows") ) {
-            row.count = cursor.parse(Expression);
+            row.count = cursor.parse(Expression).operand();
         }
 
         if ( cursor.beforeWord("row") ) {

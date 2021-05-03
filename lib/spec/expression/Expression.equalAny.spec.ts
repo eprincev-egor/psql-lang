@@ -11,12 +11,12 @@ describe("Expression.equalAny.spec.ts", () => {
                 json: {
                     operand: {
                         operand: {number: "2"},
-                        anyArray: {operand: {
+                        anyArray: {
                             column: [
                                 {name: "company"},
                                 {name: "roles_ids"}
                             ]
-                        }}
+                        }
                     }
                 },
                 minify: "2=any(company.roles_ids)"
@@ -30,18 +30,18 @@ describe("Expression.equalAny.spec.ts", () => {
                     operand: {
                         operand: {
                             operand: {number: "3"},
-                            anyArray: {operand: {
+                            anyArray: {
                                 array: [
-                                    {operand: {number: "2"}},
-                                    {operand: {number: "1"}}
+                                    {number: "2"},
+                                    {number: "1"}
                                 ]
-                            }}
+                            }
                         },
-                        anyArray: {operand: {
+                        anyArray: {
                             array: [
-                                {operand: {boolean: false}}
+                                {boolean: false}
                             ]
-                        }}
+                        }
                     }
                 },
                 minify: "3=any(array[2,1])=any(array[false])"
@@ -57,12 +57,12 @@ describe("Expression.equalAny.spec.ts", () => {
                             {name: "unit"},
                             {name: "id"}
                         ]},
-                        someArray: {operand: {
+                        someArray: {
                             column: [
                                 {name: "orders"},
                                 {name: "units_ids"}
                             ]
-                        }}
+                        }
                     }
                 },
                 minify: "unit.id=some(orders.units_ids)"

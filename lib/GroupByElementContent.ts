@@ -2,12 +2,12 @@ import {
     AbstractNode, Cursor,
     TemplateElement, printChain, _
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export type GroupByElementContentRow = {
-    expression: Expression;
+    expression: Operand;
 } | {
-    expressions: Expression[];
+    expressions: Operand[];
 }
 
 // { expression | ( expression [, ...] ) }
@@ -22,7 +22,8 @@ export class GroupByElementContent extends AbstractNode<GroupByElementContentRow
             cursor.readValue("(");
             cursor.skipSpaces();
 
-            const expressions = cursor.parseChainOf(Expression, ",");
+            const expressions = cursor.parseChainOf(Expression, ",")
+                .map((expr) => expr.operand());
 
             cursor.skipSpaces();
             cursor.readValue(")");
@@ -30,7 +31,7 @@ export class GroupByElementContent extends AbstractNode<GroupByElementContentRow
             return {expressions};
         }
         else {
-            const expression = cursor.parse(Expression);
+            const expression = cursor.parse(Expression).operand();
             return {expression};
         }
     }

@@ -2,11 +2,11 @@ import {
     AbstractNode, Cursor,
     TemplateElement, eol, keyword
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface CaseWhenElementRow {
-    when: Expression;
-    then: Expression;
+    when: Operand;
+    then: Operand;
 }
 
 export class CaseWhenElement extends AbstractNode<CaseWhenElementRow> {
@@ -17,9 +17,9 @@ export class CaseWhenElement extends AbstractNode<CaseWhenElementRow> {
 
     static parse(cursor: Cursor): CaseWhenElementRow {
         cursor.readWord("when");
-        const when = cursor.parse(Expression);
+        const when = cursor.parse(Expression).operand();
         cursor.readWord("then");
-        const then = cursor.parse(Expression);
+        const then = cursor.parse(Expression).operand();
 
         return {when, then};
     }

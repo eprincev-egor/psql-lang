@@ -2,10 +2,10 @@ import {
     AbstractNode, Cursor,
     TemplateElement, _, printChain
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface ArrayLiteralRow {
-    array: Expression[];
+    array: Operand[];
 }
 
 export class ArrayLiteral extends AbstractNode<ArrayLiteralRow> {
@@ -19,7 +19,8 @@ export class ArrayLiteral extends AbstractNode<ArrayLiteralRow> {
         cursor.readValue("[");
         cursor.skipSpaces();
 
-        const array = cursor.parseChainOf(Expression, ",");
+        const array = cursor.parseChainOf(Expression, ",")
+            .map((expr) => expr.operand());
 
         cursor.skipSpaces();
         cursor.readValue("]");

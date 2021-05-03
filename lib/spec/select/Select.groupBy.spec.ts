@@ -7,9 +7,9 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
 
         const select: ReturnType< Select["toJSON"] >["select"] = [
             {expression: {operand: {
-                arguments: [{operand: {
-                    number: "1"
-                }}],
+                arguments: [
+                    {number: "1"}
+                ],
                 call: {name: {name: "sum"}}
             }}}
         ];
@@ -25,12 +25,12 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
                 json: {
                     select, from,
                     groupBy: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [
                                 {name: "orders"},
                                 {name: "date"}
                             ]
-                        }}}
+                        }}
                     ]
                 },
                 pretty: [
@@ -50,18 +50,18 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
                 json: {
                     select, from,
                     groupBy: [
-                        {expression: {operand: {
+                        {expression: {
                             column: [
                                 {name: "orders"},
                                 {name: "client_id"}
                             ]
-                        }}},
-                        {expression: {operand: {
+                        }},
+                        {expression: {
                             column: [
                                 {name: "orders"},
                                 {name: "date"}
                             ]
-                        }}}
+                        }}
                     ]
                 },
                 pretty: [

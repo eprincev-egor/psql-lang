@@ -8,11 +8,11 @@ describe("GroupByElementContent", () => {
         assertNode(GroupByElementContent, {
             input: "id",
             shouldBe: {
-                json: {expression: {operand: {
+                json: {expression: {
                     column: [
                         {name: "id"}
                     ]
-                }}}
+                }}
             }
         });
 
@@ -20,16 +20,12 @@ describe("GroupByElementContent", () => {
             input: "(id, name)",
             shouldBe: {
                 json: {expressions: [
-                    {operand: {
-                        column: [
-                            {name: "id"}
-                        ]
-                    }},
-                    {operand: {
-                        column: [
-                            {name: "name"}
-                        ]
-                    }}
+                    {column: [
+                        {name: "id"}
+                    ]},
+                    {column: [
+                        {name: "name"}
+                    ]}
                 ]},
                 minify: "(id,name)"
             }

@@ -2,13 +2,13 @@ import {
     AbstractNode, Cursor,
     TemplateElement, _, keyword, printChain
 } from "abstract-lang";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 import { GroupByElementContent } from "./GroupByElementContent";
 
 export type GroupByElementRow = {
     empty: true;
 } | {
-    expression: Expression;
+    expression: Operand;
 } | {
     rollup: GroupByElementContent[];
 } | {
@@ -39,7 +39,7 @@ export class GroupByElement extends AbstractNode<GroupByElementRow> {
             return this.parseGroupingSets(cursor);
         }
         else {
-            const expression = cursor.parse(Expression);
+            const expression = cursor.parse(Expression).operand();
             return {expression};
         }
     }

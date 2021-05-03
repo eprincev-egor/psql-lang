@@ -15,21 +15,19 @@ describe("CaseWhen", () => {
             shouldBe: {
                 json: {
                     case: [{
-                        when: {operand: {
+                        when: {
                             operand: {column: [
                                 {name: "company"},
                                 {name: "name"}
                             ]},
                             postOperator: "is not null"
-                        }},
-                        then: {operand: {column: [
+                        },
+                        then: {column: [
                             {name: "company"},
                             {name: "name"}
-                        ]}}
+                        ]}
                     }],
-                    else: {operand: {
-                        string: "(unknown)"
-                    }}
+                    else: {string: "(unknown)"}
                 },
                 pretty: [
                     "case",
@@ -57,35 +55,33 @@ describe("CaseWhen", () => {
                 json: {
                     case: [
                         {
-                            when: {operand: {
+                            when: {
                                 operand: {column: [
                                     {name: "company"},
                                     {name: "name"}
                                 ]},
                                 postOperator: "is not null"
-                            }},
-                            then: {operand: {column: [
+                            },
+                            then: {column: [
                                 {name: "company"},
                                 {name: "name"}
-                            ]}}
+                            ]}
                         },
                         {
-                            when: {operand: {
+                            when: {
                                 operand: {column: [
                                     {name: "company"},
                                     {name: "name_eng"}
                                 ]},
                                 postOperator: "is not null"
-                            }},
-                            then: {operand: {column: [
+                            },
+                            then: {column: [
                                 {name: "company"},
                                 {name: "name_eng"}
-                            ]}}
+                            ]}
                         }
                     ],
-                    else: {operand: {
-                        string: "(unknown)"
-                    }}
+                    else: {string: "(unknown)"}
                 },
                 pretty: [
                     "case",
@@ -117,8 +113,8 @@ describe("CaseWhen", () => {
             shouldBe: {
                 json: {
                     case: [{
-                        when: {operand: {boolean: true}},
-                        then: {operand: {number: "1"}}
+                        when: {boolean: true},
+                        then: {number: "1"}
                     }]
                 },
                 pretty: [
@@ -140,15 +136,15 @@ describe("CaseWhen", () => {
             `,
             shouldBe: {
                 json: {
-                    switch: {operand: {column: [
+                    switch: {column: [
                         {name: "order"},
                         {name: "type"}
-                    ]}},
+                    ]},
                     case: [{
-                        when: {operand: {string: "FTL"}},
-                        then: {operand: {string: "green"}}
+                        when: {string: "FTL"},
+                        then: {string: "green"}
                     }],
-                    else: {operand: {string: "red"}}
+                    else: {string: "red"}
                 },
                 pretty: [
                     "case order.type",
@@ -169,13 +165,13 @@ describe("CaseWhen", () => {
             `,
             shouldBe: {
                 json: {
-                    switch: {operand: {column: [
+                    switch: {column: [
                         {name: "order"},
                         {name: "type"}
-                    ]}},
+                    ]},
                     case: [{
-                        when: {operand: {string: "FCL"}},
-                        then: {operand: {string: "black"}}
+                        when: {string: "FCL"},
+                        then: {string: "black"}
                     }]
                 },
                 pretty: [

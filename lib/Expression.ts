@@ -23,6 +23,8 @@ import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
 import { SubQuery } from "./SubQuery";
 
+export {Operand};
+
 export interface ExpressionRow {
     operand: Operand;
 }
@@ -266,6 +268,10 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
     template(): TemplateElement[] {
         return [this.row.operand];
+    }
+
+    operand(): Operand {
+        return this.row.operand;
     }
 }
 

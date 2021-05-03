@@ -103,9 +103,9 @@ describe("Expression.operand.spec.ts", () => {
             shouldBe: {
                 json: {
                     operand: {array: [
-                        {operand: {number: "1"}},
-                        {operand: {number: "2"}},
-                        {operand: {number: "3"}}
+                        {number: "1"},
+                        {number: "2"},
+                        {number: "3"}
                     ]}
                 },
                 pretty: "array[1, 2, 3]",
@@ -119,10 +119,10 @@ describe("Expression.operand.spec.ts", () => {
                 json: {
                     operand: {
                         case: [{
-                            when: {operand: {boolean: true}},
-                            then: {operand: {number: "1"}}
+                            when: {boolean: true},
+                            then: {number: "1"}
                         }],
-                        else: {operand: {number: "0"}}
+                        else: {number: "0"}
                     }
                 },
                 pretty: [
@@ -161,8 +161,8 @@ describe("Expression.operand.spec.ts", () => {
                             name: {name: "some_func"}
                         },
                         arguments: [
-                            {operand: {number: "1"}},
-                            {operand: {number: "2"}}
+                            {number: "1"},
+                            {number: "2"}
                         ]
                     }
                 },

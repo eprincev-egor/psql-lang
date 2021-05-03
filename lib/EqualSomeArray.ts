@@ -1,10 +1,9 @@
 import { AbstractNode, TemplateElement, _ } from "abstract-lang";
-import { Expression } from "./Expression";
-import { Operand } from "./Operand";
+import { Operand } from "./Expression";
 
 export interface EqualSomeArrayRow {
     operand: Operand;
-    someArray: Expression;
+    someArray: Operand;
 }
 
 export class EqualSomeArray extends AbstractNode<EqualSomeArrayRow> {

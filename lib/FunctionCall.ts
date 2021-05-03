@@ -3,11 +3,11 @@ import {
     printChain, TemplateElement, _
 } from "abstract-lang";
 import { FunctionReference } from "./FunctionReference";
-import { Expression } from "./Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface FunctionCallRow {
     call: FunctionReference;
-    arguments: Expression[];
+    arguments: Operand[];
 }
 
 export class FunctionCall extends AbstractNode<FunctionCallRow> {
@@ -19,9 +19,10 @@ export class FunctionCall extends AbstractNode<FunctionCallRow> {
         cursor.readValue("(");
         cursor.skipSpaces();
 
-        let args: Expression[] = [];
+        let args: Operand[] = [];
         if ( !cursor.beforeValue(")") ) {
-            args = cursor.parseChainOf(Expression, ",");
+            args = cursor.parseChainOf(Expression, ",")
+                .map((expr) => expr.operand());
         }
 
         cursor.skipSpaces();

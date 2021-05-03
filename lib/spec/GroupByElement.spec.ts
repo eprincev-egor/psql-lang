@@ -8,12 +8,12 @@ describe("GroupByElement", () => {
         assertNode(GroupByElement, {
             input: "order.date",
             shouldBe: {
-                json: {expression: {operand: {
+                json: {expression: {
                     column: [
                         {name: "order"},
                         {name: "date"}
                     ]
-                }}}
+                }}
             }
         });
 
@@ -21,16 +21,16 @@ describe("GroupByElement", () => {
             input: "grouping Sets (brand, size, ( ))",
             shouldBe: {
                 json: {groupingSets: [
-                    {expression: {operand: {
+                    {expression: {
                         column: [
                             {name: "brand"}
                         ]
-                    }}},
-                    {expression: {operand: {
+                    }},
+                    {expression: {
                         column: [
                             {name: "size"}
                         ]
-                    }}},
+                    }},
                     {empty: true}
                 ]},
                 pretty: "grouping sets (brand, size, ())",
@@ -42,20 +42,16 @@ describe("GroupByElement", () => {
             input: "cube ( brand, (size, 1))",
             shouldBe: {
                 json: {cube: [
-                    {expression: {operand: {
+                    {expression: {
                         column: [
                             {name: "brand"}
                         ]
-                    }}},
+                    }},
                     {expressions: [
-                        {operand: {
-                            column: [
-                                {name: "size"}
-                            ]
-                        }},
-                        {operand: {
-                            number: "1"
-                        }}
+                        {column: [
+                            {name: "size"}
+                        ]},
+                        {number: "1"}
                     ]}
                 ]},
                 pretty: "cube (brand, (size, 1))",
@@ -67,20 +63,16 @@ describe("GroupByElement", () => {
             input: "rollup ( brand, (size, 1))",
             shouldBe: {
                 json: {rollup: [
-                    {expression: {operand: {
+                    {expression: {
                         column: [
                             {name: "brand"}
                         ]
-                    }}},
+                    }},
                     {expressions: [
-                        {operand: {
-                            column: [
-                                {name: "size"}
-                            ]
-                        }},
-                        {operand: {
-                            number: "1"
-                        }}
+                        {column: [
+                            {name: "size"}
+                        ]},
+                        {number: "1"}
                     ]}
                 ]},
                 pretty: "rollup (brand, (size, 1))",

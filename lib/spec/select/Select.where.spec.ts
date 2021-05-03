@@ -75,12 +75,12 @@ describe("Select.with.spec.ts: with ... select", () => {
                             call: {
                                 name: {name: "max"}
                             },
-                            arguments: [{operand: {
+                            arguments: [{
                                 column: [
                                     {name: "orders"},
                                     {name: "profit"}
                                 ]
-                            }}]
+                            }]
                         }}}
                     ],
                     from: [{
@@ -93,12 +93,12 @@ describe("Select.with.spec.ts: with ... select", () => {
                             call: {
                                 name: {name: "sum"}
                             },
-                            arguments: [{operand: {
+                            arguments: [{
                                 column: [
                                     {name: "orders"},
                                     {name: "profit"}
                                 ]
-                            }}]
+                            }]
                         },
                         operator: ">",
                         right: {number: "1000"}
@@ -132,12 +132,12 @@ describe("Select.with.spec.ts: with ... select", () => {
                             call: {
                                 name: {name: "max"}
                             },
-                            arguments: [{operand: {
+                            arguments: [{
                                 column: [
                                     {name: "orders"},
                                     {name: "profit"}
                                 ]
-                            }}]
+                            }]
                         }}}
                     ],
                     from: [{
@@ -158,12 +158,12 @@ describe("Select.with.spec.ts: with ... select", () => {
                             call: {
                                 name: {name: "sum"}
                             },
-                            arguments: [{operand: {
+                            arguments: [{
                                 column: [
                                     {name: "orders"},
                                     {name: "profit"}
                                 ]
-                            }}]
+                            }]
                         },
                         operator: ">",
                         right: {number: "1000"}

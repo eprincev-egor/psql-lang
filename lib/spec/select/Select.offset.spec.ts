@@ -136,7 +136,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                     }],
                     fetch: {
                         type: "first",
-                        count: {operand: {number: "100"}}
+                        count: {number: "100"}
                     }
                 },
                 pretty: "select\n    name\nfrom users\nfetch first 100 rows only"
@@ -159,7 +159,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
                     }],
                     fetch: {
                         type: "next",
-                        count: {operand: {number: "1"}}
+                        count: {number: "1"}
                     }
                 },
                 pretty: "select\n    name\nfrom users\nfetch next 1 rows only",

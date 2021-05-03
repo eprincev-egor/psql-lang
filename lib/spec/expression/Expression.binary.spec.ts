@@ -347,19 +347,19 @@ describe("Expression.binary.spec.ts", () => {
                     operand: {
                         left: {
                             left: {array: [
-                                {operand: {number: "1"}},
-                                {operand: {number: "2"}}
+                                {number: "1"},
+                                {number: "2"}
                             ]},
                             operator: "||",
                             right: {array: [
-                                {operand: {number: "3"}},
-                                {operand: {number: "4"}}
+                                {number: "3"},
+                                {number: "4"}
                             ]}
                         },
                         operator: "||",
                         right: {array: [
-                            {operand: {number: "5"}},
-                            {operand: {number: "6"}}
+                            {number: "5"},
+                            {number: "6"}
                         ]}
                     }
                 },
