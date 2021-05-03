@@ -42,4 +42,8 @@ export class SchemaName extends AbstractNode<SchemaNameRow> {
 
         return [this.row.name];
     }
+
+    toLowerCase(): string {
+        return this.toString().toLowerCase();
+    }
 }

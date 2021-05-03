@@ -18,6 +18,7 @@ import { FunctionCall } from "./FunctionCall";
 import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
 import { SubQuery } from "./SubQuery";
+import { MakeInterval } from "./MakeInterval";
 
 export type Operand = (
     NumberLiteral |
@@ -39,5 +40,6 @@ export type Operand = (
     EqualAnyArray |
     EqualSomeArray |
     FunctionCall |
-    SubQuery
+    SubQuery |
+    MakeInterval
 );

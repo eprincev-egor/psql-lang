@@ -22,6 +22,7 @@ import { FunctionCall } from "./FunctionCall";
 import { EqualAnyArray } from "./EqualAnyArray";
 import { EqualSomeArray } from "./EqualSomeArray";
 import { SubQuery } from "./SubQuery";
+import { MakeInterval } from "./MakeInterval";
 
 export {Operand};
 
@@ -140,6 +141,23 @@ export class Expression extends AbstractNode<ExpressionRow> {
         cursor.skipSpaces();
         if ( operand instanceof ColumnReference && cursor.beforeValue("(") ) {
             const functionName = FunctionReference.fromColumn(cursor, operand);
+
+            if ( functionName.toString() === "make_interval" ) {
+                cursor.readValue("(");
+                const intervalArguments = MakeInterval.parseArguments(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const makeInterval = new MakeInterval({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row: {intervalArguments}
+                });
+                return makeInterval;
+            }
+
             const functionCall = FunctionCall.parseAfterName(cursor, functionName);
             return functionCall;
         }
