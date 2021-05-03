@@ -11,7 +11,6 @@ import { PostUnaryOperator } from "./operator/PostUnaryOperator";
 import { PreUnaryOperator } from "./operator/PreUnaryOperator";
 import { SubExpression } from "./operand/SubExpression";
 import { InOperator } from "./operator/InOperator";
-import { NotInOperator } from "./operator/NotInOperator";
 import { ArrayLiteral } from "./literal/ArrayLiteral";
 import { CaseWhen } from "./operand/CaseWhen";
 import { FunctionCall } from "./operand/FunctionCall";
@@ -39,7 +38,6 @@ export type Operand = (
     PreUnaryOperator |
     SubExpression |
     InOperator |
-    NotInOperator |
     ArrayLiteral |
     CaseWhen |
     EqualAnyArray |
