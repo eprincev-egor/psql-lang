@@ -14,12 +14,7 @@
 - max binary operator length
 - case( x as date )
 - collate
-- extract
-- overlay
-- position
-- substring
 - trim
-- make_interval
 - overlaps
 - timestamp
 - coalesce
@@ -54,4 +49,3 @@
 - scope methods
 - get type
 - merge any/all/some to one syntax
-- in/not int to one syntax
