@@ -23,6 +23,7 @@ import { Extract } from "./Extract";
 import { SubString } from "./SubString";
 import { Position } from "./Position";
 import { Overlay } from "./Overlay";
+import { Cast } from "./Cast";
 
 export type Operand = (
     NumberLiteral |
@@ -49,5 +50,6 @@ export type Operand = (
     Extract |
     SubString |
     Position |
-    Overlay
+    Overlay |
+    Cast
 );

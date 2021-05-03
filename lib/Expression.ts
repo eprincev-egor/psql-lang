@@ -27,6 +27,8 @@ import { Extract } from "./Extract";
 import { SubString } from "./SubString";
 import { Position } from "./Position";
 import { Overlay } from "./Overlay";
+import { Cast } from "./Cast";
+import { PgType } from "./PgType";
 
 export {Operand};
 
@@ -240,6 +242,23 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 return overlay;
             }
 
+            if ( functionName === "cast" ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+                const row = Cast.parseContent(cursor);
+                cursor.skipSpaces();
+                cursor.readValue(")");
+
+                const cast = new Cast({
+                    position: {
+                        start: operand.position!.start,
+                        end: cursor.nextToken.position
+                    },
+                    row
+                });
+                return cast;
+            }
+
             const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);
             return functionCall;
         }
@@ -264,6 +283,21 @@ export class Expression extends AbstractNode<ExpressionRow> {
         if ( options.stopOnOperator === operator ) {
             cursor.setPositionBefore(operatorToken);
             return;
+        }
+
+        if ( operator === "::" ) {
+            const type = cursor.parse(PgType);
+            const cast = new Cast({
+                position: {
+                    start: left.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: {
+                    cast: left,
+                    as: type
+                }
+            });
+            return cast;
         }
 
         cursor.skipSpaces();
