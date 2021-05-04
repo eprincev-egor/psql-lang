@@ -23,6 +23,7 @@ import { SubString } from "./likeAreFunction/SubString";
 import { Position } from "./likeAreFunction/Position";
 import { Overlay } from "./likeAreFunction/Overlay";
 import { Cast } from "./likeAreFunction/Cast";
+import { Exists } from "./likeAreFunction/Exists";
 
 export type Operand = (
     NumberLiteral |
@@ -49,5 +50,6 @@ export type Operand = (
     SubString |
     Position |
     Overlay |
-    Cast
+    Cast |
+    Exists
 );
