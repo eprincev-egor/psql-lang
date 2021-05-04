@@ -27,6 +27,7 @@ import { Cast } from "./likeAreFunction/Cast";
 import { PgType } from "./PgType";
 
 import { likeAreFunction } from "./likeAreFunction";
+import { Between } from "./operator/Between";
 
 export {Operand};
 
@@ -35,7 +36,7 @@ export interface ExpressionRow {
 }
 
 export interface ParseExpressionOptions {
-    stopOnOperator?: string;
+    stopOnOperators?: string[];
 }
 
 export class Expression extends AbstractNode<ExpressionRow> {
@@ -74,8 +75,25 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
 
+        if ( cursor.beforeWord("between") ) {
+            const betweenRow = Between.parseContent(cursor, operand);
+            const between = new Between({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: betweenRow
+            });
+
+            operand = between;
+        }
+
         if (
-            cursor.beforeWord("in") && options.stopOnOperator !== "in" ||
+            cursor.beforeWord("in") &&
+            (
+                !options.stopOnOperators ||
+                !options.stopOnOperators.includes("in")
+            ) ||
             cursor.beforePhrase("not", "in")
         ) {
             let not = false;
@@ -187,7 +205,10 @@ export class Expression extends AbstractNode<ExpressionRow> {
         const operatorToken = cursor.nextToken;
         const operator = BinaryOperator.parseOperator(cursor);
 
-        if ( options.stopOnOperator === operator ) {
+        if (
+            options.stopOnOperators &&
+            options.stopOnOperators.includes(operator)
+        ) {
             cursor.setPositionBefore(operatorToken);
             return;
         }

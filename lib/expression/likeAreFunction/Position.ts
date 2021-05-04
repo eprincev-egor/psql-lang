@@ -14,7 +14,7 @@ export class Position extends AbstractNode<PositionRow> {
 
     static parseContent(cursor: Cursor): PositionRow {
         const position = Expression.parse(cursor, {
-            stopOnOperator: "in"
+            stopOnOperators: ["in"]
         }).operand;
 
         cursor.skipSpaces();
