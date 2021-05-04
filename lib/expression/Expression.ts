@@ -29,6 +29,7 @@ import { PgType } from "./PgType";
 import { likeAreFunction } from "./likeAreFunction";
 import { Between } from "./operator/Between";
 import { Collate } from "./operator/Collate";
+import { SquareBrackets } from "./operator/SquareBrackets";
 
 export {Operand};
 
@@ -75,6 +76,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
         let operand = cursor.before(PreUnaryOperator) ?
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
+
+        operand = this.parseBrackets(cursor, operand);
 
         if ( cursor.beforeWord("collate") ) {
             const collateRow = Collate.parseCollate(cursor, operand);
@@ -156,6 +159,28 @@ export class Expression extends AbstractNode<ExpressionRow> {
                     postOperator
                 }
             });
+        }
+
+        return operand;
+    }
+
+    private static parseBrackets(
+        cursor: Cursor,
+        operand: Operand
+    ): Operand {
+
+        if ( cursor.beforeValue("[") ) {
+            const row = SquareBrackets.parseIndex(cursor, operand);
+            const brackets = new SquareBrackets({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row
+            });
+
+            operand = brackets;
+            operand = this.parseBrackets(cursor, operand);
         }
 
         return operand;
