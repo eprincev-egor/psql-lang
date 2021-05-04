@@ -28,6 +28,7 @@ import { PgType } from "./PgType";
 
 import { likeAreFunction } from "./likeAreFunction";
 import { Between } from "./operator/Between";
+import { Collate } from "./operator/Collate";
 
 export {Operand};
 
@@ -74,6 +75,19 @@ export class Expression extends AbstractNode<ExpressionRow> {
         let operand = cursor.before(PreUnaryOperator) ?
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
+
+        if ( cursor.beforeWord("collate") ) {
+            const collateRow = Collate.parseCollate(cursor, operand);
+            const collate = new Collate({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: collateRow
+            });
+
+            operand = collate;
+        }
 
         if ( cursor.beforeWord("between") ) {
             const betweenRow = Between.parseContent(cursor, operand);

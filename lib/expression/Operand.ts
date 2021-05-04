@@ -25,6 +25,7 @@ import { Overlay } from "./likeAreFunction/Overlay";
 import { Cast } from "./likeAreFunction/Cast";
 import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/Between";
+import { Collate } from "./operator/Collate";
 
 export type Operand = (
     NumberLiteral |
@@ -53,5 +54,6 @@ export type Operand = (
     Overlay |
     Cast |
     Exists |
-    Between
+    Between |
+    Collate
 );
