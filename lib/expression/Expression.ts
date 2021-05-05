@@ -223,7 +223,14 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 return syntax;
             }
 
-            const functionCall = FunctionCall.parseAfterName(cursor, functionNameReference);
+            const functionCall = new FunctionCall({
+                position: {
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    start: functionNameReference.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: FunctionCall.parseAfterName(cursor, functionNameReference)
+            });
             return functionCall;
         }
 
