@@ -15,7 +15,7 @@ export class ValueItem extends AbstractNode<ValueItemRow> {
 
     static parse(cursor: Cursor): ValueItemRow {
         if ( cursor.beforeWord("default") ) {
-            cursor.readValue("default");
+            cursor.readWord("default");
             return {default: true};
         }
         else {

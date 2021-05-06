@@ -1,7 +1,7 @@
 import {
     Cursor,
     TemplateElement,
-    printChain, eol
+    printChain, eol, keyword
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
 import { Join } from "./Join";
@@ -37,13 +37,18 @@ export class FromTable extends AbstractFromItem<FromTableRow> {
     }
 
     template(): TemplateElement[] {
-        if ( !this.row.joins ) {
-            return [this.row.table];
+        const output: TemplateElement[] = [
+            this.row.table
+        ];
+        if ( this.row.as ) {
+            output.push( keyword("as"), this.row.as );
         }
 
-        return [
-            this.row.table, eol, eol,
-            ...printChain(this.row.joins, eol, eol)
-        ];
+        if ( this.row.joins ) {
+            output.push(eol, eol);
+            output.push(...printChain(this.row.joins, eol, eol));
+        }
+
+        return output;
     }
 }

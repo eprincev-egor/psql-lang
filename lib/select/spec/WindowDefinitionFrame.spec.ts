@@ -152,4 +152,14 @@ describe("WindowDefinitionFrame", () => {
 
     });
 
+    it("invalid inputs", () => {
+
+        assertNode(WindowDefinitionFrame, {
+            input: "rows unbounded wrong",
+            throws: /expected preceding or following/,
+            target: "wrong"
+        });
+
+    });
+
 });

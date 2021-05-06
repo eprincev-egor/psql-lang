@@ -58,11 +58,9 @@ export class SubString extends AbstractNode<SubStringRow> {
             this.row.subString
         ];
 
-        if ( this.row.from ) {
-            output.push(
-                keyword("from"), this.row.from
-            );
-        }
+        output.push(
+            keyword("from"), this.row.from
+        );
 
         if ( this.row.for ) {
             output.push(
