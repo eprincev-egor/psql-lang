@@ -5,7 +5,6 @@ import {
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
 import { Join } from "./Join";
-import { Name } from "../base";
 import { TableReference } from "./TableReference";
 
 export interface FromTableRow extends FromItemRow {
@@ -24,9 +23,9 @@ export class FromTable extends AbstractFromItem<FromTableRow> {
             table
         };
 
-        if ( cursor.beforeWord("as") ) {
-            cursor.readWord("as");
-            row.as = cursor.parse(Name);
+        const alias = super.parseAlias(cursor);
+        if ( alias ) {
+            row.as = alias;
         }
 
         if ( cursor.before(Join) ) {

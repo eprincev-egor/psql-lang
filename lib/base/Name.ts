@@ -22,8 +22,7 @@ export class Name extends AbstractNode<NameRow> {
 
     static parse(cursor: Cursor): NameRow {
         if (
-            cursor.beforeValue("u") ||
-            cursor.beforeValue("U") ||
+            cursor.beforePhrase("u", "&") ||
             cursor.beforeValue("\"")
         ) {
             return this.parseStrictName(cursor);
@@ -35,9 +34,8 @@ export class Name extends AbstractNode<NameRow> {
     private static parseStrictName(cursor: Cursor): NameRow {
         let unicodeEscape: string | undefined;
 
-        if ( cursor.beforeValue("u") || cursor.beforeValue("U") ) {
-            cursor.readWord("u");
-            cursor.readValue("&");
+        if ( cursor.beforePhrase("u", "&") ) {
+            cursor.readPhrase("u", "&");
             unicodeEscape = "\\";
         }
 

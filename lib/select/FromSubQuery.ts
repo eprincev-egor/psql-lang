@@ -32,8 +32,10 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
         cursor.readValue(")");
         cursor.skipSpaces();
 
-        cursor.readWord("as");
-        const as = cursor.parse(Name);
+        const as = super.parseAlias(cursor);
+        if ( !as ) {
+            cursor.throwError("subquery in FROM must have an alias");
+        }
 
         return {subQuery, as};
     }

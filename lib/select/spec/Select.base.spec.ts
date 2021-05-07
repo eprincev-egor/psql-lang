@@ -126,6 +126,90 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
+        assertNode(Select, {
+            input: "select name nm from users",
+            shouldBe: {
+                json: {
+                    select: [
+                        {
+                            expression: {
+                                column: [{name: "name"}]
+                            },
+                            as: {name: "nm"}
+                        }
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "users"}
+                        }
+                    }]
+                },
+                pretty: "select\n    name as nm\nfrom users",
+                minify: "select name as nm from users"
+            }
+        });
+
+        assertNode(Select, {
+            input: "select name \"NM\" from users",
+            shouldBe: {
+                json: {
+                    select: [
+                        {
+                            expression: {
+                                column: [{name: "name"}]
+                            },
+                            as: {strictName: "NM"}
+                        }
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "users"}
+                        }
+                    }]
+                },
+                pretty: "select\n    name as \"NM\"\nfrom users",
+                minify: "select name as \"NM\" from users"
+            }
+        });
+
+        assertNode(Select, {
+            input: "select 1 \"NM\" from users",
+            shouldBe: {
+                json: {
+                    select: [
+                        {
+                            expression: {number: "1"},
+                            as: {strictName: "NM"}
+                        }
+                    ],
+                    from: [{
+                        table: {
+                            name: {name: "users"}
+                        }
+                    }]
+                },
+                pretty: "select\n    1 as \"NM\"\nfrom users",
+                minify: "select 1 as \"NM\" from users"
+            }
+        });
+
+        assertNode(Select, {
+            input: "select from users u",
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "users"}
+                        },
+                        as: {name: "u"}
+                    }]
+                },
+                pretty: "select\nfrom users as u",
+                minify: "select from users as u"
+            }
+        });
+
     });
 
 });

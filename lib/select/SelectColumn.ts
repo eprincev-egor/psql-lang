@@ -1,6 +1,7 @@
 import { AbstractNode, Cursor, keyword, TemplateElement } from "abstract-lang";
 import { Expression, Operand } from "../expression";
 import { Name } from "../base";
+import { keywords } from "./keywords";
 
 export interface SelectColumnRow {
     expression: Operand;
@@ -19,6 +20,14 @@ export class SelectColumn extends AbstractNode<SelectColumnRow> {
             cursor.readWord("as");
             const as = cursor.parse(Name);
             return {expression, as};
+        }
+        else if ( cursor.before(Name) ) {
+            const word = cursor.nextToken.value.toLowerCase();
+
+            if ( !keywords.includes(word) ) {
+                const as = cursor.parse(Name);
+                return {expression, as};
+            }
         }
 
         return {expression};
