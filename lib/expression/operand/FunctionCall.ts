@@ -6,6 +6,7 @@ import { FunctionReference } from "./FunctionReference";
 import { Expression, Operand } from "../Expression";
 import { ColumnReference } from "./ColumnReference";
 import { OrderByItem } from "../../select/OrderByItem";
+import { WindowDefinition } from "../../select/WindowDefinition";
 
 export interface FunctionCallRow {
     form?: "all" | "distinct";
@@ -14,6 +15,7 @@ export interface FunctionCallRow {
     filter?: Operand;
     orderBy?: OrderByItem[];
     within?: OrderByItem[];
+    over?: WindowDefinition;
 }
 
 export class FunctionCall extends AbstractNode<FunctionCallRow> {
@@ -73,12 +75,19 @@ export class FunctionCall extends AbstractNode<FunctionCallRow> {
         }
 
         if ( cursor.beforeWord("filter") ) {
-            cursor.readWord("filter");
-            cursor.readValue("(");
-            cursor.skipSpaces();
-            cursor.readWord("where");
+            cursor.readPhrase("filter", "(", "where");
 
             row.filter = cursor.parse(Expression).operand();
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+            cursor.skipSpaces();
+        }
+
+        if ( cursor.beforeWord("over") ) {
+            cursor.readPhrase("over", "(");
+
+            row.over = cursor.parse(WindowDefinition);
 
             cursor.skipSpaces();
             cursor.readValue(")");
@@ -141,6 +150,15 @@ export class FunctionCall extends AbstractNode<FunctionCallRow> {
                 keyword("filter"), _, "(", eol,
                 tab, keyword("where"), eol,
                 tab, tab, this.row.filter, eol,
+                ")"
+            );
+        }
+
+        if ( this.row.over ) {
+            output.push(
+                eol,
+                keyword("over"), _, "(", eol,
+                tab, this.row.over, eol,
                 ")"
             );
         }
