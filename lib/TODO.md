@@ -1,6 +1,5 @@
 - similar
 - not similar
-- between
 - not between
 - = all()
 - <> any()
@@ -9,11 +8,7 @@
 - is not true
 - is false
 - is not false
-- array[ index ]
-- company.dt_create::date
 - max binary operator length
-- case( x as date )
-- collate
 - trim
 - overlaps
 - timestamp
@@ -32,7 +27,6 @@
 - select
   - in (select)
   - not in (select)
-  - exists (select)
   - not exists (select)
   - any (select)
   - not any (select)
