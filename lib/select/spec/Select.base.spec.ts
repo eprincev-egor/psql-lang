@@ -212,4 +212,14 @@ describe("Select.base.spec.ts: base select variants", () => {
 
     });
 
+    it("invalid inputs", () => {
+
+        assertNode(Select, {
+            input: "select from .",
+            throws: /expected from item/,
+            target: "."
+        });
+
+    });
+
 });

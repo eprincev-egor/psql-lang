@@ -200,7 +200,6 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-
         assertNode(Select, {
             input: "select from unnest(array[10, 20]) with ordinality tmp(i)",
             shouldBe: {
