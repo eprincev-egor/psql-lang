@@ -1,15 +1,18 @@
 import {
     Cursor,
-    TemplateElement,
-    printChain, eol, keyword
+    keyword,
+    TemplateElement
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
-import { Join } from "./Join";
 import { TableReference } from "./TableReference";
 
 export interface FromTableRow extends FromItemRow {
+    only?: true;
+    all?: true;
     table: TableReference;
 }
+
+// TODO: TABLESAMPLE
 
 export class FromTable extends AbstractFromItem<FromTableRow> {
 
@@ -18,36 +21,43 @@ export class FromTable extends AbstractFromItem<FromTableRow> {
     }
 
     static parse(cursor: Cursor): FromTableRow {
+        let only = false;
+        if ( cursor.beforeWord("only") ) {
+            cursor.readWord("only");
+            only = true;
+        }
+
         const table = cursor.parse(TableReference);
         const row: FromTableRow = {
             table
         };
-
-        const alias = super.parseAlias(cursor);
-        if ( alias ) {
-            row.as = alias;
+        if ( only ) {
+            row.only = true;
         }
 
-        if ( cursor.before(Join) ) {
-            row.joins = cursor.parseChainOf(Join);
+        if ( cursor.beforeValue("*") ) {
+            cursor.readValue("*");
+            row.all = true;
         }
+
+        const otherParams = super.parseOther(cursor);
+        Object.assign(row, otherParams);
 
         return row;
     }
 
     template(): TemplateElement[] {
-        const output: TemplateElement[] = [
-            this.row.table
-        ];
-        if ( this.row.as ) {
-            output.push( keyword("as"), this.row.as );
+        const output: TemplateElement[] = [];
+
+        if ( this.row.only ) {
+            output.push( keyword("only") );
+        }
+        output.push( this.row.table );
+        if ( this.row.all ) {
+            output.push(" *");
         }
 
-        if ( this.row.joins ) {
-            output.push(eol, eol);
-            output.push(...printChain(this.row.joins, eol, eol));
-        }
-
+        super.printOther(output);
         return output;
     }
 }

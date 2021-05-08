@@ -1,13 +1,14 @@
 import {
     Cursor,
     TemplateElement,
-    eol, keyword, tab, _
+    eol, tab, _, keyword
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
 import { Name } from "../base";
 import { Select } from "./Select";
 
 export interface FromSubQueryRow extends FromItemRow {
+    lateral?: true;
     subQuery: Select;
     as: Name;
 }
@@ -19,10 +20,21 @@ export interface FromSubQueryRow extends FromItemRow {
 export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforeValue("(");
+        return (
+            cursor.beforePhrase("(", "with") ||
+            cursor.beforePhrase("(", "select") ||
+            cursor.beforePhrase("lateral", "(", "with") ||
+            cursor.beforePhrase("lateral", "(", "select")
+        );
     }
 
     static parse(cursor: Cursor): FromSubQueryRow {
+        let lateral = false;
+        if ( cursor.beforeWord("lateral") ) {
+            cursor.readWord("lateral");
+            lateral = true;
+        }
+
         cursor.readValue("(");
         cursor.skipSpaces();
 
@@ -32,20 +44,39 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
         cursor.readValue(")");
         cursor.skipSpaces();
 
-        const as = super.parseAlias(cursor);
-        if ( !as ) {
+        const otherParams = super.parseOther(cursor);
+        const alias = otherParams.as;
+        if ( !alias ) {
             cursor.throwError("subquery in FROM must have an alias");
         }
 
-        return {subQuery, as};
+        const row: FromSubQueryRow = {
+            ...otherParams,
+            subQuery,
+            as: alias
+        };
+        if ( lateral ) {
+            row.lateral = true;
+        }
+
+        return row;
     }
 
     template(): TemplateElement[] {
-        return [
+        const output: TemplateElement[] = [];
+
+        if ( this.row.lateral ) {
+            output.push( keyword("lateral"), _ );
+        }
+
+        output.push(
             "(", eol,
             tab, this.row.subQuery, eol,
-            ")",
-            _, keyword("as"), this.row.as
-        ];
+            ")", _
+        );
+
+        super.printOther(output);
+
+        return output;
     }
 }
