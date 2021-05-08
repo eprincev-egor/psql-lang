@@ -1,40 +1,36 @@
 import {
     Cursor,
     TemplateElement,
-    eol, tab, _, keyword
+    eol, tab, _, keyword, printChain
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
 import { Name } from "../base";
-import { Select } from "./Select";
+import { ValueRow } from "./ValueRow";
 
-export interface FromSubQueryRow extends FromItemRow {
+export interface FromValuesRow extends FromItemRow {
     lateral?: true;
-    subQuery: Select;
+    values: ValueRow[];
     as: Name;
 }
 
-export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
+export class FromValues extends AbstractFromItem<FromValuesRow> {
 
     static entry(cursor: Cursor): boolean {
         return (
-            cursor.beforePhrase("(", "with") ||
-            cursor.beforePhrase("(", "select") ||
-            cursor.beforePhrase("lateral", "(", "with") ||
-            cursor.beforePhrase("lateral", "(", "select")
+            cursor.beforePhrase("(", "values") ||
+            cursor.beforePhrase("lateral", "(", "values")
         );
     }
 
-    static parse(cursor: Cursor): FromSubQueryRow {
+    static parse(cursor: Cursor): FromValuesRow {
         let lateral = false;
         if ( cursor.beforeWord("lateral") ) {
             cursor.readWord("lateral");
             lateral = true;
         }
 
-        cursor.readValue("(");
-        cursor.skipSpaces();
-
-        const subQuery = cursor.parse(Select);
+        cursor.readPhrase("(", "values");
+        const values = cursor.parseChainOf(ValueRow, ",");
 
         cursor.skipSpaces();
         cursor.readValue(")");
@@ -46,9 +42,9 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
             cursor.throwError("subquery in FROM must have an alias");
         }
 
-        const row: FromSubQueryRow = {
+        const row: FromValuesRow = {
             ...otherParams,
-            subQuery,
+            values,
             as: alias
         };
         if ( lateral ) {
@@ -67,7 +63,8 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
 
         output.push(
             "(", eol,
-            tab, this.row.subQuery, eol,
+            tab, keyword("values"), eol,
+            tab, tab, ...printChain(this.row.values, ",", eol, tab, tab), eol,
             ")", _
         );
 

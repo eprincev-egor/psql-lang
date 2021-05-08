@@ -153,7 +153,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
 
     });
 
-    it("valid inputs", () => {
+    it("invalid inputs", () => {
 
         assertNode(Select, {
             input: "select from (select)",
