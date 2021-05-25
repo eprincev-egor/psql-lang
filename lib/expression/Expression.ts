@@ -14,7 +14,8 @@ import { PostUnaryOperator } from "./operator/PostUnaryOperator";
 import { PreUnaryOperator } from "./operator/PreUnaryOperator";
 import { StringLiteral } from "./literal/StringLiteral";
 import { Variable } from "./operand/Variable";
-import { InOperator, InOperatorRow } from "./operator/InOperator";
+import { In } from "./operator/In";
+import { NotIn } from "./operator/NotIn";
 import { ArrayLiteral } from "./literal/ArrayLiteral";
 import { CaseWhen } from "./operand/CaseWhen";
 import { FunctionReference } from "./operand/FunctionReference";
@@ -81,44 +82,32 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
         if ( cursor.beforeWord("collate") ) {
             const collateRow = Collate.parseCollate(cursor, operand);
-            const collate = new Collate({
+            operand = new Collate({
                 position: {
                     start: operand.position!.start,
                     end: cursor.nextToken.position
                 },
                 row: collateRow
             });
-
-            operand = collate;
         }
 
         if ( cursor.beforeWord("between") ) {
             const betweenRow = Between.parseContent(cursor, operand);
-            const between = new Between({
+            operand = new Between({
                 position: {
                     start: operand.position!.start,
                     end: cursor.nextToken.position
                 },
                 row: betweenRow
             });
-
-            operand = between;
         }
 
         if (
-            cursor.beforeWord("in") &&
-            (
+            cursor.beforeWord("in") && (
                 !options.stopOnOperators ||
                 !options.stopOnOperators.includes("in")
-            ) ||
-            cursor.beforePhrase("not", "in")
+            )
         ) {
-            let not = false;
-            if ( cursor.beforeWord("not") ) {
-                cursor.readWord("not");
-                not = true;
-            }
-
             cursor.readPhrase("in", "(");
             cursor.skipSpaces();
 
@@ -128,24 +117,39 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.skipSpaces();
             cursor.readValue(")");
 
-            const row: InOperatorRow = not ? {
-                operand,
-                notIn: inElements
-            } : {
-                operand,
-                in: inElements
-            };
-
-            const inOperator = new InOperator({
+            operand = new In({
                 position: {
                     start: operand.position!.start,
                     end: cursor.nextToken.position
                 },
-                row
+                row: {
+                    operand,
+                    in: inElements
+                }
             });
-            return inOperator;
         }
 
+        if ( cursor.beforePhrase("not", "in") ) {
+            cursor.readPhrase("not", "in", "(");
+            cursor.skipSpaces();
+
+            const inElements = cursor.parseChainOf(Expression, ",")
+                .map((expr) => expr.operand());
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+
+            operand = new NotIn({
+                position: {
+                    start: operand.position!.start,
+                    end: cursor.nextToken.position
+                },
+                row: {
+                    operand,
+                    notIn: inElements
+                }
+            });
+        }
 
         if ( PostUnaryOperator.entryOperator(cursor) ) {
             const postOperator = PostUnaryOperator.parseOperator(cursor);
