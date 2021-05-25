@@ -1,47 +1,56 @@
-import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
+import {
+    AbstractNode, Cursor,
+    TemplateElement
+} from "abstract-lang";
 import { Operand } from "../Operand";
 
-const IS_NULL = "is null";
-const IS_NOT_NULL = "is not null";
-export type PostUnaryOperatorType = (
-    typeof IS_NULL |
-    typeof IS_NOT_NULL
-);
+const IS_XXX = ["true", "false", "null"];
+
+const ENTRY_PHRASES: string[][] = [];
+const NORMALIZE_MAP: {[key: string]: string} = {};
+
+for (const XXX of IS_XXX) {
+    ENTRY_PHRASES.push(["is", XXX]);
+    ENTRY_PHRASES.push(["is", "not", XXX]);
+    ENTRY_PHRASES.push([`is${XXX}`]);
+    ENTRY_PHRASES.push([`not${XXX}`]);
+
+    NORMALIZE_MAP[`is ${XXX}`] = `is ${XXX}`;
+    NORMALIZE_MAP[`is${XXX}`] = `is ${XXX}`;
+    NORMALIZE_MAP[`is not ${XXX}`] = `is not ${XXX}`;
+    NORMALIZE_MAP[`not${XXX}`] = `is not ${XXX}`;
+}
 
 export interface PostUnaryOperatorRow {
     operand: Operand;
-    postOperator: PostUnaryOperatorType;
+    postOperator: string;
 }
 
 export class PostUnaryOperator extends AbstractNode<PostUnaryOperatorRow> {
 
     static entryOperator(cursor: Cursor): boolean {
-        return (
-            cursor.beforePhrase("is", "not", "null") ||
-            cursor.beforePhrase("is", "null") ||
-            cursor.beforeWord("isnull") ||
-            cursor.beforeWord("notnull")
-        );
+        for (const entryPhrase of ENTRY_PHRASES) {
+            if ( cursor.beforePhrase(...entryPhrase) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    static parseOperator(cursor: Cursor): PostUnaryOperatorType {
-        if ( cursor.beforeWord("isnull") ) {
-            cursor.readWord("isnull");
-            return IS_NULL;
+    static parseOperator(cursor: Cursor): string {
+        for (const entryPhrase of ENTRY_PHRASES) {
+            if ( cursor.beforePhrase(...entryPhrase) ) {
+                const inputPhrase = cursor.readPhrase(...entryPhrase)
+                    .join(" ").toLowerCase();
+                const normalPhrase = NORMALIZE_MAP[ inputPhrase ];
+                return normalPhrase;
+            }
         }
 
-        if ( cursor.beforeWord("notnull") ) {
-            cursor.readWord("notnull");
-            return IS_NOT_NULL;
-        }
-
-        if ( cursor.beforePhrase("is", "null") ) {
-            cursor.readPhrase("is", "null");
-            return IS_NULL;
-        }
-
-        cursor.readPhrase("is", "not", "null");
-        return IS_NOT_NULL;
+        const oneOf = ENTRY_PHRASES.map((phrase) =>
+            phrase.join(" ")
+        ).join("");
+        cursor.throwError(`expected one of:\n${oneOf}`);
     }
 
     template(): TemplateElement[] {

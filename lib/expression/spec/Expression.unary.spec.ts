@@ -191,6 +191,91 @@ describe("Expression.unary.spec.ts", () => {
                 }
             }
         });
+
+        assertNode(Expression, {
+            input: "true IS  \n truE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: true},
+                        postOperator: "is true"
+                    }
+                },
+                pretty: "true is true",
+                minify: "true is true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "true IS nOt  \n truE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: true},
+                        postOperator: "is not true"
+                    }
+                },
+                pretty: "true is not true",
+                minify: "true is not true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "true NOTtruE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: true},
+                        postOperator: "is not true"
+                    }
+                },
+                pretty: "true is not true",
+                minify: "true is not true"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "false IS  \n falsE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: false},
+                        postOperator: "is false"
+                    }
+                },
+                pretty: "false is false",
+                minify: "false is false"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "false IS Not  \n falsE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: false},
+                        postOperator: "is not false"
+                    }
+                },
+                pretty: "false is not false",
+                minify: "false is not false"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "false notFalsE",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {boolean: false},
+                        postOperator: "is not false"
+                    }
+                },
+                pretty: "false is not false",
+                minify: "false is not false"
+            }
+        });
+
     });
 
 });

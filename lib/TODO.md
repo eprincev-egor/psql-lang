@@ -4,15 +4,12 @@
 - = all()
 - <> any()
 - != any()
-- is true
-- is not true
-- is false
-- is not false
 - max binary operator length
 - trim
 - overlaps
 - timestamp
 - coalesce
+- with x as (values (1)) values (1), (2) 
 - CURRENT_DATE
     CURRENT_TIME
     CURRENT_TIMESTAMP
