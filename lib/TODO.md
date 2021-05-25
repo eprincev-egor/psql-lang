@@ -5,7 +5,6 @@
 - <> any()
 - != any()
 - max binary operator length
-- trim
 - overlaps
 - timestamp
 - coalesce

@@ -28,6 +28,7 @@ import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/Between";
 import { Collate } from "./operator/Collate";
 import { SquareBrackets } from "./operator/SquareBrackets";
+import { Trim } from "./likeAreFunction/Trim";
 
 export type Operand = (
     NumberLiteral |
@@ -59,5 +60,6 @@ export type Operand = (
     Exists |
     Between |
     Collate |
-    SquareBrackets
+    SquareBrackets |
+    Trim
 );
