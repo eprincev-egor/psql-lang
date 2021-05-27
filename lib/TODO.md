@@ -38,4 +38,5 @@
   - with (delete) select
 - scope methods
 - get type
+- splitBy
 - merge any/all/some to one syntax

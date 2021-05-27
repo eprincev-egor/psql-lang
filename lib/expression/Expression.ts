@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
 import { Operand } from "./Operand";
-import { BinaryOperator, BinaryOperatorType } from "./operator/BinaryOperator";
+import { BinaryOperator } from "./operator/BinaryOperator";
 import { BooleanLiteral } from "./literal/BooleanLiteral";
 import { ByteStringLiteral } from "./literal/ByteStringLiteral";
 import { ColumnReference } from "./operand/ColumnReference";
@@ -296,7 +296,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
     private static createBinaryOperator(
         cursor: Cursor,
         left: Operand,
-        operator: BinaryOperatorType,
+        operator: string,
         right: Operand
     ) {
         const equalAny = (
