@@ -32,6 +32,7 @@ import { Between } from "./operator/Between";
 import { Collate } from "./operator/Collate";
 import { SquareBrackets } from "./operator/SquareBrackets";
 import { CurrentDate } from "./operand/CurrentDate";
+import { TimestampLiteral } from "./likeAreFunction/TimestampLiteral";
 
 export {Operand};
 
@@ -198,7 +199,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             BooleanLiteral, NullLiteral,
             StringLiteral, ByteStringLiteral,
             NumberLiteral, Variable,
-            ArrayLiteral, CaseWhen, CurrentDate,
+            ArrayLiteral, CaseWhen,
+            CurrentDate, TimestampLiteral,
             ColumnReference
         ], "expected expression operand");
 

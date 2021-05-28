@@ -5,7 +5,6 @@
 - <> any()
 - != any()
 - overlaps
-- timestamp
 - coalesce
 - with x as (values (1)) values (1), (2) 
 - LineComment
