@@ -7,8 +7,7 @@
 - overlaps
 - coalesce
 - with x as (values (1)) values (1), (2) 
-- LineComment
-- MultiLineComment
+- cursor.skipSpaces() => add comments
 - select
   - in (select)
   - not in (select)
