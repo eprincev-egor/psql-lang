@@ -29,6 +29,7 @@ import { Between } from "./operator/Between";
 import { Collate } from "./operator/Collate";
 import { SquareBrackets } from "./operator/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
+import { CurrentDate } from "./operand/CurrentDate";
 
 export type Operand = (
     NumberLiteral |
@@ -61,5 +62,6 @@ export type Operand = (
     Between |
     Collate |
     SquareBrackets |
-    Trim
+    Trim |
+    CurrentDate
 );
