@@ -1,5 +1,5 @@
 import {
-    AbstractNode, Cursor,
+    AbstractDeclarationNode, Cursor,
     TemplateElement, keyword, printChain, eol, _
 } from "abstract-lang";
 import { Join } from "./Join";
@@ -13,7 +13,7 @@ export interface FromItemRow {
 }
 
 export abstract class AbstractFromItem<TRow extends FromItemRow>
-    extends AbstractNode<TRow> {
+    extends AbstractDeclarationNode<TRow> {
 
     protected static parseOther(cursor: Cursor): FromItemRow {
         const row: FromItemRow = {};

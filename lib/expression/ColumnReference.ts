@@ -1,5 +1,7 @@
-import { AbstractNode, Cursor } from "abstract-lang";
+import { AbstractDependencyNode, Cursor } from "abstract-lang";
 import { Name, NameOrStar } from "../base";
+import { FromItemType } from "../select/FromItem";
+import { FromTable } from "../select/FromTable";
 
 export type ColumnReferenceNames = (
     [] |
@@ -13,7 +15,7 @@ export interface ColumnReferenceRow {
     allColumns?: true;
 }
 
-export class ColumnReference extends AbstractNode<ColumnReferenceRow> {
+export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> {
 
     static entry(cursor: Cursor): boolean {
         return cursor.before(NameOrStar);
@@ -54,6 +56,43 @@ export class ColumnReference extends AbstractNode<ColumnReferenceRow> {
             return {column, allColumns};
         }
         return {column};
+    }
+
+    isDependentOn(fromItem: FromItemType): boolean {
+        const firstName = this.row.column[0];
+        const secondName = this.row.column[1];
+        if ( !firstName ) {
+            return false;
+        }
+
+        if ( fromItem.row.as ) {
+            const alias = fromItem.row.as;
+            return alias.equal(firstName);
+        }
+
+        const {schema, name: table} = (fromItem as FromTable).row.table.row;
+
+        // company.name from company
+        // company.name from public.company
+        if ( table.equal(firstName) ) {
+            return true;
+        }
+
+        if ( secondName ) {
+            // public.company.name from public.company
+            if ( schema ) {
+                return (
+                    schema.equal(firstName) &&
+                    table.equal(secondName)
+                );
+            }
+            // public.company.name from company
+            else {
+                return table.equal(secondName);
+            }
+        }
+
+        return false;
     }
 
     template(): string {

@@ -1,5 +1,5 @@
 import {
-    AbstractNode, Cursor,
+    AbstractScopeNode, Cursor,
     TemplateElement,
     _, eol, tab, keyword, printChain
 } from "abstract-lang";
@@ -11,6 +11,7 @@ import { With } from "./With";
 import { Fetch } from "./Fetch";
 import { GroupByElement } from "./GroupByElement";
 import { WindowItem } from "./WindowItem";
+import { FromSubQuery } from "./FromSubQuery";
 
 export interface SelectRow {
     distinct?: SelectDistinctType;
@@ -77,7 +78,7 @@ and with_query is:
 TABLE [ ONLY ] table_name [ * ]
  */
 
-export class Select extends AbstractNode<SelectRow> {
+export class Select extends AbstractScopeNode<SelectRow> {
 
     static entry(cursor: Cursor): boolean {
         return (
@@ -283,6 +284,14 @@ export class Select extends AbstractNode<SelectRow> {
         if ( option ) {
             selectRow.union.option = option;
         }
+    }
+
+    hasClojure(): boolean {
+        return (
+            this.parent &&
+            this.parent.is(FromSubQuery) &&
+            this.parent.row.lateral
+        ) || false;
     }
 
     template(): TemplateElement[] {

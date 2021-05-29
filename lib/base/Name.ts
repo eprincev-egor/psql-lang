@@ -127,4 +127,8 @@ export class Name extends AbstractNode<NameRow> {
 
         return this.row.strictName.replace(/""/g, "\"");
     }
+
+    equal(otherName: Name): boolean {
+        return this.toValue() === otherName.toValue();
+    }
 }
