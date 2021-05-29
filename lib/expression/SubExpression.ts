@@ -1,5 +1,5 @@
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
-import { Expression, Operand } from "../Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface SubExpressionRow {
     subExpression: Operand;

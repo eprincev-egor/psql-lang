@@ -2,7 +2,7 @@ import {
     AbstractNode, Cursor,
     TemplateElement, keyword, _
 } from "abstract-lang";
-import { Expression, Operand } from "../Expression";
+import { Expression, Operand } from "../../Expression";
 
 export interface BetweenRow {
     operand: Operand;

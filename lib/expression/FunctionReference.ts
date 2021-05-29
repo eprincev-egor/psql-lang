@@ -1,6 +1,6 @@
 import { Cursor } from "abstract-lang";
 import { ColumnReference } from "./ColumnReference";
-import { SchemaName } from "../../base";
+import { SchemaName } from "../base";
 
 export class FunctionReference extends SchemaName {
 

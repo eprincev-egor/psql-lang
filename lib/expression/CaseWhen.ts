@@ -4,7 +4,7 @@ import {
     eol, tab, _, keyword
 } from "abstract-lang";
 import { CaseWhenElement } from "./CaseWhenElement";
-import { Expression, Operand } from "../Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface CaseWhenRow {
     switch?: Operand;

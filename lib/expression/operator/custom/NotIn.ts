@@ -2,7 +2,7 @@ import {
     AbstractNode,
     TemplateElement, _, printChain, keyword
 } from "abstract-lang";
-import { Operand } from "../Expression";
+import { Operand } from "../../Expression";
 
 export interface NotInRow {
     operand: Operand;

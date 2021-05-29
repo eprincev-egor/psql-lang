@@ -2,7 +2,7 @@ import {
     AbstractNode, Cursor,
     TemplateElement, tab, eol
 } from "abstract-lang";
-import { Select } from "../../select";
+import { Select } from "../select";
 
 export interface SubQueryRow {
     subQuery: Select;

@@ -2,7 +2,7 @@ import {
     AbstractNode, Cursor,
     TemplateElement, eol, keyword
 } from "abstract-lang";
-import { Expression, Operand } from "../Expression";
+import { Expression, Operand } from "./Expression";
 
 export interface CaseWhenElementRow {
     when: Operand;

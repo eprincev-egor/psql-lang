@@ -2,8 +2,8 @@ import {
     AbstractNode, Cursor,
     TemplateElement, keyword
 } from "abstract-lang";
-import { Name } from "../../base";
-import { Operand } from "../Expression";
+import { Name } from "../base";
+import { Operand } from "./Expression";
 
 export interface CollateRow {
     operand: Operand;

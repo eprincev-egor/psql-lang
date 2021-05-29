@@ -3,10 +3,10 @@ import {
     TemplateElement, printChain, keyword, _, eol, tab
 } from "abstract-lang";
 import { FunctionReference } from "./FunctionReference";
-import { Expression, Operand } from "../Expression";
+import { Expression, Operand } from "./Expression";
 import { ColumnReference } from "./ColumnReference";
-import { OrderByItem } from "../../select/OrderByItem";
-import { WindowDefinition } from "../../select/WindowDefinition";
+import { OrderByItem } from "../select/OrderByItem";
+import { WindowDefinition } from "../select/WindowDefinition";
 
 export interface FunctionCallRow {
     form?: "all" | "distinct";

@@ -1,5 +1,5 @@
 import { AbstractNode, Cursor } from "abstract-lang";
-import { Name, NameOrStar } from "../../base";
+import { Name, NameOrStar } from "../base";
 
 export type ColumnReferenceNames = (
     [] |

@@ -3,8 +3,8 @@ import {
     TemplateElement, _, keyword
 } from "abstract-lang";
 import { AbstractFromItem, FromItemRow } from "./AbstractFromItem";
-import { FunctionCall } from "../expression/operand/FunctionCall";
-import { FunctionReference } from "../expression/operand/FunctionReference";
+import { FunctionCall } from "../expression/FunctionCall";
+import { FunctionReference } from "../expression/FunctionReference";
 
 export interface FromFunctionRow extends FromItemRow {
     lateral?: true;

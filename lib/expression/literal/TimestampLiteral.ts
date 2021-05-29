@@ -1,5 +1,5 @@
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
-import { StringLiteral } from "../literal/StringLiteral";
+import { StringLiteral } from "./StringLiteral";
 import { PgType } from "../PgType";
 
 export interface TimestampLiteralRow {
