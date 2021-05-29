@@ -3,8 +3,8 @@ import "./Collate";
 import "./In";
 import "./NotIn";
 import "./SquareBrackets";
-import "./EqualAnyArray";
-import "./EqualSomeArray";
-import "./EqualAllArray";
+import "./equalSome/EqualAny";
+import "./equalSome/EqualSome";
+import "./equalSome/EqualAll";
 
 export * from "./customOperators";

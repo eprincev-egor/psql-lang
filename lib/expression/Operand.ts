@@ -15,8 +15,9 @@ import { NotIn } from "./operator/custom/NotIn";
 import { ArrayLiteral } from "./literal/ArrayLiteral";
 import { CaseWhen } from "./CaseWhen";
 import { FunctionCall } from "./FunctionCall";
-import { EqualAnyArray } from "./operator/custom/EqualAnyArray";
-import { EqualSomeArray } from "./operator/custom/EqualSomeArray";
+import { EqualAny } from "./operator/custom/equalSome/EqualAny";
+import { EqualSome } from "./operator/custom/equalSome/EqualSome";
+import { EqualAll } from "./operator/custom/equalSome/EqualAll";
 import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./likeAreFunction/MakeInterval";
 import { Extract } from "./likeAreFunction/Extract";
@@ -31,7 +32,6 @@ import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
 import { CurrentDate } from "./literal/CurrentDate";
 import { TimestampLiteral } from "./literal/TimestampLiteral";
-import { EqualAllArray } from "./operator/custom/EqualAllArray";
 
 export type Operand = (
     NumberLiteral |
@@ -50,9 +50,9 @@ export type Operand = (
     NotIn |
     ArrayLiteral |
     CaseWhen |
-    EqualAnyArray |
-    EqualSomeArray |
-    EqualAllArray |
+    EqualAny |
+    EqualSome |
+    EqualAll |
     FunctionCall |
     SubQuery |
     MakeInterval |

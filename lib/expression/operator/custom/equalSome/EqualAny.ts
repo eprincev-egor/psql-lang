@@ -1,13 +1,13 @@
 import { AbstractNode, Cursor, TemplateElement, _ } from "abstract-lang";
-import { Operand, Expression } from "../../Expression";
-import { customOperators } from "./customOperators";
+import { Operand, Expression } from "../../../Expression";
+import { customOperators } from "../customOperators";
 
 export interface EqualAnyArrayRow {
     operand: Operand;
     equalAny: Operand;
 }
 
-export class EqualAnyArray extends AbstractNode<EqualAnyArrayRow> {
+export class EqualAny extends AbstractNode<EqualAnyArrayRow> {
 
     static entryOperator(cursor: Cursor): boolean {
         return cursor.beforePhrase("=", "any");
@@ -30,4 +30,4 @@ export class EqualAnyArray extends AbstractNode<EqualAnyArrayRow> {
     }
 }
 
-customOperators.push(EqualAnyArray);
+customOperators.push(EqualAny);
