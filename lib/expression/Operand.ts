@@ -31,6 +31,7 @@ import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
 import { CurrentDate } from "./literal/CurrentDate";
 import { TimestampLiteral } from "./literal/TimestampLiteral";
+import { EqualAllArray } from "./operator/custom/EqualAllArray";
 
 export type Operand = (
     NumberLiteral |
@@ -51,6 +52,7 @@ export type Operand = (
     CaseWhen |
     EqualAnyArray |
     EqualSomeArray |
+    EqualAllArray |
     FunctionCall |
     SubQuery |
     MakeInterval |

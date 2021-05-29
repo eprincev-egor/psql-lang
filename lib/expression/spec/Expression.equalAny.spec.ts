@@ -69,6 +69,27 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "unit.id = all(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        equalAll: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                minify: "unit.id=all(orders.units_ids)"
+            }
+        });
+
     });
 
 });
