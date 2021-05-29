@@ -1,9 +1,6 @@
 - similar
 - not similar
 - not between
-  - in (select)
-  - not in (select)
-  - not exists (select)
 - overlaps
 - coalesce
 - with x as (values (1)) values (1), (2) 

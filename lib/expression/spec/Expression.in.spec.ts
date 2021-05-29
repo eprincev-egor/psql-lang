@@ -44,6 +44,60 @@ describe("Expression.in.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "orders.type in (select 1, 2)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "type"}
+                        ]},
+                        in: {
+                            select: [
+                                {expression: {number: "1"}},
+                                {expression: {number: "2"}}
+                            ],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "orders.type in (select",
+                    "    1,",
+                    "    2)"
+                ].join("\n"),
+                minify: "orders.type in(select 1,2)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.type not in (select 1, 2)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "type"}
+                        ]},
+                        notIn: {
+                            select: [
+                                {expression: {number: "1"}},
+                                {expression: {number: "2"}}
+                            ],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "orders.type not in (select",
+                    "    1,",
+                    "    2)"
+                ].join("\n"),
+                minify: "orders.type not in(select 1,2)"
+            }
+        });
+
     });
 
 });
