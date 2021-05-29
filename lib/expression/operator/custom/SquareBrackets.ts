@@ -1,5 +1,6 @@
 import { AbstractNode, Cursor, TemplateElement } from "abstract-lang";
 import { Expression, Operand } from "../../Expression";
+import { customOperators } from "./customOperators";
 
 export interface SquareBracketsRow {
     operand: Operand;
@@ -8,7 +9,11 @@ export interface SquareBracketsRow {
 
 export class SquareBrackets extends AbstractNode<SquareBracketsRow> {
 
-    static parseIndex(cursor: Cursor, operand: Operand): SquareBracketsRow {
+    static entryOperator(cursor: Cursor): boolean {
+        return cursor.beforeValue("[");
+    }
+
+    static parseOperator(cursor: Cursor, operand: Operand): SquareBracketsRow {
         cursor.readValue("[");
         cursor.skipSpaces();
 
@@ -25,3 +30,5 @@ export class SquareBrackets extends AbstractNode<SquareBracketsRow> {
         ];
     }
 }
+
+customOperators.push(SquareBrackets);

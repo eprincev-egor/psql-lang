@@ -1,8 +1,9 @@
 import {
     AbstractNode,
-    TemplateElement, _, printChain, keyword
+    TemplateElement, _, printChain, keyword, Cursor
 } from "abstract-lang";
-import { Operand } from "../../Expression";
+import { Expression, Operand } from "../../Expression";
+import { customOperators } from "./customOperators";
 
 export interface NotInRow {
     operand: Operand;
@@ -10,6 +11,26 @@ export interface NotInRow {
 }
 
 export class NotIn extends AbstractNode<NotInRow> {
+
+    static entryOperator(cursor: Cursor): boolean {
+        return cursor.beforePhrase("not", "in");
+    }
+
+    static parseOperator(cursor: Cursor, operand: Operand): NotInRow {
+        cursor.readPhrase("not", "in", "(");
+        cursor.skipSpaces();
+
+        const inElements = cursor.parseChainOf(Expression, ",")
+            .map((expr) => expr.operand());
+
+        cursor.skipSpaces();
+        cursor.readValue(")");
+
+        return {
+            operand,
+            notIn: inElements
+        };
+    }
 
     template(): TemplateElement[] {
         return [
@@ -20,3 +41,5 @@ export class NotIn extends AbstractNode<NotInRow> {
         ];
     }
 }
+
+customOperators.push(NotIn);

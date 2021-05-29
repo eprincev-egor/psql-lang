@@ -14,8 +14,6 @@ import { PostUnaryOperator } from "./operator/PostUnaryOperator";
 import { PreUnaryOperator } from "./operator/PreUnaryOperator";
 import { StringLiteral } from "./literal/StringLiteral";
 import { Variable } from "./Variable";
-import { In } from "./operator/custom/In";
-import { NotIn } from "./operator/custom/NotIn";
 import { ArrayLiteral } from "./literal/ArrayLiteral";
 import { CaseWhen } from "./CaseWhen";
 import { FunctionReference } from "./FunctionReference";
@@ -26,13 +24,10 @@ import { EqualSomeArray } from "./operator/custom/EqualSomeArray";
 import { SubQuery } from "./SubQuery";
 import { Cast } from "./likeAreFunction/Cast";
 import { PgType } from "./PgType";
-
 import { likeAreFunction } from "./likeAreFunction";
-import { Between } from "./operator/custom/Between";
-import { Collate } from "./Collate";
-import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { CurrentDate } from "./literal/CurrentDate";
 import { TimestampLiteral } from "./literal/TimestampLiteral";
+import { customOperators } from "./operator/custom";
 
 export {Operand};
 
@@ -80,78 +75,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
 
-        operand = this.parseBrackets(cursor, operand);
-
-        if ( cursor.beforeWord("collate") ) {
-            const collateRow = Collate.parseCollate(cursor, operand);
-            operand = new Collate({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: collateRow
-            });
-        }
-
-        if ( cursor.beforeWord("between") ) {
-            const betweenRow = Between.parseContent(cursor, operand);
-            operand = new Between({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: betweenRow
-            });
-        }
-
-        if (
-            cursor.beforeWord("in") && (
-                !options.stopOnOperators ||
-                !options.stopOnOperators.includes("in")
-            )
-        ) {
-            cursor.readPhrase("in", "(");
-            cursor.skipSpaces();
-
-            const inElements = cursor.parseChainOf(Expression, ",")
-                .map((expr) => expr.operand());
-
-            cursor.skipSpaces();
-            cursor.readValue(")");
-
-            operand = new In({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: {
-                    operand,
-                    in: inElements
-                }
-            });
-        }
-
-        if ( cursor.beforePhrase("not", "in") ) {
-            cursor.readPhrase("not", "in", "(");
-            cursor.skipSpaces();
-
-            const inElements = cursor.parseChainOf(Expression, ",")
-                .map((expr) => expr.operand());
-
-            cursor.skipSpaces();
-            cursor.readValue(")");
-
-            operand = new NotIn({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: {
-                    operand,
-                    notIn: inElements
-                }
-            });
-        }
+        operand = this.parseCustomOperator(cursor, operand, options);
 
         if ( PostUnaryOperator.entryOperator(cursor) ) {
             const postOperator = PostUnaryOperator.parseOperator(cursor);
@@ -170,23 +94,44 @@ export class Expression extends AbstractNode<ExpressionRow> {
         return operand;
     }
 
-    private static parseBrackets(
+    private static parseCustomOperator(
         cursor: Cursor,
-        operand: Operand
+        operand: Operand,
+        options: ParseExpressionOptions = {}
     ): Operand {
+        let hasCustomOperator = false;
 
-        if ( cursor.beforeValue("[") ) {
-            const row = SquareBrackets.parseIndex(cursor, operand);
-            const brackets = new SquareBrackets({
+        for (const CustomOperator of customOperators) {
+            if ( !CustomOperator.entryOperator(cursor) ) {
+                continue;
+            }
+
+            const needIgnore = (
+                options.stopOnOperators &&
+                options.stopOnOperators.includes("in") &&
+                cursor.beforeWord("in")
+            );
+            if ( needIgnore ) {
+                continue;
+            }
+
+            const row = CustomOperator.parseOperator(cursor, operand);
+
+            operand = new CustomOperator({
                 position: {
                     start: operand.position!.start,
                     end: cursor.nextToken.position
                 },
                 row
             });
+            hasCustomOperator = true;
+        }
 
-            operand = brackets;
-            operand = this.parseBrackets(cursor, operand);
+
+        if ( hasCustomOperator ) {
+            return this.parseCustomOperator(
+                cursor, operand, options
+            );
         }
 
         return operand;

@@ -3,6 +3,7 @@ import {
     TemplateElement, keyword, _
 } from "abstract-lang";
 import { Expression, Operand } from "../../Expression";
+import { customOperators } from "./customOperators";
 
 export interface BetweenRow {
     operand: Operand;
@@ -13,7 +14,11 @@ export interface BetweenRow {
 
 export class Between extends AbstractNode<BetweenRow> {
 
-    static parseContent(cursor: Cursor, operand: Operand): BetweenRow {
+    static entryOperator(cursor: Cursor): boolean {
+        return cursor.beforeWord("between");
+    }
+
+    static parseOperator(cursor: Cursor, operand: Operand): BetweenRow {
         cursor.readWord("between");
 
         let symmetric = false;
@@ -64,3 +69,5 @@ export class Between extends AbstractNode<BetweenRow> {
         return output;
     }
 }
+
+customOperators.push(Between);

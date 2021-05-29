@@ -26,7 +26,7 @@ import { Overlay } from "./likeAreFunction/Overlay";
 import { Cast } from "./likeAreFunction/Cast";
 import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/custom/Between";
-import { Collate } from "./Collate";
+import { Collate } from "./operator/custom/Collate";
 import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
 import { CurrentDate } from "./literal/CurrentDate";
