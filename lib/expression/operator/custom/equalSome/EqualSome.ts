@@ -1,20 +1,21 @@
 import { Cursor, TemplateElement, _ } from "abstract-lang";
+import { Select } from "../../../../select";
 import { Operand } from "../../../Expression";
 import { customOperators } from "../customOperators";
 import { AbstractEqualSet } from "./AbstractEqualSet";
 
-export interface EqualSomeArrayRow {
+export interface EqualSomeRow {
     operand: Operand;
-    equalSome: Operand;
+    equalSome: Operand | Select;
 }
 
-export class EqualSome extends AbstractEqualSet<EqualSomeArrayRow> {
+export class EqualSome extends AbstractEqualSet<EqualSomeRow> {
 
     static entryOperator(cursor: Cursor): boolean {
         return cursor.beforePhrase("=", "some");
     }
 
-    static parseOperator(cursor: Cursor, operand: Operand): EqualSomeArrayRow {
+    static parseOperator(cursor: Cursor, operand: Operand): EqualSomeRow {
         cursor.readPhrase("=", "some");
         const equalSome = super.parseContent(cursor);
         return {operand, equalSome};

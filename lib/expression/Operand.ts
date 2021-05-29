@@ -18,6 +18,9 @@ import { FunctionCall } from "./FunctionCall";
 import { EqualAny } from "./operator/custom/equalSome/EqualAny";
 import { EqualSome } from "./operator/custom/equalSome/EqualSome";
 import { EqualAll } from "./operator/custom/equalSome/EqualAll";
+import { NotEqualAny } from "./operator/custom/equalSome/NotEqualAny";
+import { NotEqualSome } from "./operator/custom/equalSome/NotEqualSome";
+import { NotEqualAll } from "./operator/custom/equalSome/NotEqualAll";
 import { SubQuery } from "./SubQuery";
 import { MakeInterval } from "./likeAreFunction/MakeInterval";
 import { Extract } from "./likeAreFunction/Extract";
@@ -53,6 +56,9 @@ export type Operand = (
     EqualAny |
     EqualSome |
     EqualAll |
+    NotEqualAny |
+    NotEqualSome |
+    NotEqualAll |
     FunctionCall |
     SubQuery |
     MakeInterval |

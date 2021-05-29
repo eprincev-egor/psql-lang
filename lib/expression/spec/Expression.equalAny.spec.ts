@@ -90,6 +90,267 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "unit.id != any(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualAny: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                minify: "unit.id!=any(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id <> any(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualAny: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                pretty: "unit.id != any(orders.units_ids)",
+                minify: "unit.id!=any(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id != some(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualSome: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                minify: "unit.id!=some(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id <> some(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualSome: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                pretty: "unit.id != some(orders.units_ids)",
+                minify: "unit.id!=some(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id != all(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualAll: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                minify: "unit.id!=all(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "unit.id <> all(orders.units_ids)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "unit"},
+                            {name: "id"}
+                        ]},
+                        notEqualAll: {
+                            column: [
+                                {name: "orders"},
+                                {name: "units_ids"}
+                            ]
+                        }
+                    }
+                },
+                pretty: "unit.id != all(orders.units_ids)",
+                minify: "unit.id!=all(orders.units_ids)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 = any(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        equalAny: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 = any( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1=any( select 1)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 = all(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        equalAll: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 = all( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1=all( select 1)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 = some(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        equalSome: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 = some( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1=some( select 1)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 != any(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        notEqualAny: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 != any( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1!=any( select 1)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 != all(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        notEqualAll: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 != all( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1!=all( select 1)"
+            }
+        });
+
+        assertNode(Expression, {
+            input: "1 != some(select 1)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {number: "1"},
+                        notEqualSome: {
+                            select: [{
+                                expression: {number: "1"}
+                            }],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "1 != some( select",
+                    "    1)"
+                ].join("\n"),
+                minify: "1!=some( select 1)"
+            }
+        });
+
     });
 
 });

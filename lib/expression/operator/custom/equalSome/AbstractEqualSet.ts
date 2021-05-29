@@ -1,12 +1,21 @@
 import { AbstractNode, Cursor } from "abstract-lang";
+import { Select } from "../../../../select";
 import { Expression, Operand } from "../../../Expression";
 
 export abstract class AbstractEqualSet<TRow>
     extends AbstractNode<TRow> {
 
-    static parseContent(cursor: Cursor): Operand {
+    static parseContent(cursor: Cursor): Operand | Select {
         cursor.readValue("(");
-        const content = cursor.parse(Expression).operand();
+        cursor.skipSpaces();
+
+        const content = (
+            cursor.before(Select) ?
+                cursor.parse(Select) :
+                cursor.parse(Expression).operand()
+        );
+
+        cursor.skipSpaces();
         cursor.readValue(")");
 
         return content;
