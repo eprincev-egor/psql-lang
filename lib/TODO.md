@@ -1,6 +1,5 @@
 - similar
 - not similar
-- not between
 - overlaps
 - coalesce
 - with x as (values (1)) values (1), (2) 
@@ -17,3 +16,4 @@
 - get type
 - splitBy
 - merge any/all/some to one syntax
+- refactor

@@ -151,6 +151,48 @@ describe("Expression.between.spec.ts", () => {
                 minify: "profit between 1 and 2 and date>now()"
             }
         });
+
+        assertNode(Expression, {
+            input: "id not between 1 and 100",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "id"}
+                        ]},
+                        notBetween: {number: "1"},
+                        and: {number: "100"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "orders.profit not between symmetric 3 * 100 and 4 * 3000",
+            shouldBe: {
+                json: {
+                    operand: {
+                        operand: {column: [
+                            {name: "orders"},
+                            {name: "profit"}
+                        ]},
+                        symmetric: true,
+                        notBetween: {
+                            left: {number: "3"},
+                            operator: "*",
+                            right: {number: "100"}
+                        },
+                        and: {
+                            left: {number: "4"},
+                            operator: "*",
+                            right: {number: "3000"}
+                        }
+                    }
+                },
+                minify: "orders.profit not between symmetric 3*100 and 4*3000"
+            }
+        });
+
     });
 
 });

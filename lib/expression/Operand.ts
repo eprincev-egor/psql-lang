@@ -30,6 +30,7 @@ import { Overlay } from "./likeAreFunction/Overlay";
 import { Cast } from "./likeAreFunction/Cast";
 import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/custom/Between";
+import { NotBetween } from "./operator/custom/NotBetween";
 import { Collate } from "./operator/custom/Collate";
 import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
@@ -69,6 +70,7 @@ export type Operand = (
     Cast |
     Exists |
     Between |
+    NotBetween |
     Collate |
     SquareBrackets |
     Trim |
