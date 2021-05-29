@@ -69,6 +69,38 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "company.name similar '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "similar",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
+        assertNode(Expression, {
+            input: "company.name not similar '%hello%'",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {column: [
+                            {name: "company"},
+                            {name: "name"}
+                        ]},
+                        operator: "not similar",
+                        right: {string: "%hello%"}
+                    }
+                }
+            }
+        });
+
     });
 
 });

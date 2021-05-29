@@ -15,7 +15,7 @@ const OPERATORS_PRECEDENCE = [
     ["*", "%", "/"],
     ["+", "-"],
     [], // all other native and user-defined operators
-    ["like", "ilike", "similar", "not like", "not ilike"],
+    ["like", "ilike", "similar", "not similar", "not like", "not ilike"],
     ["=", "!=", "<>", "<", "<=", ">=", ">"],
     ["is distinct from", "is not distinct from"],
     ["and"],
@@ -57,8 +57,10 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
             cursor.beforeWord("and") ||
             cursor.beforeWord("ilike") ||
             cursor.beforeWord("like") ||
+            cursor.beforeWord("similar") ||
             cursor.beforePhrase("not", "ilike") ||
             cursor.beforePhrase("not", "like") ||
+            cursor.beforePhrase("not", "similar") ||
             cursor.beforePhrase("is", "distinct", "from") ||
             cursor.beforePhrase("is", "not", "distinct", "from")
         ) &&
@@ -75,6 +77,11 @@ export class BinaryOperator extends AbstractNode<BinaryOperatorRow> {
         if ( cursor.beforePhrase("not", "like") ) {
             cursor.readPhrase("not", "like");
             return "not like";
+        }
+
+        if ( cursor.beforePhrase("not", "similar") ) {
+            cursor.readPhrase("not", "similar");
+            return "not similar";
         }
 
         if ( cursor.beforePhrase("is", "distinct", "from") ) {
