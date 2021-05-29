@@ -1,23 +1,22 @@
-import { AbstractNode, Cursor, TemplateElement, _ } from "abstract-lang";
-import { Operand, Expression } from "../../../Expression";
+import { Cursor, TemplateElement, _ } from "abstract-lang";
+import { Operand } from "../../../Expression";
 import { customOperators } from "../customOperators";
+import { AbstractEqualSet } from "./AbstractEqualSet";
 
 export interface EqualAllArrayRow {
     operand: Operand;
     equalAll: Operand;
 }
 
-export class EqualAll extends AbstractNode<EqualAllArrayRow> {
+export class EqualAll extends AbstractEqualSet<EqualAllArrayRow> {
 
     static entryOperator(cursor: Cursor): boolean {
         return cursor.beforePhrase("=", "all");
     }
 
     static parseOperator(cursor: Cursor, operand: Operand): EqualAllArrayRow {
-        cursor.readPhrase("=", "all", "(");
-        const equalAll = cursor.parse(Expression).operand();
-        cursor.readValue(")");
-
+        cursor.readPhrase("=", "all");
+        const equalAll = super.parseContent(cursor);
         return {operand, equalAll};
     }
 
