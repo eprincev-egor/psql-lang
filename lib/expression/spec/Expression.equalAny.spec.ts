@@ -11,7 +11,7 @@ describe("Expression.equalAny.spec.ts", () => {
                 json: {
                     operand: {
                         operand: {number: "2"},
-                        anyArray: {
+                        equalAny: {
                             column: [
                                 {name: "company"},
                                 {name: "roles_ids"}
@@ -30,14 +30,14 @@ describe("Expression.equalAny.spec.ts", () => {
                     operand: {
                         operand: {
                             operand: {number: "3"},
-                            anyArray: {
+                            equalAny: {
                                 array: [
                                     {number: "2"},
                                     {number: "1"}
                                 ]
                             }
                         },
-                        anyArray: {
+                        equalAny: {
                             array: [
                                 {boolean: false}
                             ]
@@ -57,7 +57,7 @@ describe("Expression.equalAny.spec.ts", () => {
                             {name: "unit"},
                             {name: "id"}
                         ]},
-                        someArray: {
+                        equalSome: {
                             column: [
                                 {name: "orders"},
                                 {name: "units_ids"}
@@ -67,28 +67,6 @@ describe("Expression.equalAny.spec.ts", () => {
                 },
                 minify: "unit.id=some(orders.units_ids)"
             }
-        });
-
-    });
-
-    it("invalid inputs", () => {
-
-        assertNode(Expression, {
-            input: "2 = any()",
-            throws: /expected array argument/,
-            target: "any()"
-        });
-
-        assertNode(Expression, {
-            input: "2 = any(array[1], array[2])",
-            throws: /expected only one argument/,
-            target: "any(array[1], array[2])"
-        });
-
-        assertNode(Expression, {
-            input: "2 = some(array[1], array[2])",
-            throws: /expected only one argument/,
-            target: "some(array[1], array[2])"
         });
 
     });

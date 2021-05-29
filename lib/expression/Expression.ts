@@ -19,8 +19,6 @@ import { CaseWhen } from "./CaseWhen";
 import { FunctionReference } from "./FunctionReference";
 import { SubExpression } from "./SubExpression";
 import { FunctionCall } from "./FunctionCall";
-import { EqualAnyArray } from "./operator/custom/EqualAnyArray";
-import { EqualSomeArray } from "./operator/custom/EqualSomeArray";
 import { SubQuery } from "./SubQuery";
 import { Cast } from "./likeAreFunction/Cast";
 import { PgType } from "./PgType";
@@ -99,6 +97,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
         operand: Operand,
         options: ParseExpressionOptions = {}
     ): Operand {
+        cursor.skipSpaces();
+
         let hasCustomOperator = false;
 
         for (const CustomOperator of customOperators) {
@@ -230,7 +230,6 @@ export class Expression extends AbstractNode<ExpressionRow> {
         const right = this.parseOperand(cursor);
 
         const binary = this.createBinaryOperator(
-            cursor,
             left, operator, right
         );
 
@@ -242,20 +241,10 @@ export class Expression extends AbstractNode<ExpressionRow> {
     }
 
     private static createBinaryOperator(
-        cursor: Cursor,
         left: Operand,
         operator: string,
         right: Operand
     ) {
-        const equalAny = (
-            right.is(FunctionCall) &&
-            ["any", "all", "some"].includes(right.row.call.toString()) &&
-            operator === "="
-        );
-        if ( equalAny && right.is(FunctionCall) ) {
-            return this.createEqualAny(cursor, left, right);
-        }
-
         if (
             left.is(BinaryOperator) &&
             left.lessPrecedence(operator)
@@ -294,45 +283,6 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 right
             }
         });
-    }
-
-    private static createEqualAny(
-        cursor: Cursor,
-        left: Operand,
-        right: FunctionCall
-    ) {
-        if ( right.row.arguments.length === 0 ) {
-            cursor.throwError("expected array argument", right);
-        }
-        if ( right.row.arguments.length > 1 ) {
-            cursor.throwError("expected only one argument", right);
-        }
-        const type = right.row.call.toString();
-        const arrayExpression = right.row.arguments[0];
-
-        const position = {
-            start: left.position!.start,
-            end: right.position!.end
-        };
-
-        if ( type === "any" ) {
-            return new EqualAnyArray({
-                position,
-                row: {
-                    operand: left,
-                    anyArray: arrayExpression
-                }
-            });
-        }
-        else {
-            return new EqualSomeArray({
-                position,
-                row: {
-                    operand: left,
-                    someArray: arrayExpression
-                }
-            });
-        }
     }
 
     template(): TemplateElement[] {
