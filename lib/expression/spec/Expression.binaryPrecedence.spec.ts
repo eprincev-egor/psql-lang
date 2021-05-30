@@ -585,6 +585,21 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
+        assertNode(Expression, {
+            input: "3`- -2",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {number: "3"},
+                        operator: "`-",
+                        right: {number: "-2"}
+                    }
+                },
+                pretty: "3 `- -2",
+                minify: "3`- -2"
+            }
+        });
+
     });
 
 });

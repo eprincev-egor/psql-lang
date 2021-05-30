@@ -76,7 +76,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
         operand = this.parseCustomOperator(cursor, operand, options);
 
         if ( PostUnaryOperator.entryOperator(cursor) ) {
-            const postOperator = PostUnaryOperator.parseOperator(cursor);
+            const postOperator = PostUnaryOperator.parseOperator(cursor) as string;
             operand = new PostUnaryOperator({
                 position: {
                     start: operand.position!.start,
@@ -95,7 +95,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
     private static parseCustomOperator(
         cursor: Cursor,
         operand: Operand,
-        options: ParseExpressionOptions = {}
+        options: ParseExpressionOptions
     ): Operand {
         cursor.skipSpaces();
 

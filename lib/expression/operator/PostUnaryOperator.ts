@@ -37,7 +37,7 @@ export class PostUnaryOperator extends AbstractNode<PostUnaryOperatorRow> {
         return false;
     }
 
-    static parseOperator(cursor: Cursor): string {
+    static parseOperator(cursor: Cursor): string | undefined {
         for (const entryPhrase of ENTRY_PHRASES) {
             if ( cursor.beforePhrase(...entryPhrase) ) {
                 const inputPhrase = cursor.readPhrase(...entryPhrase)
@@ -46,11 +46,6 @@ export class PostUnaryOperator extends AbstractNode<PostUnaryOperatorRow> {
                 return normalPhrase;
             }
         }
-
-        const oneOf = ENTRY_PHRASES.map((phrase) =>
-            phrase.join(" ")
-        ).join("");
-        cursor.throwError(`expected one of:\n${oneOf}`);
     }
 
     template(): TemplateElement[] {
