@@ -195,6 +195,89 @@ describe("ColumnReference", () => {
         });
     });
 
+    it("from parent query WITH lateral", () => {
+        testDependencies({
+            input: `
+                select from company
+                join lateral (
+                    select from country
+                    where
+                        country.id = company.id_country
+                ) as country on true
+            `,
+            check([countryId, companyCountryId], [company, join, country]) {
+                assert.ok(
+                    countryId.findDeclaration() === country,
+                    "country.id"
+                );
+                assert.ok(
+                    companyCountryId.findDeclaration() === company,
+                    "company.id_country"
+                );
+            }
+        });
+    });
+
+    it("from parent query WITHOUT lateral", () => {
+        testDependencies({
+            input: `
+                select from company
+                join (
+                    select from country
+                    where
+                        country.id = company.id_country
+                ) as country on true
+            `,
+            check([, companyCountryId]) {
+                assert.ok(
+                    companyCountryId.findDeclaration() === undefined,
+                    "company.id_country"
+                );
+            }
+        });
+    });
+
+    it("select * from x, y", () => {
+        testDependencies({
+            input: `
+                select * from x, y
+            `,
+            check([all]) {
+                assert.ok(
+                    all.findDeclaration() === undefined
+                );
+            }
+        });
+    });
+
+    it("row_to_json(company) from public.company", () => {
+        testDependencies({
+            input: `
+                select row_to_json(company)
+                from public.company
+            `,
+            check([companyRow], [company]) {
+                assert.ok(
+                    companyRow.findDeclaration() === company
+                );
+            }
+        });
+    });
+
+    it("row_to_json(unknown) from public.company", () => {
+        testDependencies({
+            input: `
+                select row_to_json(unknown)
+                from public.company
+            `,
+            check([unknownRow]) {
+                assert.ok(
+                    unknownRow.findDeclaration() === undefined
+                );
+            }
+        });
+    });
+
     interface TestDeps {
         input: string;
         check(
