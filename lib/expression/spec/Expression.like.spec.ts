@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.like.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name ilike '%hello%'",
             shouldBe: {
                 json: {
@@ -21,7 +21,7 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name like '%hello%'",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name not ilike '%hello%'",
             shouldBe: {
                 json: {
@@ -53,7 +53,7 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name not like '%hello%'",
             shouldBe: {
                 json: {
@@ -69,7 +69,7 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name similar '%hello%'",
             shouldBe: {
                 json: {
@@ -85,7 +85,7 @@ describe("Expression.like.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name not similar '%hello%'",
             shouldBe: {
                 json: {

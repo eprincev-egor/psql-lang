@@ -1,10 +1,10 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { UEscape } from "../UEscape";
 
 describe("UEscape", () => {
 
     it("valid inputs", () => {
-        assertNode(UEscape, {
+        Sql.assertNode(UEscape, {
             input: "uescape '!'",
             shouldBe: {
                 json: {escape: "!"}

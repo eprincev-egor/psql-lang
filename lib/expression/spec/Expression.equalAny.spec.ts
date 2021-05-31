@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.equalAny.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 = any(company.roles_ids)",
             shouldBe: {
                 json: {
@@ -23,7 +23,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3 = any(array[2, 1]) = any(array[false])",
             shouldBe: {
                 json: {
@@ -48,7 +48,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id = some(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -69,7 +69,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id = all(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -90,7 +90,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id != any(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -111,7 +111,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id <> any(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -133,7 +133,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id != some(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -154,7 +154,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id <> some(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -176,7 +176,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id != all(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -197,7 +197,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "unit.id <> all(orders.units_ids)",
             shouldBe: {
                 json: {
@@ -219,7 +219,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 = any(select 1)",
             shouldBe: {
                 json: {
@@ -241,7 +241,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 = all(select 1)",
             shouldBe: {
                 json: {
@@ -263,7 +263,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 = some(select 1)",
             shouldBe: {
                 json: {
@@ -285,7 +285,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 != any(select 1)",
             shouldBe: {
                 json: {
@@ -307,7 +307,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 != all(select 1)",
             shouldBe: {
                 json: {
@@ -329,7 +329,7 @@ describe("Expression.equalAny.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 != some(select 1)",
             shouldBe: {
                 json: {

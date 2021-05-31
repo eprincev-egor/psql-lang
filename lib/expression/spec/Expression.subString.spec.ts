@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.subString.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "substring(test from 2)",
             shouldBe: {
                 json: {
@@ -19,7 +19,7 @@ describe("Expression.subString.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "substring(test, 2)",
             shouldBe: {
                 json: {
@@ -35,7 +35,7 @@ describe("Expression.subString.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "substring(test from 2 for 3)",
             shouldBe: {
                 json: {
@@ -50,7 +50,7 @@ describe("Expression.subString.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "substring(test, 2, 3)",
             shouldBe: {
                 json: {
@@ -71,7 +71,7 @@ describe("Expression.subString.spec.ts", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "substring(test)",
             throws: /required 'from' position/
         });

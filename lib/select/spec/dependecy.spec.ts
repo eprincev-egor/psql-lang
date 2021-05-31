@@ -1,6 +1,6 @@
-import { SourceCode } from "abstract-lang";
 import assert from "assert";
 import { ColumnReference } from "../../expression/ColumnReference";
+import { Sql } from "../../Sql";
 import { AbstractFromItem } from "../AbstractFromItem";
 import { FromItemType } from "../FromItem";
 import { Select } from "../Select";
@@ -286,10 +286,7 @@ describe("ColumnReference", () => {
         ): void;
     }
     function testDependencies(test: TestDeps) {
-        const code = new SourceCode({
-            text: test.input.trim()
-        });
-        const select = code.cursor.parse(Select);
+        const select = Sql.code( test.input.trim() ).parse(Select);
 
         const columnReferences = select.filterChildrenByInstance(ColumnReference);
         const fromItems = select.filterChildrenByInstance(AbstractFromItem);

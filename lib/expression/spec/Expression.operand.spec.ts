@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.operand.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "100",
             shouldBe: {
                 json: {
@@ -14,7 +14,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "-4",
             shouldBe: {
                 json: {
@@ -23,7 +23,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "'string'",
             shouldBe: {
                 json: {
@@ -32,7 +32,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "E'Estring'",
             shouldBe: {
                 json: {
@@ -41,7 +41,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "U&'Ustring'",
             shouldBe: {
                 json: {
@@ -50,7 +50,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "$dol1lar$dollar\nstring$dol1lar$",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.inn",
             shouldBe: {
                 json: {
@@ -71,7 +71,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "false",
             shouldBe: {
                 json: {
@@ -80,7 +80,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "null",
             shouldBe: {
                 json: {
@@ -89,7 +89,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "$lang",
             shouldBe: {
                 json: {
@@ -98,7 +98,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "ARRAY[1,2,3]",
             shouldBe: {
                 json: {
@@ -113,7 +113,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "case when true then 1 else 0 end",
             shouldBe: {
                 json: {
@@ -135,7 +135,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "now ( )",
             shouldBe: {
                 json: {
@@ -151,7 +151,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "public.some_func(1, 2)",
             shouldBe: {
                 json: {
@@ -170,7 +170,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "now_utc()",
             shouldBe: {
                 json: {
@@ -185,7 +185,7 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "(select 1)",
             shouldBe: {
                 json: {
@@ -211,25 +211,25 @@ describe("Expression.operand.spec.ts", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "::",
             throws: /expected expression operand/,
             target: ":"
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "a.b.c()",
             throws: /improper qualified name \(too many dotted names\): a\.b\.c/,
             target: "c"
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "(select) + 1",
             throws: /expected one column for subquery/,
             target: "select"
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "(select hello, world as x) + 1",
             throws: /subquery must return only one column/,
             target: "world as x"

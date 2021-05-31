@@ -1,12 +1,12 @@
-import { assertNode } from "abstract-lang";
 import assert from "assert";
+import { Sql } from "../../../Sql";
 import { StringLiteral } from "../StringLiteral";
 
 describe("StringLiteral", () => {
 
     it("valid inputs", () => {
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "''",
             shouldBe: {
                 json: {
@@ -15,7 +15,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'hello'",
             shouldBe: {
                 json: {
@@ -24,7 +24,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'hello ''world'''",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'first line'\n' second line'",
             shouldBe: {
                 json: {
@@ -48,7 +48,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'first '\r' second'",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'hello' \n\r 'world' \n\r 'world'",
             shouldBe: {
                 json: {
@@ -70,7 +70,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'hello' \n\r ",
             shouldBe: {
                 json: {
@@ -81,7 +81,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'_ \"!@#$%^&*()-+*/=№?[]{}<>|    ~`.:;,qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789'",
             shouldBe: {
                 json: {
@@ -90,7 +90,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&'d\\0061t\\+000061 hello'",
             shouldBe: {
                 json: {
@@ -104,7 +104,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&'d\\0061t\\+000061 world' uescape '\\'",
             shouldBe: {
                 json: {
@@ -120,7 +120,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "u&'d\\0061t\\+000061 test'",
             shouldBe: {
                 json: {
@@ -136,7 +136,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&'d!0061t!+000061' UESCAPE '!'",
             shouldBe: {
                 json: {
@@ -153,7 +153,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&'\\0066'",
             shouldBe: {
                 json: {
@@ -166,7 +166,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'hello'",
             shouldBe: {
                 json: {
@@ -180,7 +180,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\\\'",
             shouldBe: {
                 json: {
@@ -194,7 +194,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "e'\\\\test'",
             shouldBe: {
                 json: {
@@ -210,7 +210,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'\\\\'",
             shouldBe: {
                 json: {
@@ -223,7 +223,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "e'\\n'",
             shouldBe: {
                 json: {
@@ -239,7 +239,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\r'",
             shouldBe: {
                 json: {
@@ -253,7 +253,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E''''",
             shouldBe: {
                 json: {
@@ -267,7 +267,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&''''",
             shouldBe: {
                 json: {
@@ -281,7 +281,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'e\\''''",
             shouldBe: {
                 json: {
@@ -295,7 +295,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\n10'",
             shouldBe: {
                 json: {
@@ -305,7 +305,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\none'",
             shouldBe: {
                 json: {
@@ -315,7 +315,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\b'",
             shouldBe: {
                 json: {
@@ -329,7 +329,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\f'",
             shouldBe: {
                 json: {
@@ -343,7 +343,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\t'",
             shouldBe: {
                 json: {
@@ -357,7 +357,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'1\n\r2'",
             shouldBe: {
                 json: {
@@ -366,7 +366,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'_ \"!@#$%^&*()-+*/=№?[]{}<>|    ~`.:;,qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789'",
             shouldBe: {
                 json: {
@@ -376,7 +376,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\U00000061b'",
             shouldBe: {
                 json: {
@@ -390,7 +390,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\U00000061_\\U00000062'",
             shouldBe: {
                 json: {
@@ -404,7 +404,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\u006aa'",
             shouldBe: {
                 json: {
@@ -418,7 +418,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\x7a\\x79'",
             shouldBe: {
                 json: {
@@ -432,7 +432,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\x7\\xf'",
             shouldBe: {
                 json: {
@@ -446,7 +446,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\111\\112'",
             shouldBe: {
                 json: {
@@ -460,7 +460,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\77'",
             shouldBe: {
                 json: {
@@ -474,7 +474,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$$hello$$",
             shouldBe: {
                 json: {
@@ -484,7 +484,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$$$$",
             shouldBe: {
                 json: {
@@ -494,7 +494,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$tag$hello$tag$",
             shouldBe: {
                 json: {
@@ -504,7 +504,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$tag$$tag$",
             shouldBe: {
                 json: {
@@ -514,7 +514,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$TAG$he$$llo$TAG$",
             shouldBe: {
                 json: {
@@ -524,7 +524,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$Tag_1$$tag_1$$Tag_1$",
             shouldBe: {
                 json: {
@@ -534,7 +534,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$$\n\r$$",
             shouldBe: {
                 json: {
@@ -544,7 +544,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$q$[\\t\\r\\n\\v\\\\]$q$",
             shouldBe: {
                 json: {
@@ -554,7 +554,7 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$$''\\$$",
             shouldBe: {
                 json: {
@@ -571,31 +571,31 @@ describe("StringLiteral", () => {
     });
 
     it("invalid inputs", () => {
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "'1' uescape",
             throws: /unexpected uescape, use u& before quotes/,
             target: "uescape"
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'1' uescape",
             throws: /unexpected uescape, use u& before quotes/,
             target: "uescape"
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "U&'d!0061t!+000061' UESCAPE '+'",
             throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
             target: "+"
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "u&'' uescape '+'",
             throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
             target: "+"
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "E'\\x00'",
             shouldBe: {
                 json: {
@@ -612,13 +612,13 @@ describe("StringLiteral", () => {
             }
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$0x$xx$0x$",
             throws: /dollar tag should starts with alphabet char, invalid tag: 0x/,
             target: "0"
         });
 
-        assertNode(StringLiteral, {
+        Sql.assertNode(StringLiteral, {
             input: "$x*$xx$x*$",
             throws: /unexpected token: "\*", expected: "\$"/,
             target: "*"

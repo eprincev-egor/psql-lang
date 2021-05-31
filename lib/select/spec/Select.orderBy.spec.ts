@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.orderBy.spec.ts: select ... order by ...", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users order by id",
             shouldBe: {
                 json: {
@@ -33,7 +33,7 @@ describe("Select.orderBy.spec.ts: select ... order by ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users order by id desc",
             shouldBe: {
                 json: {

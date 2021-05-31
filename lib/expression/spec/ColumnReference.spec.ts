@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { ColumnReference } from "../ColumnReference";
 
 describe("ColumnReference", () => {
 
     it("valid inputs", () => {
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "name",
             shouldBe: {
                 json: {
@@ -14,7 +14,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "table.column",
             shouldBe: {
                 json: {
@@ -26,7 +26,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "schema.table.column",
             shouldBe: {
                 json: {
@@ -39,7 +39,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "schema.table",
             shouldBe: {
                 json: {
@@ -51,7 +51,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "table",
             shouldBe: {
                 json: {
@@ -62,7 +62,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "SCHEMA_name  .  TABLE_name  .  COLUMN_NAME",
             shouldBe: {
                 json: {
@@ -77,7 +77,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "\" table \" . \" COLUMN \"",
             shouldBe: {
                 json: {
@@ -91,7 +91,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "TABLE  . \" COLUMN \"",
             shouldBe: {
                 json: {
@@ -105,7 +105,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "\" TABLE \" . COLUMN ",
             shouldBe: {
                 json: {
@@ -119,7 +119,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "public.\"*\"",
             shouldBe: {
                 json: {
@@ -131,7 +131,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "company.*",
             shouldBe: {
                 json: {
@@ -143,7 +143,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "*",
             shouldBe: {
                 json: {
@@ -153,7 +153,7 @@ describe("ColumnReference", () => {
             }
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "schema . table . *",
             shouldBe: {
                 json: {
@@ -172,25 +172,25 @@ describe("ColumnReference", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "a.b.c.d",
             throws: /cross-database references are not implemented: a\.b\.c\.d/,
             target: "a"
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "a.b.c.d.e",
             throws: /improper qualified name \(too many dotted names\): a\.b\.c\.d\.e/,
             target: "e"
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "*.*",
             throws: /improper use of "\*"/,
             target: "*"
         });
 
-        assertNode(ColumnReference, {
+        Sql.assertNode(ColumnReference, {
             input: "a.*.*",
             throws: /improper use of "\*"/,
             target: "*"

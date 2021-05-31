@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { ValueRow } from "../ValueRow";
 
 describe("ValueRow", () => {
 
     it("valid inputs", () => {
 
-        assertNode(ValueRow, {
+        Sql.assertNode(ValueRow, {
             input: "( 1, default)",
             shouldBe: {
                 json: {

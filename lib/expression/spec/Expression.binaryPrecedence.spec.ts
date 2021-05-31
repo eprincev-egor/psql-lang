@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.binaryPrecedence.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3 - 2 + 1",
             shouldBe: {
                 json: {
@@ -23,7 +23,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 + 2 * 2",
             shouldBe: {
                 json: {
@@ -41,7 +41,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 - 2 / 2",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 + 5 % 2",
             shouldBe: {
                 json: {
@@ -77,7 +77,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.id > 100 or company.name is not null",
             shouldBe: {
                 json: {
@@ -104,7 +104,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "(1 + 2) - (3 + 4)",
             shouldBe: {
                 json: {
@@ -130,7 +130,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: [
                 "account.balance > 0",
                 "and",
@@ -188,7 +188,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 + 2 ^ 3",
             shouldBe: {
                 json: {
@@ -206,7 +206,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 * 2 ^ 3",
             shouldBe: {
                 json: {
@@ -224,7 +224,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 ^ 2 / 3",
             shouldBe: {
                 json: {
@@ -242,7 +242,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 @@@ 2 + 3",
             shouldBe: {
                 json: {
@@ -260,7 +260,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 = 2 @@@ 3",
             shouldBe: {
                 json: {
@@ -278,7 +278,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 = 2 ~ 3",
             shouldBe: {
                 json: {
@@ -296,7 +296,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 ilike 2 <#> 3",
             shouldBe: {
                 json: {
@@ -314,7 +314,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 in (1) and 2 in (2)",
             shouldBe: {
                 json: {
@@ -334,7 +334,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "name ilike '%ooo%' or note not ilike '%ooo%'",
             shouldBe: {
                 json: {
@@ -359,7 +359,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "name ilike '%ooo%' and note not ilike '%ooo%'",
             shouldBe: {
                 json: {
@@ -384,7 +384,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3*-2",
             shouldBe: {
                 json: {
@@ -398,7 +398,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3+-2",
             shouldBe: {
                 json: {
@@ -412,7 +412,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3*+2",
             shouldBe: {
                 json: {
@@ -430,7 +430,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3@-2",
             shouldBe: {
                 json: {
@@ -444,7 +444,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3@+2",
             shouldBe: {
                 json: {
@@ -459,7 +459,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3#-2",
             shouldBe: {
                 json: {
@@ -473,7 +473,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3~-2",
             shouldBe: {
                 json: {
@@ -487,7 +487,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3%-2",
             shouldBe: {
                 json: {
@@ -501,7 +501,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3^-2",
             shouldBe: {
                 json: {
@@ -515,7 +515,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3&-2",
             shouldBe: {
                 json: {
@@ -529,7 +529,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3!-2",
             shouldBe: {
                 json: {
@@ -543,7 +543,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3|-2",
             shouldBe: {
                 json: {
@@ -557,7 +557,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3?-2",
             shouldBe: {
                 json: {
@@ -571,7 +571,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3`-2",
             shouldBe: {
                 json: {
@@ -585,7 +585,7 @@ describe("Expression.binaryPrecedence.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3`- -2",
             shouldBe: {
                 json: {

@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { WindowDefinitionFrameElement } from "../WindowDefinitionFrameElement";
 
 describe("WindowDefinitionFrameElement", () => {
 
     it("valid inputs", () => {
 
-        assertNode(WindowDefinitionFrameElement, {
+        Sql.assertNode(WindowDefinitionFrameElement, {
             input: "current row",
             shouldBe: {
                 json: {
@@ -14,7 +14,7 @@ describe("WindowDefinitionFrameElement", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrameElement, {
+        Sql.assertNode(WindowDefinitionFrameElement, {
             input: "CURRENT row",
             shouldBe: {
                 json: {
@@ -25,7 +25,7 @@ describe("WindowDefinitionFrameElement", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrameElement, {
+        Sql.assertNode(WindowDefinitionFrameElement, {
             input: "Unbounded Following",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("WindowDefinitionFrameElement", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrameElement, {
+        Sql.assertNode(WindowDefinitionFrameElement, {
             input: "2 preceding",
             shouldBe: {
                 json: {

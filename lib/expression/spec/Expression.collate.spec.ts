@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.collate.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "'' Collate \"POSIX\"",
             shouldBe: {
                 json: {
@@ -19,7 +19,7 @@ describe("Expression.collate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name collate \"fr_FR\"",
             shouldBe: {
                 json: {

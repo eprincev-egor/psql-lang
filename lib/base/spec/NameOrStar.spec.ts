@@ -1,25 +1,25 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { NameOrStar } from "../NameOrStar";
 
 describe("NameOrStar", () => {
 
     it("valid inputs", () => {
 
-        assertNode(NameOrStar, {
+        Sql.assertNode(NameOrStar, {
             input: "name",
             shouldBe: {
                 json: {name: {name: "name"}}
             }
         });
 
-        assertNode(NameOrStar, {
+        Sql.assertNode(NameOrStar, {
             input: "\"name\"",
             shouldBe: {
                 json: {name: {strictName: "name"}}
             }
         });
 
-        assertNode(NameOrStar, {
+        Sql.assertNode(NameOrStar, {
             input: "*",
             shouldBe: {
                 json: {star: true}

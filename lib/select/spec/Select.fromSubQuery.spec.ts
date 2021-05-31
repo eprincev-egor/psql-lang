@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select id from (select 1 as id) as tmp",
             shouldBe: {
                 json: {
@@ -41,7 +41,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (select) tmp",
             shouldBe: {
                 json: {
@@ -64,7 +64,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (select) tmp right join users on true",
             shouldBe: {
                 json: {
@@ -97,7 +97,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral (select)tmp",
             shouldBe: {
                 json: {
@@ -121,7 +121,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral (select 1)tmp(y)",
             shouldBe: {
                 json: {
@@ -155,7 +155,7 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (select)",
             throws: /subquery in FROM must have an alias/
         });

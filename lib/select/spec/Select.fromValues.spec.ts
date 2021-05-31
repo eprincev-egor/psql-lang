@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.fromValues.spec.ts: select ... from (values ...)", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (values (1, 2), (3, 4))tmp(a,b)",
             shouldBe: {
                 json: {
@@ -40,7 +40,7 @@ describe("Select.fromValues.spec.ts: select ... from (values ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (values (1)) as tmp",
             shouldBe: {
                 json: {
@@ -65,7 +65,7 @@ describe("Select.fromValues.spec.ts: select ... from (values ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral (values (1)) as tmp",
             shouldBe: {
                 json: {
@@ -95,7 +95,7 @@ describe("Select.fromValues.spec.ts: select ... from (values ...)", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from (values (1))",
             throws: /subquery in FROM must have an alias/
         });

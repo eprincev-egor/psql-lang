@@ -1,4 +1,4 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.groupBy.spec.ts: select ... group by", () => {
@@ -19,7 +19,7 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
             }
         }];
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select sum(1) from orders group by orders.date",
             shouldBe: {
                 json: {
@@ -44,7 +44,7 @@ describe("Select.groupBy.spec.ts: select ... group by", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select sum(1) from orders group by orders.client_id, orders.date",
             shouldBe: {
                 json: {

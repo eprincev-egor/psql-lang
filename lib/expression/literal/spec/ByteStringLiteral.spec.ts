@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../../Sql";
 import { ByteStringLiteral } from "../ByteStringLiteral";
 
 describe("ByteStringLiteral", () => {
 
     it("valid inputs", () => {
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "B'0011'",
             shouldBe: {
                 json: {
@@ -15,7 +15,7 @@ describe("ByteStringLiteral", () => {
             }
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "b'1'",
             shouldBe: {
                 json: {
@@ -27,7 +27,7 @@ describe("ByteStringLiteral", () => {
             }
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "B''",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("ByteStringLiteral", () => {
             }
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "X'0123ee'",
             shouldBe: {
                 json: {
@@ -47,7 +47,7 @@ describe("ByteStringLiteral", () => {
             }
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "x'ff'",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("ByteStringLiteral", () => {
             }
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "x'FFa'",
             shouldBe: {
                 json: {
@@ -75,25 +75,25 @@ describe("ByteStringLiteral", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "x'zz'",
             throws: /"z" is not a valid hexadecimal digit/,
             target: "zz"
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "b'zz'",
             throws: /"z" is not a valid binary digit/,
             target: "zz"
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "b'a'",
             throws: /"a" is not a valid binary digit/,
             target: "a"
         });
 
-        assertNode(ByteStringLiteral, {
+        Sql.assertNode(ByteStringLiteral, {
             input: "b'2'",
             throws: /"2" is not a valid binary digit/,
             target: "2"

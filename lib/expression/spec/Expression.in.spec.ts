@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.in.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.type in (1, 2)",
             shouldBe: {
                 json: {
@@ -24,7 +24,7 @@ describe("Expression.in.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.type not in (3, 4, 5)",
             shouldBe: {
                 json: {
@@ -44,7 +44,7 @@ describe("Expression.in.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.type in (select 1, 2)",
             shouldBe: {
                 json: {
@@ -71,7 +71,7 @@ describe("Expression.in.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.type not in (select 1, 2)",
             shouldBe: {
                 json: {

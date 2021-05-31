@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.window.spec.ts: select ... window", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from company window x as (order by company.name), y as (order by company.id)",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("Select.window.spec.ts: select ... window", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: `SELECT depname, empno, salary, avg(salary) OVER (PARTITION BY depname)
             FROM empsalary`,
             shouldBe: {

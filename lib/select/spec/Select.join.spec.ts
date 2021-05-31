@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.join.spec.ts: from ... join ...", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "    companies.id,",
@@ -70,7 +70,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "from companies",
@@ -101,7 +101,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "from companies",
@@ -132,7 +132,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "from companies",
@@ -163,7 +163,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "from companies",
@@ -194,7 +194,7 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "select",
                 "from companies",

@@ -1,32 +1,32 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { MultilineComment } from "../MultilineComment";
 
 describe("MultilineComment", () => {
 
     it("valid inputs", () => {
 
-        assertNode(MultilineComment, {
+        Sql.assertNode(MultilineComment, {
             input: "/**/",
             shouldBe: {
                 json: {multilineComment: ""}
             }
         });
 
-        assertNode(MultilineComment, {
+        Sql.assertNode(MultilineComment, {
             input: "/*hello*/",
             shouldBe: {
                 json: {multilineComment: "hello"}
             }
         });
 
-        assertNode(MultilineComment, {
+        Sql.assertNode(MultilineComment, {
             input: "/*hello\nworld*/",
             shouldBe: {
                 json: {multilineComment: "hello\nworld"}
             }
         });
 
-        assertNode(MultilineComment, {
+        Sql.assertNode(MultilineComment, {
             input: "/*hello\rworld*/",
             shouldBe: {
                 json: {multilineComment: "hello\rworld"}

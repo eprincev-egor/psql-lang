@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.union.spec.ts: select ... union select ...", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 union select 2",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 intersect select 2",
             shouldBe: {
                 json: {
@@ -69,7 +69,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 except select 2",
             shouldBe: {
                 json: {
@@ -101,7 +101,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 union all select 2",
             shouldBe: {
                 json: {
@@ -134,7 +134,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 union distinct select 2",
             shouldBe: {
                 json: {
@@ -167,7 +167,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 intersect distinct select 2",
             shouldBe: {
                 json: {
@@ -200,7 +200,7 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 union select 2 union select 3",
             shouldBe: {
                 json: {

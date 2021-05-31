@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { WindowDefinition } from "../WindowDefinition";
 
 describe("WindowDefinition", () => {
 
     it("valid inputs", () => {
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: "parent_window",
             shouldBe: {
                 json: {
@@ -14,7 +14,7 @@ describe("WindowDefinition", () => {
             }
         });
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: "partition by company.name, company.id",
             shouldBe: {
                 json: {
@@ -38,7 +38,7 @@ describe("WindowDefinition", () => {
             }
         });
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: "order by company.name asc, company.id desc",
             shouldBe: {
                 json: {
@@ -68,7 +68,7 @@ describe("WindowDefinition", () => {
             }
         });
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: "range between 1 following and 2 following",
             shouldBe: {
                 json: {
@@ -87,7 +87,7 @@ describe("WindowDefinition", () => {
             }
         });
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: "rows between 1 following and 2 following",
             shouldBe: {
                 json: {
@@ -106,7 +106,7 @@ describe("WindowDefinition", () => {
             }
         });
 
-        assertNode(WindowDefinition, {
+        Sql.assertNode(WindowDefinition, {
             input: [
                 "parent_window",
                 "partition by company.name, company.id",

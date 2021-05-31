@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.exists.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "exists(select)",
             shouldBe: {
                 json: {
@@ -24,7 +24,7 @@ describe("Expression.exists.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "exists(select from companies where id = 1)",
             shouldBe: {
                 json: {
@@ -58,7 +58,7 @@ describe("Expression.exists.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "exists(select 1)",
             shouldBe: {
                 json: {

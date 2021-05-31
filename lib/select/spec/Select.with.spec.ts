@@ -1,4 +1,4 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.with.spec.ts: with ... select", () => {
@@ -26,7 +26,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         }];
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "with",
                 "    companies as (",
@@ -54,7 +54,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: [
                 "with recursive",
                 "    companies as (",
@@ -87,7 +87,7 @@ describe("Select.with.spec.ts: with ... select", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: `with
                 a as (select),
                 a as (select)

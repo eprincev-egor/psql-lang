@@ -1,45 +1,45 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Variable } from "../Variable";
 
 describe("Variable", () => {
 
     it("valid inputs", () => {
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$hello",
             shouldBe: {
                 json: {variable: "hello"}
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$world",
             shouldBe: {
                 json: {variable: "world"}
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$NAME",
             shouldBe: {
                 json: {variable: "NAME"}
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$_",
             shouldBe: {
                 json: {variable: "_"}
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$a1",
             shouldBe: {
                 json: {variable: "a1"}
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$xx zz",
             shouldBe: {
                 json: {variable: "xx"},
@@ -48,7 +48,7 @@ describe("Variable", () => {
             }
         });
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$1",
             shouldBe: {
                 json: {variable: "1"}
@@ -59,7 +59,7 @@ describe("Variable", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Variable, {
+        Sql.assertNode(Variable, {
             input: "$",
             throws: /expected variable name/,
             target: "$"

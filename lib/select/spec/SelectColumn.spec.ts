@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { SelectColumn } from "../SelectColumn";
 
 describe("SelectColumn", () => {
 
     it("valid inputs", () => {
 
-        assertNode(SelectColumn, {
+        Sql.assertNode(SelectColumn, {
             input: "order.date as order_date",
             shouldBe: {
                 json: {

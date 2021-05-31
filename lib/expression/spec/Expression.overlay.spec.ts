@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.overlay.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "OVERLAY('Txxxxas' placing 'hom' from 2 for 4)",
             shouldBe: {
                 json: {
@@ -21,7 +21,7 @@ describe("Expression.overlay.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "overlay('Txxxxas' placing 'hom' from 2)",
             shouldBe: {
                 json: {

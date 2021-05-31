@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.with.spec.ts: with ... select", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users where users.name is not null",
             shouldBe: {
                 json: {
@@ -37,7 +37,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 where false",
             shouldBe: {
                 json: {
@@ -58,7 +58,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: `
                 select
                     max(orders.profit)
@@ -113,7 +113,7 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: `
                 select
                     max(orders.profit)

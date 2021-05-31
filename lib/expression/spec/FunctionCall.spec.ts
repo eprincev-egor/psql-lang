@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { FunctionCall } from "../FunctionCall";
 
 describe("FunctionCall", () => {
 
     it("valid inputs", () => {
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "count(*)",
             shouldBe: {
                 json: {
@@ -17,7 +17,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "array_agg( all company.id )",
             shouldBe: {
                 json: {
@@ -34,7 +34,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "string_agg( distinct company.name, ', ' )",
             shouldBe: {
                 json: {
@@ -52,7 +52,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "array_agg( all company.id ) filter (where company.type8=3 )",
             shouldBe: {
                 json: {
@@ -84,7 +84,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "array_agg( distinct company.id ) filter (where company.type8=3 )",
             shouldBe: {
                 json: {
@@ -116,7 +116,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "array_agg(company.id) filter (where company.type8=3 )",
             shouldBe: {
                 json: {
@@ -147,7 +147,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "string_agg( company.name, ', ' order by company.name)",
             shouldBe: {
                 json: {
@@ -177,7 +177,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "string_agg( distinct company.name, ', ' order by company.name)",
             shouldBe: {
                 json: {
@@ -208,7 +208,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "string_agg( distinct company.name, ', ' order by company.name) filter (where true)",
             shouldBe: {
                 json: {
@@ -245,7 +245,7 @@ describe("FunctionCall", () => {
             }
         });
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "UNNEST( ARRAY[ 1, 2 ] ) WITHIN GROUP (ORDER BY val desc))",
             shouldBe: {
                 json: {
@@ -277,7 +277,7 @@ describe("FunctionCall", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(FunctionCall, {
+        Sql.assertNode(FunctionCall, {
             input: "UNNEST( ARRAY[ 1, 2 ] ORDER BY val desc ) WITHIN GROUP (ORDER BY val desc))",
             throws: /cannot use multiple ORDER BY clauses with WITHIN GROUP/,
             target: "WITHIN"

@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.between.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "id between 1 and 100",
             shouldBe: {
                 json: {
@@ -20,7 +20,7 @@ describe("Expression.between.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.profit between symmetric 3 * 100 and 4 * 3000",
             shouldBe: {
                 json: {
@@ -46,7 +46,7 @@ describe("Expression.between.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.id between 1 and 2 or company.id between 5 and 6",
             shouldBe: {
                 json: {
@@ -73,7 +73,7 @@ describe("Expression.between.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.id between 1 and 2 + 3 <= true",
             shouldBe: {
                 json: {
@@ -102,7 +102,7 @@ describe("Expression.between.spec.ts", () => {
             ">", "<", ">=", "<=", "="
         ];
         for (const stopOperator of stopOperators) {
-            assertNode(Expression, {
+            Sql.assertNode(Expression, {
                 input: `profit between 1 and 2 ${stopOperator} false`,
                 shouldBe: {
                     json: {
@@ -123,7 +123,7 @@ describe("Expression.between.spec.ts", () => {
             });
         }
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "profit between 1 and 2 and date > now()",
             shouldBe: {
                 json: {
@@ -152,7 +152,7 @@ describe("Expression.between.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "id not between 1 and 100",
             shouldBe: {
                 json: {
@@ -167,7 +167,7 @@ describe("Expression.between.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "orders.profit not between symmetric 3 * 100 and 4 * 3000",
             shouldBe: {
                 json: {

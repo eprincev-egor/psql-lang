@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.timestamp.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "timestamp '2001-09-28 01:00'",
             shouldBe: {
                 json: {
@@ -17,7 +17,7 @@ describe("Expression.timestamp.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "TIMESTAMP\nwithout TIME zone '1900-09-28 01:00'",
             shouldBe: {
                 json: {
@@ -31,7 +31,7 @@ describe("Expression.timestamp.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "date '2001-09-28'",
             shouldBe: {
                 json: {
@@ -43,7 +43,7 @@ describe("Expression.timestamp.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "time '22:00'",
             shouldBe: {
                 json: {
@@ -55,7 +55,7 @@ describe("Expression.timestamp.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "date > now()",
             shouldBe: {
                 json: {

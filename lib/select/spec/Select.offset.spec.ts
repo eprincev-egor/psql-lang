@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.offset.spec.ts: offset/limit/...", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users limit 10",
             shouldBe: {
                 json: {
@@ -25,7 +25,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users limit all",
             shouldBe: {
                 json: {
@@ -45,7 +45,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users offset 10",
             shouldBe: {
                 json: {
@@ -65,7 +65,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users offset 1000 limit 120",
             shouldBe: {
                 json: {
@@ -86,7 +86,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users limit 120 offset 1000",
             shouldBe: {
                 json: {
@@ -108,7 +108,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users fetch first 100 rows only",
             shouldBe: {
                 json: {
@@ -131,7 +131,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users fetch next 1 row only",
             shouldBe: {
                 json: {
@@ -155,7 +155,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users fetch next row only",
             shouldBe: {
                 json: {
@@ -178,7 +178,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users offset 10 fetch next row only",
             shouldBe: {
                 json: {
@@ -200,7 +200,7 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users offset 10 - 3 fetch next row only",
             shouldBe: {
                 json: {
@@ -230,37 +230,37 @@ describe("Select.offset.spec.ts: offset/limit/...", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users limit 10 limit 20",
             throws: /duplicated limit/,
             target: "limit"
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users limit 10 offset 1 limit 20",
             throws: /duplicated limit/,
             target: "limit"
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users offset 10 offset 20",
             throws: /duplicated offset/,
             target: "offset"
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users offset 10 limit 4 offset 20",
             throws: /duplicated offset/,
             target: "offset"
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users fetch next rows only limit 10",
             throws: /unexpected limit, fetch already exists/,
             target: "limit"
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users limit 10 fetch next rows only",
             throws: /unexpected fetch, limit already exists/,
             target: "fetch"

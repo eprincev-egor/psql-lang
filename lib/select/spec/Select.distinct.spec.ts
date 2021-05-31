@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.distinct.spec.ts: select distinct ... ", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select distinct name from users",
             shouldBe: {
                 json: {
@@ -26,7 +26,7 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select distinct on (name) id, note from users",
             shouldBe: {
                 json: {
@@ -54,7 +54,7 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select distinct on (2) id, note from users",
             shouldBe: {
                 json: {
@@ -80,7 +80,7 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select distinct on (1, 2) id, note from users",
             shouldBe: {
                 json: {
@@ -107,7 +107,7 @@ describe("Select.distinct.spec.ts: select distinct ... ", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select distinct on (id % 2, name) id, note from users",
             shouldBe: {
                 json: {

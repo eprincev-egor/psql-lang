@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.binary.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "$1 > $2",
             shouldBe: {
                 json: {
@@ -19,7 +19,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 + 2",
             shouldBe: {
                 json: {
@@ -33,7 +33,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 - 1",
             shouldBe: {
                 json: {
@@ -47,7 +47,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 != 1",
             shouldBe: {
                 json: {
@@ -61,7 +61,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2 <> 1",
             shouldBe: {
                 json: {
@@ -75,7 +75,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "3 ^ 5",
             shouldBe: {
                 json: {
@@ -89,7 +89,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "'hello' || 'world'",
             shouldBe: {
                 json: {
@@ -103,7 +103,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "true > false",
             shouldBe: {
                 json: {
@@ -117,7 +117,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "true > null",
             shouldBe: {
                 json: {
@@ -131,7 +131,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "$variable = 4",
             shouldBe: {
                 json: {
@@ -145,7 +145,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "$t$20 days$t$ >= interval '1 day'",
             shouldBe: {
                 json: {
@@ -159,7 +159,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.dt_create <= interval '1 year'",
             shouldBe: {
                 json: {
@@ -176,7 +176,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "b'0001' || x'0ffe'",
             shouldBe: {
                 json: {
@@ -197,7 +197,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "E'hello' || U&'world'",
             shouldBe: {
                 json: {
@@ -211,7 +211,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "true or false",
             shouldBe: {
                 json: {
@@ -224,7 +224,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "FALSE \r OR \n TRUE",
             shouldBe: {
                 json: {
@@ -239,7 +239,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "true and false",
             shouldBe: {
                 json: {
@@ -252,7 +252,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "FALSE \n AND \t\r TRUE",
             shouldBe: {
                 json: {
@@ -267,7 +267,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name is distinct from 'hello'",
             shouldBe: {
                 json: {
@@ -283,7 +283,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.name is not distinct from 'hello'",
             shouldBe: {
                 json: {
@@ -299,7 +299,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 + 2 + 3",
             shouldBe: {
                 json: {
@@ -317,7 +317,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "1 +2 + 3+4",
             shouldBe: {
                 json: {
@@ -340,7 +340,7 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "ARRAY[1,2] || ARRAY[ 3, 4 ] || ARRAY[5, 6]",
             shouldBe: {
                 json: {

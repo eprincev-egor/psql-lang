@@ -1,12 +1,12 @@
-import { assertNode } from "abstract-lang";
 import assert from "assert";
+import { Sql } from "../../Sql";
 import { Name } from "../Name";
 
 describe("Name", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "name",
             shouldBe: {
                 json: {name: "name"},
@@ -17,14 +17,14 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "hello",
             shouldBe: {
                 json: {name: "hello"}
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "HELLO",
             shouldBe: {
                 json: {name: "hello"},
@@ -37,21 +37,21 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "__",
             shouldBe: {
                 json: {name: "__"}
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "a1",
             shouldBe: {
                 json: {name: "a1"}
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "XYZ1ABC ",
             shouldBe: {
                 json: {name: "xyz1abc"},
@@ -60,7 +60,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "\"\"",
             shouldBe: {
                 json: {
@@ -73,7 +73,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "\"HELLO\"",
             shouldBe: {
                 json: {
@@ -86,7 +86,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "\"hello world\"",
             shouldBe: {
                 json: {
@@ -99,7 +99,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "\"HELLO \"\"world\"\"\"",
             shouldBe: {
                 json: {
@@ -112,7 +112,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"d\\0061t\\+000061 hello\"",
             shouldBe: {
                 json: {
@@ -126,7 +126,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"d\\0061t\\+000061 world\" uescape '\\'",
             shouldBe: {
                 json: {
@@ -142,7 +142,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "u&\"d\\0061t\\+000061 test\"",
             shouldBe: {
                 json: {
@@ -158,7 +158,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"d!0061t!+000061\" UESCAPE '!'",
             shouldBe: {
                 json: {
@@ -175,7 +175,7 @@ describe("Name", () => {
             }
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"\\0066\"",
             shouldBe: {
                 json: {
@@ -192,31 +192,31 @@ describe("Name", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "0a",
             throws: /name should starts with alphabet char, invalid name: 0a/,
             target: "0"
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "\"1\" uescape",
             throws: /unexpected uescape, use u& before quotes/,
             target: "uescape"
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"d!0061t!+000061\" UESCAPE '+'",
             throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
             target: "+"
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "u&\"\" uescape '+'",
             throws: /The escape character can be any single character other than a hexadecimal digit, the plus sign, a single quote, a double quote, or a whitespace character/,
             target: "+"
         });
 
-        assertNode(Name, {
+        Sql.assertNode(Name, {
             input: "U&\"\\0000\"",
             shouldBe: {
                 json: {

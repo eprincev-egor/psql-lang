@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.base.spec.ts: base select variants", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select",
             shouldBe: {
                 json: {
@@ -15,7 +15,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1",
             shouldBe: {
                 json: {
@@ -28,7 +28,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1, 2",
             shouldBe: {
                 json: {
@@ -43,7 +43,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name from users",
             shouldBe: {
                 json: {
@@ -62,7 +62,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select user.name from public.users as user",
             shouldBe: {
                 json: {
@@ -86,7 +86,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select * from users",
             shouldBe: {
                 json: {
@@ -107,7 +107,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from users, companies",
             shouldBe: {
                 json: {
@@ -126,7 +126,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name nm from users",
             shouldBe: {
                 json: {
@@ -149,7 +149,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select name \"NM\" from users",
             shouldBe: {
                 json: {
@@ -172,7 +172,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select 1 \"NM\" from users",
             shouldBe: {
                 json: {
@@ -193,7 +193,7 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from users u",
             shouldBe: {
                 json: {
@@ -214,7 +214,7 @@ describe("Select.base.spec.ts: base select variants", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from .",
             throws: /expected from item/,
             target: "."

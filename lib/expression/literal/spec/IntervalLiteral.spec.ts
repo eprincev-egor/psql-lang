@@ -1,25 +1,25 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../../Sql";
 import { IntervalLiteral } from "../IntervalLiteral";
 
 describe("IntervalLiteral", () => {
 
     it("valid inputs", () => {
 
-        assertNode(IntervalLiteral, {
+        Sql.assertNode(IntervalLiteral, {
             input: "interval '1 day'",
             shouldBe: {
                 json: {interval: {string: "1 day"}}
             }
         });
 
-        assertNode(IntervalLiteral, {
+        Sql.assertNode(IntervalLiteral, {
             input: "interval $$10 days$$",
             shouldBe: {
                 json: {interval: {tag: "", string: "10 days"}}
             }
         });
 
-        assertNode(IntervalLiteral, {
+        Sql.assertNode(IntervalLiteral, {
             input: "INTERVAL    '2 years'",
             shouldBe: {
                 json: {interval: {string: "2 years"}},

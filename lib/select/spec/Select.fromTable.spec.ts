@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.fromTable.spec.ts: select ... from ...table...", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from users as u(x,y,z)",
             shouldBe: {
                 json: {
@@ -27,7 +27,7 @@ describe("Select.fromTable.spec.ts: select ... from ...table...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from only base_table",
             shouldBe: {
                 json: {
@@ -44,7 +44,7 @@ describe("Select.fromTable.spec.ts: select ... from ...table...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from base_table *",
             shouldBe: {
                 json: {
@@ -61,7 +61,7 @@ describe("Select.fromTable.spec.ts: select ... from ...table...", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from only base_table *",
             shouldBe: {
                 json: {

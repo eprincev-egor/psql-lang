@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { WindowItem } from "../WindowItem";
 
 describe("WindowItem", () => {
 
     it("valid inputs", () => {
 
-        assertNode(WindowItem, {
+        Sql.assertNode(WindowItem, {
             input: "hello as (bob)",
             shouldBe: {
                 json: {

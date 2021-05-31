@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { OrderByItem } from "../OrderByItem";
 
 describe("OrderByItem", () => {
 
     it("valid inputs", () => {
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id",
             shouldBe: {
                 json: {
@@ -21,7 +21,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id asc",
             shouldBe: {
                 json: {
@@ -35,7 +35,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id desc",
             shouldBe: {
                 json: {
@@ -49,7 +49,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id desc",
             shouldBe: {
                 json: {
@@ -63,7 +63,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id using >",
             shouldBe: {
                 json: {
@@ -79,7 +79,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id using <",
             shouldBe: {
                 json: {
@@ -95,7 +95,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name nulls first",
             shouldBe: {
                 json: {
@@ -112,7 +112,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name nulls last",
             shouldBe: {
                 json: {
@@ -129,7 +129,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name desc nulls last",
             shouldBe: {
                 json: {
@@ -146,7 +146,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name asc nulls last",
             shouldBe: {
                 json: {
@@ -163,7 +163,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name asc nulls first",
             shouldBe: {
                 json: {
@@ -180,7 +180,7 @@ describe("OrderByItem", () => {
             }
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id using < nulls first",
             shouldBe: {
                 json: {
@@ -201,13 +201,13 @@ describe("OrderByItem", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "id using >=",
             throws: /Ordering operators must be "<" or ">" members of btree operator families/,
             target: ">"
         });
 
-        assertNode(OrderByItem, {
+        Sql.assertNode(OrderByItem, {
             input: "name nulls wrong",
             throws: /nulls must be "first" or "last"/,
             target: "wrong"

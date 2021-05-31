@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.cast.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "cast( 'hello' as text )",
             shouldBe: {
                 json: {
@@ -19,7 +19,7 @@ describe("Expression.cast.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "8::numeric(14, 2)",
             shouldBe: {
                 json: {
@@ -31,7 +31,7 @@ describe("Expression.cast.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "2000 :: bigint",
             shouldBe: {
                 json: {

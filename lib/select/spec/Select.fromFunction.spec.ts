@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Select } from "../Select";
 
 describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from unnest(array[1, 2, 3])",
             shouldBe: {
                 json: {
@@ -31,7 +31,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from unnest(array[1, 2]) as company_id",
             shouldBe: {
                 json: {
@@ -57,7 +57,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral json_each('{}'::json) as json_item",
             shouldBe: {
                 json: {
@@ -84,7 +84,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral json_each('{}'::json) as json_item (k, v)",
             shouldBe: {
                 json: {
@@ -115,7 +115,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select ordinality from unnest(array[10, 20]) with ordinality",
             shouldBe: {
                 json: {
@@ -146,7 +146,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from lateral unnest(array[10, 20]) with ordinality",
             shouldBe: {
                 json: {
@@ -173,7 +173,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from unnest(array[10, 20]) with ordinality tmp",
             shouldBe: {
                 json: {
@@ -200,7 +200,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
             }
         });
 
-        assertNode(Select, {
+        Sql.assertNode(Select, {
             input: "select from unnest(array[10, 20]) with ordinality tmp(i)",
             shouldBe: {
                 json: {

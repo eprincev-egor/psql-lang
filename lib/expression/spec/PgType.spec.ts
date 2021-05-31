@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { PgType } from "../PgType";
 
 describe("PgType", () => {
 
     it("valid inputs", () => {
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "Timestamp",
             shouldBe: {
                 json: {type: "timestamp"},
@@ -14,7 +14,7 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "numeric  ( 10 )",
             shouldBe: {
                 json: {type: "numeric(10)"},
@@ -23,7 +23,7 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "numeric ( 10, 3 )",
             shouldBe: {
                 json: {type: "numeric(10, 3)"},
@@ -32,7 +32,7 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "bigint[ ]",
             shouldBe: {
                 json: {type: "bigint[]"},
@@ -41,21 +41,21 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "integer[]",
             shouldBe: {
                 json: {type: "integer[]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "numeric(14, 3)[]",
             shouldBe: {
                 json: {type: "numeric(14, 3)[]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "numeric(9) [] []",
             shouldBe: {
                 json: {type: "numeric(9)[][]"},
@@ -64,21 +64,21 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "date[][][]",
             shouldBe: {
                 json: {type: "date[][][]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "bigint[1]",
             shouldBe: {
                 json: {type: "bigint[1]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "bigint[ 19 ]",
             shouldBe: {
                 json: {type: "bigint[19]"},
@@ -87,14 +87,14 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "bigint[1][2][3]",
             shouldBe: {
                 json: {type: "bigint[1][2][3]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "double Precision",
             shouldBe: {
                 json: {type: "double precision"},
@@ -103,7 +103,7 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "DOUBLE \nPrecision",
             shouldBe: {
                 json: {type: "double precision"},
@@ -112,14 +112,14 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "double precision[]",
             shouldBe: {
                 json: {type: "double precision[]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "int4RANGE",
             shouldBe: {
                 json: {type: "int4range"},
@@ -128,14 +128,14 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "int8range",
             shouldBe: {
                 json: {type: "int8range"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "timestamp\r\nwithout\t TIME zone",
             shouldBe: {
                 json: {type: "timestamp without time zone"},
@@ -144,7 +144,7 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "public . company",
             shouldBe: {
                 json: {type: "public.company"},
@@ -153,14 +153,14 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "operation.unit",
             shouldBe: {
                 json: {type: "operation.unit"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "PUBLIC . company",
             shouldBe: {
                 json: {type: "public.company"},
@@ -169,21 +169,21 @@ describe("PgType", () => {
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "operation.unit[]",
             shouldBe: {
                 json: {type: "operation.unit[]"}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "\"char\"",
             shouldBe: {
                 json: {type: "\"char\""}
             }
         });
 
-        assertNode(PgType, {
+        Sql.assertNode(PgType, {
             input: "\"SCHEMA\" . \"TABLE\"",
             shouldBe: {
                 json: {type: "\"SCHEMA\".\"TABLE\""},
@@ -270,7 +270,7 @@ describe("PgType", () => {
         ];
         for (const type of allDefaultTypes) {
 
-            assertNode(PgType, {
+            Sql.assertNode(PgType, {
                 input: type,
                 shouldBe: {
                     json: {type}

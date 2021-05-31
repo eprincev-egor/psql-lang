@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { GroupByElement } from "../GroupByElement";
 
 describe("GroupByElement", () => {
 
     it("valid inputs", () => {
 
-        assertNode(GroupByElement, {
+        Sql.assertNode(GroupByElement, {
             input: "order.date",
             shouldBe: {
                 json: {expression: {
@@ -17,7 +17,7 @@ describe("GroupByElement", () => {
             }
         });
 
-        assertNode(GroupByElement, {
+        Sql.assertNode(GroupByElement, {
             input: "grouping Sets (brand, size, ( ))",
             shouldBe: {
                 json: {groupingSets: [
@@ -38,7 +38,7 @@ describe("GroupByElement", () => {
             }
         });
 
-        assertNode(GroupByElement, {
+        Sql.assertNode(GroupByElement, {
             input: "cube ( brand, (size, 1))",
             shouldBe: {
                 json: {cube: [
@@ -59,7 +59,7 @@ describe("GroupByElement", () => {
             }
         });
 
-        assertNode(GroupByElement, {
+        Sql.assertNode(GroupByElement, {
             input: "rollup ( brand, (size, 1))",
             shouldBe: {
                 json: {rollup: [

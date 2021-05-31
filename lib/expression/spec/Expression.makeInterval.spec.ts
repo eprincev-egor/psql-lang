@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.makeInterval.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "make_interval(weeks => 2, days => 3)",
             shouldBe: {
                 json: {
@@ -27,7 +27,7 @@ describe("Expression.makeInterval.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "make_interval(year:= 8)",
             shouldBe: {
                 json: {
@@ -45,7 +45,7 @@ describe("Expression.makeInterval.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "make_interval(1, 2, 3, 4, 5, 6, 7)",
             shouldBe: {
                 json: {
@@ -65,7 +65,7 @@ describe("Expression.makeInterval.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "MAKE_INTERVAL(  HOURS => 24  )",
             shouldBe: {
                 json: {

@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { WindowDefinitionFrame } from "../WindowDefinitionFrame";
 
 describe("WindowDefinitionFrame", () => {
 
     it("valid inputs", () => {
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows unbounded preceding",
             shouldBe: {
                 json: {
@@ -18,7 +18,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "ROWS UNBOUNDED FOLLOWING",
             shouldBe: {
                 json: {
@@ -33,7 +33,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "range\nunbounded\tpreceding",
             shouldBe: {
                 json: {
@@ -48,7 +48,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows unbounded following",
             shouldBe: {
                 json: {
@@ -61,7 +61,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "range unbounded following",
             shouldBe: {
                 json: {
@@ -74,7 +74,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows 1 preceding",
             shouldBe: {
                 json: {
@@ -87,7 +87,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows 999 following",
             shouldBe: {
                 json: {
@@ -100,7 +100,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows between 1 preceding and 2 preceding",
             shouldBe: {
                 json: {
@@ -117,7 +117,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows between unbounded following and current row",
             shouldBe: {
                 json: {
@@ -133,7 +133,7 @@ describe("WindowDefinitionFrame", () => {
             }
         });
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "range between unbounded preceding and 88 following",
             shouldBe: {
                 json: {
@@ -154,7 +154,7 @@ describe("WindowDefinitionFrame", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(WindowDefinitionFrame, {
+        Sql.assertNode(WindowDefinitionFrame, {
             input: "rows unbounded wrong",
             throws: /expected preceding or following/,
             target: "wrong"

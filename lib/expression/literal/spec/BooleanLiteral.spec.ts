@@ -1,17 +1,17 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../../Sql";
 import { BooleanLiteral } from "../BooleanLiteral";
 
 describe("BooleanLiteral", () => {
 
     it("valid inputs", () => {
-        assertNode(BooleanLiteral, {
+        Sql.assertNode(BooleanLiteral, {
             input: "true",
             shouldBe: {
                 json: {boolean: true}
             }
         });
 
-        assertNode(BooleanLiteral, {
+        Sql.assertNode(BooleanLiteral, {
             input: "TRUE",
             shouldBe: {
                 json: {boolean: true},
@@ -20,14 +20,14 @@ describe("BooleanLiteral", () => {
             }
         });
 
-        assertNode(BooleanLiteral, {
+        Sql.assertNode(BooleanLiteral, {
             input: "false",
             shouldBe: {
                 json: {boolean: false}
             }
         });
 
-        assertNode(BooleanLiteral, {
+        Sql.assertNode(BooleanLiteral, {
             input: "FALSE",
             shouldBe: {
                 json: {boolean: false},

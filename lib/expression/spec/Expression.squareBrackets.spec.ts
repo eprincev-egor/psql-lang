@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.squareBrackets.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.roles_ids[1]",
             shouldBe: {
                 json: {
@@ -20,7 +20,7 @@ describe("Expression.squareBrackets.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "company.roles_ids[2 * 8]",
             shouldBe: {
                 json: {
@@ -40,7 +40,7 @@ describe("Expression.squareBrackets.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "some_matrix[1][2]",
             shouldBe: {
                 json: {
@@ -57,7 +57,7 @@ describe("Expression.squareBrackets.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "some_matrix[1][2][3]",
             shouldBe: {
                 json: {
@@ -77,7 +77,7 @@ describe("Expression.squareBrackets.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "roles  [100]",
             shouldBe: {
                 json: {

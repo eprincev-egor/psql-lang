@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.trim.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim('hello')",
             shouldBe: {
                 json: {
@@ -17,7 +17,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim( BOTH 'hello')",
             shouldBe: {
                 json: {
@@ -31,7 +31,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim( LEADING 'hello')",
             shouldBe: {
                 json: {
@@ -45,7 +45,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim( TRAILING 'hello')",
             shouldBe: {
                 json: {
@@ -59,7 +59,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim( FROM 'hello')",
             shouldBe: {
                 json: {
@@ -73,7 +73,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim( 'ho' FROM 'hello')",
             shouldBe: {
                 json: {
@@ -88,7 +88,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim(leading 'ho' from 'hello')",
             shouldBe: {
                 json: {
@@ -101,7 +101,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim(trailing 'ho' from 'hello')",
             shouldBe: {
                 json: {
@@ -114,7 +114,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim(both 'ho' from 'hello')",
             shouldBe: {
                 json: {
@@ -129,7 +129,7 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "trim(settings.trim_characters from company.name)",
             shouldBe: {
                 json: {

@@ -1,6 +1,5 @@
 - overlaps
 - with x as (values (1)) values (1), (2) 
-- cursor.skipSpaces() => add comments
 - insert
 - update
 - delete

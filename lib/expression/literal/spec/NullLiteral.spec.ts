@@ -1,18 +1,18 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../../Sql";
 import { NullLiteral } from "../NullLiteral";
 
 describe("NullLiteral", () => {
 
     it("valid inputs", () => {
 
-        assertNode(NullLiteral, {
+        Sql.assertNode(NullLiteral, {
             input: "null",
             shouldBe: {
                 json: {null: true}
             }
         });
 
-        assertNode(NullLiteral, {
+        Sql.assertNode(NullLiteral, {
             input: "NULL",
             shouldBe: {
                 json: {null: true},

@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../../Sql";
 import { MakeIntervalArgument } from "../MakeIntervalArgument";
 
 describe("MakeIntervalArgument", () => {
 
     it("valid inputs", () => {
 
-        assertNode(MakeIntervalArgument, {
+        Sql.assertNode(MakeIntervalArgument, {
             input: "DAY => 10",
             shouldBe: {
                 json: {
@@ -17,7 +17,7 @@ describe("MakeIntervalArgument", () => {
             }
         });
 
-        assertNode(MakeIntervalArgument, {
+        Sql.assertNode(MakeIntervalArgument, {
             input: "epOch := 9999",
             shouldBe: {
                 json: {

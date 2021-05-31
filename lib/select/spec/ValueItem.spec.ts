@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { ValueItem } from "../ValueItem";
 
 describe("ValueItem", () => {
 
     it("valid inputs", () => {
 
-        assertNode(ValueItem, {
+        Sql.assertNode(ValueItem, {
             input: "default",
             shouldBe: {
                 json: {
@@ -14,7 +14,7 @@ describe("ValueItem", () => {
             }
         });
 
-        assertNode(ValueItem, {
+        Sql.assertNode(ValueItem, {
             input: "DEFAULT",
             shouldBe: {
                 json: {
@@ -25,7 +25,7 @@ describe("ValueItem", () => {
             }
         });
 
-        assertNode(ValueItem, {
+        Sql.assertNode(ValueItem, {
             input: "1",
             shouldBe: {
                 json: {

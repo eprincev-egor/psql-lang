@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { GroupByElementContent } from "../GroupByElementContent";
 
 describe("GroupByElementContent", () => {
 
     it("valid inputs", () => {
 
-        assertNode(GroupByElementContent, {
+        Sql.assertNode(GroupByElementContent, {
             input: "id",
             shouldBe: {
                 json: {expression: {
@@ -16,7 +16,7 @@ describe("GroupByElementContent", () => {
             }
         });
 
-        assertNode(GroupByElementContent, {
+        Sql.assertNode(GroupByElementContent, {
             input: "(id, name)",
             shouldBe: {
                 json: {expressions: [

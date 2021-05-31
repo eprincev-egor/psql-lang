@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.extract.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "extract(CENTURY FROM '2000-12-16 12:21:13')",
             shouldBe: {
                 json: {
@@ -41,7 +41,7 @@ describe("Expression.extract.spec.ts", () => {
             "year"
         ];
         for (const interval of allIntervals) {
-            assertNode(Expression, {
+            Sql.assertNode(Expression, {
                 input: `extract(${interval} FROM some_date)`,
                 shouldBe: {
                     json: {
@@ -77,7 +77,7 @@ describe("Expression.extract.spec.ts", () => {
                 alias as keyof typeof intervalsAliases
             ];
 
-            assertNode(Expression, {
+            Sql.assertNode(Expression, {
                 input: `extract(${alias} FROM some_date)`,
                 shouldBe: {
                     json: {
@@ -97,7 +97,7 @@ describe("Expression.extract.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "extract(unknown FROM orders.date)",
             throws: /unrecognized extract field: unknown/,
             target: "unknown"

@@ -1,25 +1,25 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { LineComment } from "../LineComment";
 
 describe("LineComment", () => {
 
     it("valid inputs", () => {
 
-        assertNode(LineComment, {
+        Sql.assertNode(LineComment, {
             input: "--",
             shouldBe: {
                 json: {inlineComment: ""}
             }
         });
 
-        assertNode(LineComment, {
+        Sql.assertNode(LineComment, {
             input: "--hello",
             shouldBe: {
                 json: {inlineComment: "hello"}
             }
         });
 
-        assertNode(LineComment, {
+        Sql.assertNode(LineComment, {
             input: "--hello\n",
             shouldBe: {
                 json: {inlineComment: "hello"},
@@ -28,7 +28,7 @@ describe("LineComment", () => {
             }
         });
 
-        assertNode(LineComment, {
+        Sql.assertNode(LineComment, {
             input: "--hello\r",
             shouldBe: {
                 json: {inlineComment: "hello"},
@@ -37,7 +37,7 @@ describe("LineComment", () => {
             }
         });
 
-        assertNode(LineComment, {
+        Sql.assertNode(LineComment, {
             input: "----",
             shouldBe: {
                 json: {inlineComment: "--"}

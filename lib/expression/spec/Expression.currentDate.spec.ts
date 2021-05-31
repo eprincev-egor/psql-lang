@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { Expression } from "../Expression";
 
 describe("Expression.currentDate.spec.ts", () => {
 
     it("valid inputs", () => {
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "current_date",
             shouldBe: {
                 json: {
@@ -16,7 +16,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "current_time",
             shouldBe: {
                 json: {
@@ -27,7 +27,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "current_timestamp",
             shouldBe: {
                 json: {
@@ -38,7 +38,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "localtime",
             shouldBe: {
                 json: {
@@ -49,7 +49,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "localtimestamp",
             shouldBe: {
                 json: {
@@ -60,7 +60,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "current_time(1)",
             shouldBe: {
                 json: {
@@ -72,7 +72,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "CURRENT_TIMESTAMP ( 99 )",
             shouldBe: {
                 json: {
@@ -86,7 +86,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "localtime(20)",
             shouldBe: {
                 json: {
@@ -98,7 +98,7 @@ describe("Expression.currentDate.spec.ts", () => {
             }
         });
 
-        assertNode(Expression, {
+        Sql.assertNode(Expression, {
             input: "localtimestamp(21)",
             shouldBe: {
                 json: {

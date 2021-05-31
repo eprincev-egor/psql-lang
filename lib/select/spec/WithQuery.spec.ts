@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { WithQuery } from "../WithQuery";
 
 describe("WithQuery", () => {
 
     it("valid inputs", () => {
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items as (
                 select
             )`,
@@ -26,7 +26,7 @@ describe("WithQuery", () => {
             }
         });
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items as (
                 select 1,2
             )`,
@@ -56,7 +56,7 @@ describe("WithQuery", () => {
             }
         });
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items as (
                 values
                     (1, 2),
@@ -87,7 +87,7 @@ describe("WithQuery", () => {
             }
         });
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items (id, code) as (
                 values
                     (1, 2),
@@ -126,7 +126,7 @@ describe("WithQuery", () => {
 
     it("invalid inputs", () => {
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items as (
                 values
                     (1, 2, 3),
@@ -136,7 +136,7 @@ describe("WithQuery", () => {
             target: "(4, 5)"
         });
 
-        assertNode(WithQuery, {
+        Sql.assertNode(WithQuery, {
             input: `items as (
                 values
                     (1, 2, 3),

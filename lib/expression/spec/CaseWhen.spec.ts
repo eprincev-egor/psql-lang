@@ -1,11 +1,11 @@
-import { assertNode } from "abstract-lang";
+import { Sql } from "../../Sql";
 import { CaseWhen } from "../CaseWhen";
 
 describe("CaseWhen", () => {
 
     it("valid inputs", () => {
 
-        assertNode(CaseWhen, {
+        Sql.assertNode(CaseWhen, {
             input: `case
                 when company.name is not null
                 then company.name
@@ -40,7 +40,7 @@ describe("CaseWhen", () => {
             }
         });
 
-        assertNode(CaseWhen, {
+        Sql.assertNode(CaseWhen, {
             input: `case
                 when company.name is not null
                 then company.name
@@ -104,7 +104,7 @@ describe("CaseWhen", () => {
             }
         });
 
-        assertNode(CaseWhen, {
+        Sql.assertNode(CaseWhen, {
             input: `case
                 when true
                 then 1
@@ -127,7 +127,7 @@ describe("CaseWhen", () => {
             }
         });
 
-        assertNode(CaseWhen, {
+        Sql.assertNode(CaseWhen, {
             input: `case order.type
                 when 'FTL'
                 then 'green'
@@ -157,7 +157,7 @@ describe("CaseWhen", () => {
             }
         });
 
-        assertNode(CaseWhen, {
+        Sql.assertNode(CaseWhen, {
             input: `case order.type
                 when 'FCL'
                 then 'black'
