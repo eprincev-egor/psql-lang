@@ -192,6 +192,17 @@ describe("PgType", () => {
             }
         });
 
+        Sql.assertNode(PgType, {
+            input: "bigint else null",
+            shouldBe: {
+                json: {
+                    type: "bigint"
+                },
+                pretty: "bigint",
+                minify: "bigint"
+            }
+        });
+
         const allDefaultTypes: string[] = [
             "smallint",
             "integer",

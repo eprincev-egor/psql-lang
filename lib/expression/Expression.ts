@@ -212,6 +212,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
         }
 
         if ( operator === "::" ) {
+            cursor.skipSpaces();
+
             const type = cursor.parse(PgType);
             const cast = new Cast({
                 position: {

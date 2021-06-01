@@ -1,11 +1,32 @@
 import {
     AbstractNode, Cursor,
-    DigitsToken, EndOfLineToken, SpaceToken, WordToken
+    DigitsToken, WordToken
 } from "abstract-lang";
 import { Name } from "../base";
 
 export interface PgTypeRow {
     type: string;
+}
+
+const MULTI_WORD_TYPES = [
+    "character varying",
+    "double precision",
+    "timestamp without time zone",
+    "timestamp with time zone",
+    "time without time zone",
+    "time with time zone",
+    "bit varying",
+    "bit varying",
+    "character varying"
+].map((typeName) => typeName.split(" "))
+    .sort((phraseA, phraseB) =>
+        phraseB.length - phraseA.length
+    );
+
+const CAN_BE_MULTI_WORD: {[firstWord: string]: boolean} = {};
+for (const phrase of MULTI_WORD_TYPES) {
+    const firstWord = phrase[0];
+    CAN_BE_MULTI_WORD[ firstWord ] = true;
 }
 
 export class PgType extends AbstractNode<PgTypeRow> {
@@ -28,6 +49,7 @@ export class PgType extends AbstractNode<PgTypeRow> {
             type += this.parseArrayBrackets(cursor);
         }
 
+        cursor.skipSpaces();
         return {type};
     }
 
@@ -39,16 +61,30 @@ export class PgType extends AbstractNode<PgTypeRow> {
             typeName = nameSyntax.toString();
         }
         else {
-            typeName = cursor.readAll(
-                WordToken, DigitsToken,
-                SpaceToken, EndOfLineToken
-            ).join("");
+            const beginToken = cursor.nextToken;
+            typeName = cursor.readAll(WordToken, DigitsToken)
+                .join("").toLowerCase();
 
-            typeName = typeName
-                .split(/\s+/).join(" ")
-                .trim()
-                .toLowerCase();
+            cursor.skipSpaces();
+            const endToken = cursor.nextToken;
 
+            if ( CAN_BE_MULTI_WORD[ typeName ] ) {
+                cursor.setPositionBefore(beginToken);
+
+                let hasLongName = false;
+                for (const phrase of MULTI_WORD_TYPES) {
+                    if ( cursor.beforePhrase(...phrase) ) {
+                        typeName = cursor.readPhrase(...phrase).join(" ");
+                        hasLongName = true;
+                        break;
+                    }
+                }
+                if ( !hasLongName ) {
+                    cursor.setPositionBefore(endToken);
+                }
+
+                typeName = typeName.toLowerCase();
+            }
         }
 
         if ( cursor.beforeValue(".") ) {
