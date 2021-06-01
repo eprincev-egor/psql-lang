@@ -223,7 +223,10 @@ export class Expression extends AbstractNode<ExpressionRow> {
                     as: type
                 }
             });
-            return cast;
+            const nextBinary = this.parseBinary(
+                cursor, cast, options
+            );
+            return nextBinary || cast;
         }
 
         cursor.skipSpaces();

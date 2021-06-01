@@ -45,6 +45,40 @@ describe("Expression.cast.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: "round(1.5)::bigint",
+            shouldBe: {
+                json: {
+                    operand: {
+                        cast: {
+                            call: {
+                                name: {name: "round"}
+                            },
+                            arguments: [{number: "1.5"}]
+                        },
+                        as: {type: "bigint"}
+                    }
+                }
+            }
+        });
+
+        Sql.assertNode(Expression, {
+            input: "1::numeric / 10",
+            shouldBe: {
+                json: {
+                    operand: {
+                        left: {
+                            cast: {number: "1"},
+                            as: {type: "numeric"}
+                        },
+                        operator: "/",
+                        right: {number: "10"}
+                    }
+                },
+                minify: "1::numeric/10"
+            }
+        });
+
     });
 
 });
