@@ -207,6 +207,44 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: "(with x as(select)select 1 from x)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        subQuery: {
+                            with: {
+                                queries: [{
+                                    name: {name: "x"},
+                                    query: {
+                                        select: [],
+                                        from: []
+                                    }
+                                }]
+                            },
+                            select: [{expression: {number: "1"}}],
+                            from: [{
+                                table: {
+                                    name: {name: "x"}
+                                }
+                            }]
+                        }
+                    }
+                },
+                pretty: [
+                    "(",
+                    "    with",
+                    "        x as (",
+                    "            select",
+                    "        )",
+                    "    select",
+                    "        1",
+                    "    from x",
+                    ")"
+                ].join("\n")
+            }
+        });
+
     });
 
     it("invalid inputs", () => {

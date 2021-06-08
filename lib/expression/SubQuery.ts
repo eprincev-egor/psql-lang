@@ -11,7 +11,10 @@ export interface SubQueryRow {
 export class SubQuery extends AbstractNode<SubQueryRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforePhrase("(", "select");
+        return (
+            cursor.beforePhrase("(", "select") ||
+            cursor.beforePhrase("(", "with")
+        );
     }
 
     static parse(cursor: Cursor): SubQueryRow {
