@@ -23,6 +23,7 @@
         "unicorn"
     ],
     "rules": {
+        "unicorn/no-null": "off",
         "no-import-assign": "off",
         "arrow-spacing": "error",
         "arrow-parens": ["error", "always"],
