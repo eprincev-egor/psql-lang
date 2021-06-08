@@ -77,15 +77,9 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
         if ( PostUnaryOperator.entryOperator(cursor) ) {
             const postOperator = PostUnaryOperator.parseOperator(cursor) as string;
-            operand = new PostUnaryOperator({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: {
-                    operand,
-                    postOperator
-                }
+            operand = cursor.create(PostUnaryOperator, operand, {
+                operand,
+                postOperator
             });
         }
 
@@ -117,13 +111,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
 
             const row = CustomOperator.parseOperator(cursor, operand);
 
-            operand = new CustomOperator({
-                position: {
-                    start: operand.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row
-            });
+            operand = cursor.create(CustomOperator, operand, row);
             hasCustomOperator = true;
         }
 
@@ -165,24 +153,14 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 cursor.skipSpaces();
                 cursor.readValue(")");
 
-                const syntax = new Syntax({
-                    position: {
-                        start: operand.position!.start,
-                        end: cursor.nextToken.position
-                    },
-                    row
-                });
+                const syntax = cursor.create(Syntax, operand, row);
                 return syntax;
             }
 
-            const functionCall = new FunctionCall({
-                position: {
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    start: functionNameReference.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: FunctionCall.parseAfterName(cursor, functionNameReference)
-            });
+            const functionCall = cursor.create(
+                FunctionCall, functionNameReference,
+                FunctionCall.parseAfterName(cursor, functionNameReference)
+            );
             return functionCall;
         }
 
@@ -214,16 +192,9 @@ export class Expression extends AbstractNode<ExpressionRow> {
         if ( operator === "::" ) {
             cursor.skipSpaces();
 
-            const type = cursor.parse(PgType);
-            const cast = new Cast({
-                position: {
-                    start: left.position!.start,
-                    end: cursor.nextToken.position
-                },
-                row: {
-                    cast: left,
-                    as: type
-                }
+            const cast = cursor.create(Cast, left, {
+                cast: left,
+                as: cursor.parse(PgType)
             });
             const nextBinary = this.parseBinary(
                 cursor, cast, options
@@ -235,6 +206,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
         const right = this.parseOperand(cursor);
 
         const binary = this.createBinaryOperator(
+            cursor,
             left, operator, right
         );
 
@@ -246,6 +218,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
     }
 
     private static createBinaryOperator(
+        cursor: Cursor,
         left: Operand,
         operator: string,
         right: Operand
@@ -254,39 +227,21 @@ export class Expression extends AbstractNode<ExpressionRow> {
             left.is(BinaryOperator) &&
             left.lessPrecedence(operator)
         ) {
-            return new BinaryOperator({
-                position: {
-                    start: left.row.left.position!.start,
-                    end: right.position!.end
-                },
-                row: {
-                    left: left.row.left,
-                    operator: left.row.operator,
-                    right: new BinaryOperator({
-                        position: {
-                            start: left.row.right.position!.start,
-                            end: right.position!.end
-                        },
-                        row: {
-                            left: left.row.right,
-                            operator,
-                            right
-                        }
-                    })
-                }
+            return cursor.create(BinaryOperator, left, {
+                left: left.row.left,
+                operator: left.row.operator,
+                right: cursor.create(BinaryOperator, left.row.right, {
+                    left: left.row.right,
+                    operator,
+                    right
+                })
             });
         }
 
-        return new BinaryOperator({
-            position: {
-                start: left.position!.start,
-                end: right.position!.end
-            },
-            row: {
-                left,
-                operator,
-                right
-            }
+        return cursor.create(BinaryOperator, left, {
+            left,
+            operator,
+            right
         });
     }
 

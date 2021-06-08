@@ -11,9 +11,6 @@ export class FunctionReference extends SchemaName {
         const names = columnReference.row.column;
         const row = this.namesToRow(cursor, names);
 
-        return new FunctionReference({
-            position: columnReference.position,
-            row
-        });
+        return cursor.create(FunctionReference, columnReference, row);
     }
 }
