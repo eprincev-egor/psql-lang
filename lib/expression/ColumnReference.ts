@@ -95,6 +95,10 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
         return false;
     }
 
+    last(): Name | undefined {
+        return this.row.column.slice(-1)[0];
+    }
+
     template(): string {
         let output = this.row.column.join(".");
         if ( this.row.allColumns ) {
