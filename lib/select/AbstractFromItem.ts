@@ -65,4 +65,19 @@ export abstract class AbstractFromItem<TRow extends FromItemRow>
             output.push(...printChain(this.row.joins, eol, eol));
         }
     }
+
+    getFromItems(): AbstractFromItem<FromItemRow>[] {
+        const joins = (
+            this.row.joins ?
+                this.row.joins : []
+        ) as Join[];
+
+        const fromItems: AbstractFromItem<FromItemRow>[] = [];
+        for (const join of joins) {
+            fromItems.push( join.row.from );
+            fromItems.push( ...join.row.from.getFromItems() );
+        }
+
+        return fromItems;
+    }
 }

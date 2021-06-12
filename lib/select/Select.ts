@@ -294,6 +294,17 @@ export class Select extends AbstractScopeNode<SelectRow> {
         ) || false;
     }
 
+    getDeclarations(): FromItemType[] {
+        const fromItems: FromItemType[] = this.row.from.slice();
+
+        for (const item of this.row.from) {
+            const childItems = item.getFromItems() as FromItemType[];
+            fromItems.push( ...childItems );
+        }
+
+        return fromItems;
+    }
+
     template(): TemplateElement[] {
         const output: TemplateElement[] = [];
 
