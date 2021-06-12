@@ -24,6 +24,7 @@
     ],
     "rules": {
         "unicorn/no-null": "off",
+        "unicorn/no-array-callback-reference": "off",
         "no-import-assign": "off",
         "arrow-spacing": "error",
         "arrow-parens": ["error", "always"],
