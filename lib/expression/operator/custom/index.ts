@@ -12,3 +12,10 @@ import "./equalSome/NotEqualSome";
 import "./equalSome/NotEqualAll";
 
 export * from "./customOperators";
+export * from "./Between";
+export * from "./Collate";
+export * from "./In";
+export * from "./NotIn";
+export * from "./NotBetween";
+export * from "./SquareBrackets";
+export * from "./equalSome";
