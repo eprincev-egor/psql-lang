@@ -278,6 +278,36 @@ describe("ColumnReference", () => {
         });
     });
 
+    it("operation.table2.name from operation.operation, operation.table2", () => {
+        testDependencies({
+            input: `
+                select
+                    operation.table2.name 
+                from operation.operation, operation.table2
+            `,
+            check([column], [, table2]) {
+                assert.ok(
+                    column.findDeclaration() === table2
+                );
+            }
+        });
+    });
+
+    it("company.company.name from x.company, y.company", () => {
+        testDependencies({
+            input: `
+                select
+                    company.company.name
+                from x.company, y.company
+            `,
+            check([column]) {
+                assert.ok(
+                    column.findDeclaration() === undefined
+                );
+            }
+        });
+    });
+
     interface TestDeps {
         input: string;
         check(

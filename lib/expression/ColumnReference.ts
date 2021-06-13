@@ -61,6 +61,7 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
     isDependentOn(fromItem: FromItemType): boolean {
         const firstName = this.row.column[0];
         const secondName = this.row.column[1];
+        const thirdName = this.row.column[2];
         if ( !firstName ) {
             return false;
         }
@@ -71,6 +72,14 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
         }
 
         const {schema, name: table} = (fromItem as FromTable).row.table.row;
+
+        // operation.type.name from operation.operation, operation.type
+        if ( schema && secondName && thirdName ) {
+            return (
+                schema.equal(firstName) &&
+                table.equal(secondName)
+            );
+        }
 
         // company.name from company
         // company.name from public.company
