@@ -19,6 +19,40 @@ describe("Expression.extract.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: `extract(
+                days from invoice.plan_payment_date - now()::timestamp with time zone at time zone 'UTC'
+            )`,
+            shouldBe: {
+                json: {
+                    operand: {
+                        extract: "day",
+                        from: {
+                            left: {
+                                column: [
+                                    {name: "invoice"},
+                                    {name: "plan_payment_date"}
+                                ]
+                            },
+                            operator: "-",
+                            right: {
+                                operand: {
+                                    cast: {
+                                        call: {name: {name: "now"}},
+                                        arguments: []
+                                    },
+                                    as: {type: "timestamp with time zone"}
+                                },
+                                atTimeZone: {string: "UTC"}
+                            }
+                        }
+                    }
+                },
+                pretty: "extract( day from invoice.plan_payment_date - now()::timestamp with time zone at time zone 'UTC' )",
+                minify: "extract(day from invoice.plan_payment_date-now()::timestamp with time zone at time zone 'UTC')"
+            }
+        });
+
         const allIntervals = [
             "century",
             "day",
