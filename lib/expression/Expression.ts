@@ -20,12 +20,12 @@ import { FunctionReference } from "./FunctionReference";
 import { SubExpression } from "./SubExpression";
 import { FunctionCall } from "./FunctionCall";
 import { SubQuery } from "./SubQuery";
-import { Cast } from "./likeAreFunction/Cast";
-import { PgType } from "./PgType";
 import { likeAreFunction } from "./likeAreFunction";
 import { CurrentDate } from "./literal/CurrentDate";
 import { TimestampLiteral } from "./literal/TimestampLiteral";
 import { customOperators } from "./operator/custom";
+import { Cast } from "./likeAreFunction/Cast";
+import { PgType } from "./PgType";
 
 export {Operand};
 
@@ -73,8 +73,6 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.parse(PreUnaryOperator) :
             this.parseSimpleOperand(cursor);
 
-        operand = this.parseCustomOperator(cursor, operand, options);
-
         if ( PostUnaryOperator.entryOperator(cursor) ) {
             const postOperator = PostUnaryOperator.parseOperator(cursor) as string;
             operand = cursor.create(PostUnaryOperator, operand, {
@@ -82,6 +80,19 @@ export class Expression extends AbstractNode<ExpressionRow> {
                 postOperator
             });
         }
+
+        if ( cursor.beforeSequence(":", ":") ) {
+            cursor.readValue(":");
+            cursor.readValue(":");
+            cursor.skipSpaces();
+
+            operand = cursor.create(Cast, operand, {
+                cast: operand,
+                as: cursor.parse(PgType)
+            });
+        }
+
+        operand = this.parseCustomOperator(cursor, operand, options);
 
         return operand;
     }
@@ -187,19 +198,6 @@ export class Expression extends AbstractNode<ExpressionRow> {
         ) {
             cursor.setPositionBefore(operatorToken);
             return;
-        }
-
-        if ( operator === "::" ) {
-            cursor.skipSpaces();
-
-            const cast = cursor.create(Cast, left, {
-                cast: left,
-                as: cursor.parse(PgType)
-            });
-            const nextBinary = this.parseBinary(
-                cursor, cast, options
-            );
-            return nextBinary || cast;
         }
 
         cursor.skipSpaces();

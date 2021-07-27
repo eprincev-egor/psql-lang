@@ -12,6 +12,7 @@ import { PreUnaryOperator } from "./operator/PreUnaryOperator";
 import { SubExpression } from "./SubExpression";
 import { In } from "./operator/custom/In";
 import { NotIn } from "./operator/custom/NotIn";
+import { AtTimeZone } from "./operator/custom/AtTimeZone";
 import { ArrayLiteral } from "./literal/ArrayLiteral";
 import { CaseWhen } from "./CaseWhen";
 import { FunctionCall } from "./FunctionCall";
@@ -75,5 +76,6 @@ export type Operand = (
     SquareBrackets |
     Trim |
     CurrentDate |
-    TimestampLiteral
+    TimestampLiteral |
+    AtTimeZone
 );
