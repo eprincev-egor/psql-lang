@@ -31,7 +31,7 @@ export abstract class AbstractFromItem<TRow extends FromItemRow>
         }
 
         cursor.skipSpaces();
-        if ( row.as && cursor.beforeValue("(") ) {
+        if ( row.hasOwnProperty("as") && row.as && cursor.beforeValue("(") ) {
             cursor.readValue("(");
             cursor.skipSpaces();
 

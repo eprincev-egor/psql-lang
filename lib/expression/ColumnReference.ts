@@ -66,7 +66,7 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
             return false;
         }
 
-        if ( fromItem.row.as ) {
+        if ( fromItem.row.hasOwnProperty("as") && fromItem.row.as ) {
             const alias = fromItem.row.as;
             return alias.equal(firstName);
         }

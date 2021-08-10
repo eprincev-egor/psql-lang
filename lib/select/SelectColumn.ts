@@ -34,7 +34,7 @@ export class SelectColumn extends AbstractNode<SelectColumnRow> {
     }
 
     template(): TemplateElement[] {
-        if ( this.row.as ) {
+        if ( this.row.as && this.row.hasOwnProperty("as") ) {
             return [
                 this.row.expression,
                 keyword("as"),

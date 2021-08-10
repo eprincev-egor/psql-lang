@@ -42,7 +42,7 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
 
         const otherParams = super.parseOther(cursor);
         const alias = otherParams.as;
-        if ( !alias ) {
+        if ( !alias || !otherParams.hasOwnProperty("as") ) {
             cursor.throwError("subquery in FROM must have an alias");
         }
 

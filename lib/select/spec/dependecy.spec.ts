@@ -308,6 +308,25 @@ describe("ColumnReference", () => {
         });
     });
 
+    it("when Object.prototype was changed", () => {
+        // lib sql bricks do it:
+        (Object.prototype as any).as = function() {
+            return;
+        };
+
+        testDependencies({
+            input: `
+                select company.name
+                from "company"
+            `,
+            check([xName], [x]) {
+                assert.ok(
+                    xName.findDeclaration() === x
+                );
+            }
+        });
+    });
+
     interface TestDeps {
         input: string;
         check(

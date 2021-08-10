@@ -76,7 +76,7 @@ export class FromFunction extends AbstractFromItem<FromFunctionRow> {
         if ( this.row.withOrdinality ) {
             output.push( _, keyword("with"), keyword("ordinality") );
         }
-        else if ( this.row.as ) {
+        else if ( this.row.as && this.row.hasOwnProperty("as") ) {
             output.push(_);
         }
 
