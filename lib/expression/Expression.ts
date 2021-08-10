@@ -24,8 +24,6 @@ import { likeAreFunction } from "./likeAreFunction";
 import { CurrentDate } from "./literal/CurrentDate";
 import { TimestampLiteral } from "./literal/TimestampLiteral";
 import { customOperators } from "./operator/custom";
-import { Cast } from "./likeAreFunction/Cast";
-import { PgType } from "./PgType";
 
 export {Operand};
 
@@ -78,17 +76,6 @@ export class Expression extends AbstractNode<ExpressionRow> {
             operand = cursor.create(PostUnaryOperator, operand, {
                 operand,
                 postOperator
-            });
-        }
-
-        if ( cursor.beforeSequence(":", ":") ) {
-            cursor.readValue(":");
-            cursor.readValue(":");
-            cursor.skipSpaces();
-
-            operand = cursor.create(Cast, operand, {
-                cast: operand,
-                as: cursor.parse(PgType)
             });
         }
 

@@ -93,6 +93,24 @@ describe("Expression.squareBrackets.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: "company.roles_ids[1]::bigint",
+            shouldBe: {
+                json: {
+                    operand: {
+                        cast: {
+                            operand: {column: [
+                                {name: "company"},
+                                {name: "roles_ids"}
+                            ]},
+                            index: {number: "1"}
+                        },
+                        as: {type: "bigint"}
+                    }
+                }
+            }
+        });
+
     });
 
 });

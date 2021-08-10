@@ -28,7 +28,7 @@ import { Extract } from "./likeAreFunction/Extract";
 import { SubString } from "./likeAreFunction/SubString";
 import { Position } from "./likeAreFunction/Position";
 import { Overlay } from "./likeAreFunction/Overlay";
-import { Cast } from "./likeAreFunction/Cast";
+import { Cast } from "./Cast";
 import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/custom/Between";
 import { NotBetween } from "./operator/custom/NotBetween";
