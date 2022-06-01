@@ -368,6 +368,55 @@ describe("Expression.binary.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: `coalesce('test' || case
+                when company.name is not null
+                then company.name
+                else '(unknown)'
+            end, '')
+            `,
+            shouldBe: {
+                json: {
+                    operand: {
+                        call: {
+                            name: {name: "coalesce"}
+                        },
+                        arguments: [
+                            {
+                                left: {string: "test"},
+                                operator: "||",
+                                right: {
+                                    case: [{
+                                        when: {
+                                            operand: {column: [
+                                                {name: "company"},
+                                                {name: "name"}
+                                            ]},
+                                            postOperator: "is not null"
+                                        },
+                                        then: {column: [
+                                            {name: "company"},
+                                            {name: "name"}
+                                        ]}
+                                    }],
+                                    else: {string: "(unknown)"}
+                                }
+                            },
+                            {string: ""}
+                        ]
+                    }
+                },
+                pretty: [
+                    "coalesce('test' || case",
+                    "    when company.name is not null",
+                    "    then company.name",
+                    "    else '(unknown)'",
+                    "end, '')"
+                ].join("\n"),
+                minify: "coalesce('test'||case when company.name is not null then company.name else '(unknown)' end,'')"
+            }
+        });
+
     });
 
 });
