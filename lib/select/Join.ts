@@ -1,9 +1,9 @@
 import {
     AbstractNode, Cursor,
     TemplateElement,
-    keyword, eol, tab
+    keyword, eol, tab, _
 } from "abstract-lang";
-import { Expression, Operand } from "../expression";
+import { ColumnReference, Expression, Operand } from "../expression";
 import { FromItemType, parseFromItem } from "./FromItem";
 
 export type JoinType = (
@@ -19,10 +19,14 @@ export type JoinType = (
     "natural join"
 );
 
-export interface JoinRow {
+export type JoinRow = {
     type: JoinType;
     from: FromItemType;
     on: Operand;
+} | {
+    type: JoinType;
+    from: FromItemType;
+    using: ColumnReference[];
 }
 
 export class Join extends AbstractNode<JoinRow> {
@@ -42,10 +46,23 @@ export class Join extends AbstractNode<JoinRow> {
         const type = this.parseType(cursor);
         const from = parseFromItem(cursor);
 
+        if ( cursor.beforeWord("using") ) {
+            cursor.readWord("using");
+            cursor.readValue("(");
+            cursor.skipSpaces();
+
+            const using = cursor.parseChainOf(ColumnReference);
+
+            cursor.skipSpaces();
+            cursor.readValue(")");
+
+            return {type, from, using};
+        }
+
         cursor.readWord("on");
         const on = cursor.parse(Expression).operand();
 
-        return {type,from, on};
+        return {type, from, on};
     }
 
     private static parseType(cursor: Cursor) {
@@ -92,12 +109,24 @@ export class Join extends AbstractNode<JoinRow> {
     }
 
     template(): TemplateElement[] {
-        return [
+        const output: TemplateElement[] = [
             ...this.printType(),
-            this.row.from,
-            keyword("on"), eol,
-            tab, this.row.on
+            this.row.from
         ];
+
+        if ( "using" in this.row ) {
+            output.push(
+                keyword("using"), _, "(", ...this.row.using, ")"
+            );
+        }
+        else {
+            output.push(
+                keyword("on"), eol,
+                tab, this.row.on
+            );
+        }
+
+        return output;
     }
 
     private printType() {

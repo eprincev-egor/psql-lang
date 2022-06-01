@@ -318,6 +318,38 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "left join countries using (id)"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "left join",
+                            from: {table: {
+                                name: {name: "countries"}
+                            }},
+                            using: [
+                                {column: [{name: "id"}]}
+                            ]
+                        }]
+                    }]
+                },
+                minify: [
+                    "select from companies",
+                    "left join countries using(id)"
+                ].join(" ")
+            }
+        });
+
     });
 
 });
