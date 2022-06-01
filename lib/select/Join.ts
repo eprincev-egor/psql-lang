@@ -54,6 +54,11 @@ export class Join extends AbstractNode<JoinRow> {
         if ( cursor.beforeWord("left") ) {
             cursor.readWord("left");
             type = "left join";
+
+            if ( cursor.beforeWord("outer") ) {
+                cursor.readWord("outer");
+                type = "left outer join";
+            }
         }
         else if ( cursor.beforeWord("inner") ) {
             cursor.readWord("inner");
@@ -62,10 +67,20 @@ export class Join extends AbstractNode<JoinRow> {
         else if ( cursor.beforeWord("right") ) {
             cursor.readWord("right");
             type = "right join";
+
+            if ( cursor.beforeWord("outer") ) {
+                cursor.readWord("outer");
+                type = "right outer join";
+            }
         }
         else if ( cursor.beforeWord("full") ) {
             cursor.readWord("full");
             type = "full join";
+
+            if ( cursor.beforeWord("outer") ) {
+                cursor.readWord("outer");
+                type = "full outer join";
+            }
         }
         else if ( cursor.beforeWord("cross") ) {
             cursor.readWord("cross");

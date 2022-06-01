@@ -225,6 +225,99 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "left outer join countries on",
+                "    true"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "left outer join",
+                            from: {table: {
+                                name: {name: "countries"}
+                            }},
+                            on: {boolean: true}
+                        }]
+                    }]
+                },
+                minify: [
+                    "select from companies",
+                    "left outer join countries on true"
+                ].join(" ")
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "right outer join countries on",
+                "    true"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "right outer join",
+                            from: {table: {
+                                name: {name: "countries"}
+                            }},
+                            on: {boolean: true}
+                        }]
+                    }]
+                },
+                minify: [
+                    "select from companies",
+                    "right outer join countries on true"
+                ].join(" ")
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "full outer join countries on",
+                "    true"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "full outer join",
+                            from: {table: {
+                                name: {name: "countries"}
+                            }},
+                            on: {boolean: true}
+                        }]
+                    }]
+                },
+                minify: [
+                    "select from companies",
+                    "full outer join countries on true"
+                ].join(" ")
+            }
+        });
+
     });
 
 });
