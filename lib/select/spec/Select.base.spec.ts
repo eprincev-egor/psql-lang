@@ -210,6 +210,36 @@ describe("Select.base.spec.ts: base select variants", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            // WARNING defaultсoef has cyrillic "с"
+            input: "select defaultсoef.name::DECIMAL as defaultсoef, 1",
+
+            shouldBe: {
+                json: {
+                    select: [
+                        {
+                            expression: {
+                                cast: {
+                                    column: [
+                                        {name: "defaultсoef"},
+                                        {name: "name"}
+                                    ]
+                                },
+                                as: {type: "decimal"}
+                            },
+                            as: {name: "defaultсoef"}
+                        },
+                        {
+                            expression: {number: "1"}
+                        }
+                    ],
+                    from: []
+                },
+                pretty: "select\n    defaultсoef.name::decimal as defaultсoef,\n    1",
+                minify: "select defaultсoef.name::decimal as defaultсoef,1"
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
