@@ -245,6 +245,46 @@ describe("Expression.operand.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: "id",
+            shouldBe: {
+                json: {
+                    operand: {
+                        column: [{name: "id"}]
+                    }
+                }
+            }
+        });
+
+        Sql.assertNode(Expression, {
+            input: "company.id",
+            shouldBe: {
+                json: {
+                    operand: {
+                        column: [
+                            {name: "company"},
+                            {name: "id"}
+                        ]
+                    }
+                }
+            }
+        });
+
+        Sql.assertNode(Expression, {
+            input: "public.\"Order\".id",
+            shouldBe: {
+                json: {
+                    operand: {
+                        column: [
+                            {name: "public"},
+                            {strictName: "Order"},
+                            {name: "id"}
+                        ]
+                    }
+                }
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
