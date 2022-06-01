@@ -23,13 +23,8 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
 
     static parse(cursor: Cursor): ColumnReferenceRow {
         const names = cursor.parseChainOf(NameOrStar, ".");
-        if ( names.length === 4 ) {
-            cursor.throwError(
-                `cross-database references are not implemented: ${names.join(".")}`,
-                names[0]
-            );
-        }
-        else if ( names.length > 4 ) {
+
+        if ( names.length > 4 ) {
             cursor.throwError(
                 `improper qualified name (too many dotted names): ${names.join(".")}`,
                 names[ names.length - 1 ]

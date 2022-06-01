@@ -79,6 +79,26 @@ describe("Select.fromTable.spec.ts: select ... from ...table...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: "select from database.schema.table",
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            database: {name: "database"},
+                            schema: {name: "schema"},
+                            name: {name: "table"}
+                        }
+                    }]
+                },
+                pretty: [
+                    "select",
+                    "from database.schema.table"
+                ].join("\n")
+            }
+        });
+
     });
 
 });

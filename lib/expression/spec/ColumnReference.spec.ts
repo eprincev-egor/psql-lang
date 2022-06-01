@@ -40,6 +40,20 @@ describe("ColumnReference", () => {
         });
 
         Sql.assertNode(ColumnReference, {
+            input: "database.schema.table.column",
+            shouldBe: {
+                json: {
+                    column: [
+                        {name: "database"},
+                        {name: "schema"},
+                        {name: "table"},
+                        {name: "column"}
+                    ]
+                }
+            }
+        });
+
+        Sql.assertNode(ColumnReference, {
             input: "schema.table",
             shouldBe: {
                 json: {
@@ -171,12 +185,6 @@ describe("ColumnReference", () => {
     });
 
     it("invalid inputs", () => {
-
-        Sql.assertNode(ColumnReference, {
-            input: "a.b.c.d",
-            throws: /cross-database references are not implemented: a\.b\.c\.d/,
-            target: "a"
-        });
 
         Sql.assertNode(ColumnReference, {
             input: "a.b.c.d.e",

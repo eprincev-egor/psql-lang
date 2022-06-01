@@ -296,9 +296,9 @@ describe("Expression.operand.spec.ts", () => {
         });
 
         Sql.assertNode(Expression, {
-            input: "a.b.c()",
-            throws: /improper qualified name \(too many dotted names\): a\.b\.c/,
-            target: "c"
+            input: "a.b.c.d()",
+            throws: /improper qualified name \(too many dotted names\): a\.b\.c.d/,
+            target: "d"
         });
 
         Sql.assertNode(Expression, {
