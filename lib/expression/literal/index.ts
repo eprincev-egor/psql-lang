@@ -7,4 +7,3 @@ export * from "./IntervalLiteral";
 export * from "./NullLiteral";
 export * from "./NumberLiteral";
 export * from "./StringLiteral";
-export * from "./TimestampLiteral";

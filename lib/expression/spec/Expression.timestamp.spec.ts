@@ -44,6 +44,25 @@ describe("Expression.timestamp.spec.ts", () => {
         });
 
         Sql.assertNode(Expression, {
+            input: "date ('2001-09-28' + interval '1 hour')",
+            shouldBe: {
+                json: {
+                    operand: {
+                        timestamp: {
+                            subExpression: {
+                                left: {string: "2001-09-28"},
+                                operator: "+",
+                                right: {interval: {string: "1 hour"}}
+                            }
+                        },
+                        type: "date"
+                    }
+                },
+                minify: "date ('2001-09-28'+interval '1 hour')"
+            }
+        });
+
+        Sql.assertNode(Expression, {
             input: "time '22:00'",
             shouldBe: {
                 json: {

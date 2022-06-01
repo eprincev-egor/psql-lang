@@ -22,7 +22,7 @@ import { FunctionCall } from "./FunctionCall";
 import { SubQuery } from "./SubQuery";
 import { likeAreFunction } from "./likeAreFunction";
 import { CurrentDate } from "./literal/CurrentDate";
-import { TimestampLiteral } from "./literal/TimestampLiteral";
+import { Timestamp } from "./Timestamp";
 import { customOperators } from "./operator/custom";
 
 export {Operand};
@@ -131,7 +131,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
             StringLiteral, ByteStringLiteral,
             NumberLiteral, Variable,
             ArrayLiteral, CaseWhen,
-            CurrentDate, TimestampLiteral,
+            CurrentDate, Timestamp,
             ColumnReference
         ], "expected expression operand");
 

@@ -36,7 +36,7 @@ import { Collate } from "./operator/custom/Collate";
 import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
 import { CurrentDate } from "./literal/CurrentDate";
-import { TimestampLiteral } from "./literal/TimestampLiteral";
+import { Timestamp } from "./Timestamp";
 
 export type Operand = (
     NumberLiteral |
@@ -76,6 +76,6 @@ export type Operand = (
     SquareBrackets |
     Trim |
     CurrentDate |
-    TimestampLiteral |
+    Timestamp |
     AtTimeZone
 );

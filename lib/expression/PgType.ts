@@ -9,13 +9,11 @@ export interface PgTypeRow {
 }
 
 const MULTI_WORD_TYPES = [
-    "character varying",
     "double precision",
     "timestamp without time zone",
     "timestamp with time zone",
     "time without time zone",
     "time with time zone",
-    "bit varying",
     "bit varying",
     "character varying"
 ].map((typeName) => typeName.split(" "))
@@ -29,6 +27,16 @@ for (const phrase of MULTI_WORD_TYPES) {
     CAN_BE_MULTI_WORD[ firstWord ] = true;
 }
 
+const TYPES_WITH_SIZE = new Set([
+    "bit varying",
+    "character varying",
+    "bit",
+    "char",
+    "character",
+    "varchar",
+    "numeric"
+]);
+
 export class PgType extends AbstractNode<PgTypeRow> {
 
     static entry(cursor: Cursor): boolean {
@@ -41,7 +49,7 @@ export class PgType extends AbstractNode<PgTypeRow> {
     static parse(cursor: Cursor): PgTypeRow {
         let type = this.parseTypeName(cursor);
 
-        if ( cursor.beforeValue("(") ) {
+        if ( cursor.beforeValue("(") && TYPES_WITH_SIZE.has(type) ) {
             type += this.parseSize(cursor);
         }
 

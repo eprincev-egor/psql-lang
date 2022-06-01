@@ -10,11 +10,11 @@ describe("Expression.atTimeZone.spec.ts", () => {
             shouldBe: {
                 json: {
                     operand: {
-                        operand: {
-                            timestamp: {string: "2001-09-28 01:00"},
-                            type: "timestamp"
+                        timestamp: {
+                            operand: {string: "2001-09-28 01:00"},
+                            atTimeZone: {string: "utc"}
                         },
-                        atTimeZone: {string: "utc"}
+                        type: "timestamp"
                     }
                 }
             }
