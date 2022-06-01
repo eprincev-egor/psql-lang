@@ -19,6 +19,12 @@ export class MultilineComment extends AbstractNode<MultilineCommentRow> {
             !cursor.beforeSequence("*", "/") &&
             !cursor.beforeEnd()
         ) {
+            if ( cursor.before(MultilineComment) ) {
+                const subComment = cursor.parse(MultilineComment);
+                multilineComment += subComment.toString();
+                continue;
+            }
+
             multilineComment += cursor.readAnyOne().value;
         }
 

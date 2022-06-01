@@ -33,6 +33,27 @@ describe("MultilineComment", () => {
             }
         });
 
+        Sql.assertNode(MultilineComment, {
+            input: "/*/*hello\rworld*/*/",
+            shouldBe: {
+                json: {multilineComment: "/*hello\rworld*/"}
+            }
+        });
+
+        Sql.assertNode(MultilineComment, {
+            input: "/*/*hello*/\n-- world\n*/",
+            shouldBe: {
+                json: {multilineComment: "/*hello*/\n-- world\n"}
+            }
+        });
+
+        Sql.assertNode(MultilineComment, {
+            input: "/*/*hello*/\n+3\n*/",
+            shouldBe: {
+                json: {multilineComment: "/*hello*/\n+3\n"}
+            }
+        });
+
     });
 
 });
