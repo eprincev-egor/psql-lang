@@ -408,6 +408,79 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "inner join (operation.operation_type  INNER JOIN operation.rate_expense_type on",
+                "    rate_expense_type.id = operation_type.id_rate",
+                ") on operation_type.id = 1"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "inner join",
+                            from: {
+                                table: {
+                                    schema: {name: "operation"},
+                                    name: {name: "operation_type"}
+                                },
+                                joins: [{
+                                    type: "inner join",
+                                    from: {table: {
+                                        schema: {name: "operation"},
+                                        name: {name: "rate_expense_type"}
+                                    }},
+                                    on: {
+                                        left: {column: [
+                                            {name: "rate_expense_type"},
+                                            {name: "id"}
+                                        ]},
+                                        operator: "=",
+                                        right: {column: [
+                                            {name: "operation_type"},
+                                            {name: "id_rate"}
+                                        ]}
+                                    }
+                                }]
+                            },
+                            on: {
+                                left: {column: [
+                                    {name: "operation_type"},
+                                    {name: "id"}
+                                ]},
+                                operator: "=",
+                                right: {number: "1"}
+                            }
+                        }]
+                    }]
+                },
+                pretty: [
+                    "select",
+                    "from companies",
+                    "",
+                    "inner join operation.operation_type",
+                    "",
+                    "inner join operation.rate_expense_type on",
+                    "    rate_expense_type.id = operation_type.id_rate on",
+                    "    operation_type.id = 1"
+                ].join("\n"),
+                minify: [
+                    "select from companies",
+                    "inner join operation.operation_type",
+                    "inner join operation.rate_expense_type",
+                    "on rate_expense_type.id=operation_type.id_rate",
+                    "on operation_type.id=1"
+                ].join(" ")
+            }
+        });
+
     });
 
 });

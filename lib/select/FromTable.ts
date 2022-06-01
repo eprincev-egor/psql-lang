@@ -17,10 +17,19 @@ export interface FromTableRow extends FromItemRow {
 export class FromTable extends AbstractFromItem<FromTableRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.before(TableReference);
+        return (
+            cursor.beforeValue("(") ||
+            cursor.before(TableReference)
+        );
     }
 
     static parse(cursor: Cursor): FromTableRow {
+        const startsWithBracket = cursor.beforeValue("(");
+        if ( startsWithBracket ) {
+            cursor.readValue("(");
+            cursor.skipSpaces();
+        }
+
         let only = false;
         if ( cursor.beforeWord("only") ) {
             cursor.readWord("only");
@@ -43,6 +52,11 @@ export class FromTable extends AbstractFromItem<FromTableRow> {
         const otherParams = super.parseOther(cursor);
         Object.assign(row, otherParams);
 
+        if ( startsWithBracket ) {
+            cursor.skipSpaces();
+            cursor.readValue(")");
+            cursor.skipSpaces();
+        }
         return row;
     }
 
