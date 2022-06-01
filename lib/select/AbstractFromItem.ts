@@ -39,6 +39,7 @@ export abstract class AbstractFromItem<TRow extends FromItemRow>
 
             cursor.skipSpaces();
             cursor.readValue(")");
+            cursor.skipSpaces();
         }
 
         if ( cursor.before(Join) ) {
