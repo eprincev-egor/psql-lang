@@ -44,6 +44,14 @@ export class Trim extends AbstractNode<TrimRow> {
             }
         }
 
+        cursor.skipSpaces();
+        if ( cursor.beforeValue(",") ) {
+            cursor.readValue(",");
+            cursor.skipSpaces();
+
+            characters = cursor.parse(Expression).operand();
+        }
+
         const row: TrimRow = {
             trim: type,
             from

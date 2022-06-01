@@ -148,6 +148,21 @@ describe("Expression.trim.spec.ts", () => {
             }
         });
 
+        Sql.assertNode(Expression, {
+            input: "trim(',a,b,c,', ',')",
+            shouldBe: {
+                json: {
+                    operand: {
+                        trim: "both",
+                        from: {string: ",a,b,c,"},
+                        characters: {string: ","}
+                    }
+                },
+                pretty: "trim(',' from ',a,b,c,')",
+                minify: "trim(',' from ',a,b,c,')"
+            }
+        });
+
     });
 
 });
