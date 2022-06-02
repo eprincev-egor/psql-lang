@@ -481,6 +481,64 @@ describe("Select.join.spec.ts: from ... join ...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: [
+                "select",
+                "from companies",
+                "",
+                "inner join ((values",
+                "    ('01', 'January'),",
+                "    ('02', 'February')",
+                ")) as months (month_number, month_name) on true"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        table: {
+                            name: {name: "companies"}
+                        },
+                        joins: [{
+                            type: "inner join",
+                            from: {
+                                values: [
+                                    {values: [
+                                        {value: {string: "01"}},
+                                        {value: {string: "January"}}
+                                    ]},
+                                    {values: [
+                                        {value: {string: "02"}},
+                                        {value: {string: "February"}}
+                                    ]}
+                                ],
+                                as: {name: "months"},
+                                columnAliases: [
+                                    {name: "month_number"},
+                                    {name: "month_name"}
+                                ]
+                            },
+                            on: {boolean: true}
+                        }]
+                    }]
+                },
+                pretty: [
+                    "select",
+                    "from companies",
+                    "",
+                    "inner join(", // TODO: space after join
+                    "    values",
+                    "        ('01', 'January'),",
+                    "        ('02', 'February')",
+                    ") as months(month_number, month_name)on", // TODO: space before on and after months
+                    "    true"
+                ].join("\n"),
+                minify: [
+                    "select from companies",
+                    "inner join(values('01','January'),('02','February'))as months(month_number,month_name)on true"
+                ].join(" ")
+            }
+        });
+
     });
 
 });

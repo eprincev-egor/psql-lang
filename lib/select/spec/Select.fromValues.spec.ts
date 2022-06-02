@@ -91,6 +91,30 @@ describe("Select.fromValues.spec.ts: select ... from (values ...)", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: "select from ((values (1))) as tmp",
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        values: [
+                            {values: [
+                                {value: {number: "1"}}
+                            ]}
+                        ],
+                        as: {name: "tmp"}
+                    }]
+                },
+                pretty: [
+                    "select",
+                    "from (",
+                    "    values",
+                    "        (1)",
+                    ") as tmp"
+                ].join("\n"),
+                minify: "select from(values(1))as tmp"
+            }
+        });
     });
 
     it("invalid inputs", () => {

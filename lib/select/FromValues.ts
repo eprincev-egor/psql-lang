@@ -16,10 +16,25 @@ export interface FromValuesRow extends FromItemRow {
 export class FromValues extends AbstractFromItem<FromValuesRow> {
 
     static entry(cursor: Cursor): boolean {
-        return (
-            cursor.beforePhrase("(", "values") ||
-            cursor.beforePhrase("lateral", "(", "values")
-        );
+        const startToken = cursor.nextToken;
+        if ( cursor.beforeWord("lateral") ) {
+            cursor.readWord("lateral");
+        }
+
+        if ( !cursor.beforeValue("(") ) {
+            cursor.setPositionBefore(startToken);
+            return false;
+        }
+
+        while ( cursor.beforeValue("(") ) {
+            cursor.readValue("(");
+            cursor.skipSpaces();
+        }
+
+        const isValues = cursor.beforeWord("values");
+
+        cursor.setPositionBefore(startToken);
+        return isValues;
     }
 
     static parse(cursor: Cursor): FromValuesRow {
@@ -29,12 +44,21 @@ export class FromValues extends AbstractFromItem<FromValuesRow> {
             lateral = true;
         }
 
-        cursor.readPhrase("(", "values");
+        let brackets = 0;
+        while ( cursor.beforeValue("(") ) {
+            cursor.readValue("(");
+            cursor.skipSpaces();
+            brackets++;
+        }
+
+        cursor.readWord("values");
         const values = cursor.parseChainOf(ValueRow, ",");
 
-        cursor.skipSpaces();
-        cursor.readValue(")");
-        cursor.skipSpaces();
+        for (let i = 0; i < brackets; i++) {
+            cursor.skipSpaces();
+            cursor.readValue(")");
+            cursor.skipSpaces();
+        }
 
         const otherParams = super.parseOther(cursor);
         const alias = otherParams.as;

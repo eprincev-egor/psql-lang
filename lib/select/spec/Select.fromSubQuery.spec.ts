@@ -151,6 +151,29 @@ describe("Select.fromSubQuery.spec.ts: select ... from (...)", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: "select from ( ( ( select ) ) ) tmp",
+            shouldBe: {
+                json: {
+                    select: [],
+                    from: [{
+                        subQuery: {
+                            select: [],
+                            from: []
+                        },
+                        as: {name: "tmp"}
+                    }]
+                },
+                pretty: [
+                    "select",
+                    "from (",
+                    "    select",
+                    ") as tmp"
+                ].join("\n"),
+                minify: "select from(select)as tmp"
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
