@@ -277,12 +277,25 @@ export class Select extends AbstractScopeNode<SelectRow> {
             option = "distinct";
         }
 
+        let brackets = 0;
+        while ( cursor.beforeValue("(") ) {
+            cursor.readValue("(");
+            cursor.skipSpaces();
+            brackets++;
+        }
+
         selectRow.union = {
             type,
             select: cursor.parse(Select)
         };
         if ( option ) {
             selectRow.union.option = option;
+        }
+
+        for (let i = 0; i < brackets; i++) {
+            cursor.skipSpaces();
+            cursor.readValue(")");
+            cursor.skipSpaces();
         }
     }
 

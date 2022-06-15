@@ -246,6 +246,72 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: "select 1 union (select 2)",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {
+                            number: "1"
+                        }}
+                    ],
+                    from: [],
+                    union: {
+                        type: "union",
+                        select: {
+                            select: [
+                                {expression: {
+                                    number: "2"
+                                }}
+                            ],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "select",
+                    "    1",
+                    "union",
+                    "select",
+                    "    2"
+                ].join("\n"),
+                minify: "select 1 union select 2"
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: "select 1 union (((select 2)))",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {
+                            number: "1"
+                        }}
+                    ],
+                    from: [],
+                    union: {
+                        type: "union",
+                        select: {
+                            select: [
+                                {expression: {
+                                    number: "2"
+                                }}
+                            ],
+                            from: []
+                        }
+                    }
+                },
+                pretty: [
+                    "select",
+                    "    1",
+                    "union",
+                    "select",
+                    "    2"
+                ].join("\n"),
+                minify: "select 1 union select 2"
+            }
+        });
+
     });
 
 });
