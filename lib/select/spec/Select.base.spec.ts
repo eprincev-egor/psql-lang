@@ -225,7 +225,7 @@ describe("Select.base.spec.ts: base select variants", () => {
                                         {name: "name"}
                                     ]
                                 },
-                                as: {type: "decimal"}
+                                to: {type: "decimal"}
                             },
                             as: {name: "defaultсoef"}
                         },

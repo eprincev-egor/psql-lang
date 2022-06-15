@@ -41,7 +41,7 @@ describe("Expression.extract.spec.ts", () => {
                                         call: {name: {name: "now"}},
                                         arguments: []
                                     },
-                                    as: {type: "timestamp with time zone"}
+                                    to: {type: "timestamp with time zone"}
                                 },
                                 atTimeZone: {string: "UTC"}
                             }

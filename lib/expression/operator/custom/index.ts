@@ -21,4 +21,4 @@ export * from "./NotBetween";
 export * from "./SquareBrackets";
 export * from "./AtTimeZone";
 export * from "./equalSome";
-export * from "../../Cast";
+export * from "./CastTo";

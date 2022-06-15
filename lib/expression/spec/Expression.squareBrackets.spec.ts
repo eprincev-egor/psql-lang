@@ -105,7 +105,7 @@ describe("Expression.squareBrackets.spec.ts", () => {
                             ]},
                             index: {number: "1"}
                         },
-                        as: {type: "bigint"}
+                        to: {type: "bigint"}
                     }
                 }
             }

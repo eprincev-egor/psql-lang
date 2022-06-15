@@ -28,7 +28,8 @@ import { Extract } from "./likeAreFunction/Extract";
 import { SubString } from "./likeAreFunction/SubString";
 import { Position } from "./likeAreFunction/Position";
 import { Overlay } from "./likeAreFunction/Overlay";
-import { Cast } from "./Cast";
+import { CastAs } from "./likeAreFunction/CastAs";
+import { CastTo } from "./operator/custom/CastTo";
 import { Exists } from "./likeAreFunction/Exists";
 import { Between } from "./operator/custom/Between";
 import { NotBetween } from "./operator/custom/NotBetween";
@@ -68,7 +69,8 @@ export type Operand = (
     SubString |
     Position |
     Overlay |
-    Cast |
+    CastTo |
+    CastAs |
     Exists |
     Between |
     NotBetween |

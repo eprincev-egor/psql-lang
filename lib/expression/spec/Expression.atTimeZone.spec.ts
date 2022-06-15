@@ -51,7 +51,7 @@ describe("Expression.atTimeZone.spec.ts", () => {
                                 },
                                 arguments: []
                             },
-                            as: {type: "timestamp without time zone"}
+                            to: {type: "timestamp without time zone"}
                         },
                         atTimeZone: {string: "utc"}
                     }

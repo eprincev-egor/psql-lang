@@ -5,6 +5,6 @@ import "./Position";
 import "./Overlay";
 import "./Exists";
 import "./Trim";
-import "../Cast";
+import "./CastAs";
 
 export * from "./likeAreFunction";

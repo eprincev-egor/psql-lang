@@ -69,7 +69,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
                             arguments: [
                                 {
                                     cast: {string: "{}"},
-                                    as: {type: "json"}
+                                    to: {type: "json"}
                                 }
                             ]
                         },
@@ -96,7 +96,7 @@ describe("Select.fromFunction.spec.ts: select ... from func(arg, ...)", () => {
                             arguments: [
                                 {
                                     cast: {string: "{}"},
-                                    as: {type: "json"}
+                                    to: {type: "json"}
                                 }
                             ]
                         },
