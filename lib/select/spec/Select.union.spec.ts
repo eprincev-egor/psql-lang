@@ -264,7 +264,8 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                                     number: "2"
                                 }}
                             ],
-                            from: []
+                            from: [],
+                            bracketsBeforeSelect: 1
                         }
                     }
                 },
@@ -272,10 +273,10 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                     "select",
                     "    1",
                     "union",
-                    "select",
-                    "    2"
+                    "(select",
+                    "    2)"
                 ].join("\n"),
-                minify: "select 1 union select 2"
+                minify: "select 1 union(select 2)"
             }
         });
 
@@ -297,7 +298,8 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                                     number: "2"
                                 }}
                             ],
-                            from: []
+                            from: [],
+                            bracketsBeforeSelect: 3
                         }
                     }
                 },
@@ -305,10 +307,80 @@ describe("Select.union.spec.ts: select ... union select ...", () => {
                     "select",
                     "    1",
                     "union",
-                    "select",
-                    "    2"
+                    "(((select",
+                    "    2)))"
                 ].join("\n"),
-                minify: "select 1 union select 2"
+                minify: "select 1 union(((select 2)))"
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: "(select 1) union(select 2)",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {
+                            number: "1"
+                        }}
+                    ],
+                    from: [],
+                    bracketsBeforeSelect: 1,
+                    union: {
+                        type: "union",
+                        select: {
+                            select: [
+                                {expression: {
+                                    number: "2"
+                                }}
+                            ],
+                            from: [],
+                            bracketsBeforeSelect: 1
+                        }
+                    }
+                },
+                pretty: [
+                    "(select",
+                    "    1)",
+                    "union",
+                    "(select",
+                    "    2)"
+                ].join("\n"),
+                minify: "(select 1)union(select 2)"
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: "(((select 1))) union ((select 2))",
+            shouldBe: {
+                json: {
+                    select: [
+                        {expression: {
+                            number: "1"
+                        }}
+                    ],
+                    bracketsBeforeSelect: 3,
+                    from: [],
+                    union: {
+                        type: "union",
+                        select: {
+                            select: [
+                                {expression: {
+                                    number: "2"
+                                }}
+                            ],
+                            from: [],
+                            bracketsBeforeSelect: 2
+                        }
+                    }
+                },
+                pretty: [
+                    "(((select",
+                    "    1)))",
+                    "union",
+                    "((select",
+                    "    2))"
+                ].join("\n"),
+                minify: "(((select 1)))union((select 2))"
             }
         });
 

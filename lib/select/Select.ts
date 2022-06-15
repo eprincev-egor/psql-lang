@@ -27,6 +27,8 @@ export interface SelectRow {
     limit?: Operand;
     fetch?: Fetch;
     union?: SelectUnion;
+    bracketsBeforeWith?: number;
+    bracketsBeforeSelect?: number;
 }
 
 export type SelectDistinctType = {all: true} | {on: Operand[]};
@@ -81,10 +83,25 @@ TABLE [ ONLY ] table_name [ * ]
 export class Select extends AbstractScopeNode<SelectRow> {
 
     static entry(cursor: Cursor): boolean {
-        return (
-            cursor.beforeWord("select") ||
-            cursor.before(With)
-        );
+        if ( cursor.beforeWord("select") || cursor.before(With) ) {
+            return true;
+        }
+
+        if ( cursor.beforeValue("(") ) {
+            const startToken = cursor.nextToken;
+
+            while ( cursor.beforeValue("(") ) {
+                cursor.readValue("(");
+                cursor.skipSpaces();
+            }
+
+            const isSelect = cursor.beforeWord("select") || cursor.before(With);
+
+            cursor.setPositionBefore(startToken);
+            return isSelect;
+        }
+
+        return false;
     }
 
     static parse(cursor: Cursor): SelectRow {
@@ -93,8 +110,17 @@ export class Select extends AbstractScopeNode<SelectRow> {
             from: []
         };
 
+        let bracketsBeforeWith = readOpenBrackets(cursor);
+
         if ( cursor.before(With) ) {
             selectRow.with = cursor.parse(With);
+        }
+
+        let bracketsBeforeSelect = readOpenBrackets(cursor);
+
+        if ( !selectRow.with ) {
+            bracketsBeforeSelect = bracketsBeforeWith;
+            bracketsBeforeWith = 0;
         }
 
         cursor.readWord("select");
@@ -143,12 +169,22 @@ export class Select extends AbstractScopeNode<SelectRow> {
 
         this.parseOffsetLimit(cursor, selectRow);
 
+        readCloseBrackets(cursor, bracketsBeforeSelect);
+
         if (
             cursor.beforeWord("union") ||
             cursor.beforeWord("intersect") ||
             cursor.beforeWord("except")
         ) {
             this.parseUnion(cursor, selectRow);
+        }
+        readCloseBrackets(cursor, bracketsBeforeWith);
+
+        if ( bracketsBeforeWith ) {
+            selectRow.bracketsBeforeWith = bracketsBeforeWith;
+        }
+        if ( bracketsBeforeSelect ) {
+            selectRow.bracketsBeforeSelect = bracketsBeforeSelect;
         }
 
         return selectRow;
@@ -277,25 +313,12 @@ export class Select extends AbstractScopeNode<SelectRow> {
             option = "distinct";
         }
 
-        let brackets = 0;
-        while ( cursor.beforeValue("(") ) {
-            cursor.readValue("(");
-            cursor.skipSpaces();
-            brackets++;
-        }
-
         selectRow.union = {
             type,
             select: cursor.parse(Select)
         };
         if ( option ) {
             selectRow.union.option = option;
-        }
-
-        for (let i = 0; i < brackets; i++) {
-            cursor.skipSpaces();
-            cursor.readValue(")");
-            cursor.skipSpaces();
         }
     }
 
@@ -322,7 +345,15 @@ export class Select extends AbstractScopeNode<SelectRow> {
         const output: TemplateElement[] = [];
 
         if ( this.row.with ) {
+            if ( this.row.bracketsBeforeWith ) {
+                output.push("(".repeat(this.row.bracketsBeforeWith));
+            }
+
             output.push( this.row.with, eol );
+        }
+
+        if ( this.row.bracketsBeforeSelect ) {
+            output.push("(".repeat(this.row.bracketsBeforeSelect));
         }
 
         output.push( keyword("select") );
@@ -336,7 +367,16 @@ export class Select extends AbstractScopeNode<SelectRow> {
         this.printWindow(output);
         this.printOrderBy(output);
         this.printFetch(output);
+
+        if ( this.row.bracketsBeforeSelect ) {
+            output.push(")".repeat(this.row.bracketsBeforeSelect));
+        }
+
         this.printUnion(output);
+
+        if ( this.row.bracketsBeforeWith ) {
+            output.push(")".repeat(this.row.bracketsBeforeWith));
+        }
 
         return output;
     }
@@ -458,5 +498,25 @@ export class Select extends AbstractScopeNode<SelectRow> {
 
             output.push( eol, this.row.union.select );
         }
+    }
+}
+
+function readOpenBrackets(cursor: Cursor): number {
+    let brackets = 0;
+
+    while ( cursor.beforeValue("(") ) {
+        cursor.readValue("(");
+        cursor.skipSpaces();
+        brackets++;
+    }
+
+    return brackets;
+}
+
+function readCloseBrackets(cursor: Cursor, brackets: number) {
+    for (let i = 0; i < brackets; i++) {
+        cursor.skipSpaces();
+        cursor.readValue(")");
+        cursor.skipSpaces();
     }
 }

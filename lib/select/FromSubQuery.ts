@@ -26,11 +26,6 @@ export class FromSubQuery extends AbstractFromItem<FromSubQueryRow> {
             return false;
         }
 
-        while ( cursor.beforeValue("(") ) {
-            cursor.readValue("(");
-            cursor.skipSpaces();
-        }
-
         const isSelect = cursor.before(Select);
 
         cursor.setPositionBefore(startToken);

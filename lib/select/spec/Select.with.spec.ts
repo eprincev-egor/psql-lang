@@ -83,6 +83,85 @@ describe("Select.with.spec.ts: with ... select", () => {
             }
         });
 
+        Sql.assertNode(Select, {
+            input: [
+                "((with",
+                "    companies as (",
+                "        select",
+                "            1 as id",
+                "    )",
+                "select",
+                "    companies.*",
+                "from companies))"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    with: {
+                        queries: [{
+                            name: {name: "companies"},
+                            query
+                        }]
+                    },
+                    select, from,
+                    bracketsBeforeWith: 2
+                },
+                pretty: [
+                    "((with",
+                    "    companies as (",
+                    "        select",
+                    "            1 as id",
+                    "    )",
+                    "select",
+                    "    companies.*",
+                    "from companies))"
+                ].join("\n"),
+                minify: [
+                    "((with companies as(select 1 as id)",
+                    "select companies.* from companies))"
+                ].join("")
+            }
+        });
+
+        Sql.assertNode(Select, {
+            input: [
+                "((with",
+                "    companies as (",
+                "        select",
+                "            1 as id",
+                "    )",
+                "((select",
+                "    companies.*",
+                "from companies))))"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    with: {
+                        queries: [{
+                            name: {name: "companies"},
+                            query
+                        }]
+                    },
+                    select, from,
+                    bracketsBeforeWith: 2,
+                    bracketsBeforeSelect: 2
+                },
+                pretty: [
+                    "((with",
+                    "    companies as (",
+                    "        select",
+                    "            1 as id",
+                    "    )",
+                    "((select",
+                    "    companies.*",
+                    "from companies))))"
+                ].join("\n"),
+                minify: [
+                    "((with companies as(select 1 as id)",
+                    "((select companies.* from companies))))"
+                ].join("")
+            }
+        });
+
     });
 
     it("invalid inputs", () => {
