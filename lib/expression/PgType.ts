@@ -34,7 +34,8 @@ const TYPES_WITH_SIZE = new Set([
     "char",
     "character",
     "varchar",
-    "numeric"
+    "numeric",
+    "decimal"
 ]);
 
 export class PgType extends AbstractNode<PgTypeRow> {

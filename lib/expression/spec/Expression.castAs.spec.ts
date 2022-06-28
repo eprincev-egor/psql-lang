@@ -3,7 +3,7 @@ import { Expression } from "../Expression";
 
 describe("Expression.castAs.spec.ts", () => {
 
-    it("valid inputs", () => {
+    it.only("valid inputs", () => {
 
         Sql.assertNode(Expression, {
             input: "cast( 'hello' as text )",
@@ -58,6 +58,27 @@ describe("Expression.castAs.spec.ts", () => {
                     }
                 },
                 minify: "cast('hello' as text)"
+            }
+        });
+
+        Sql.assertNode(Expression, {
+            input: "cast(fin_oper_buy.sum_with_vat / 10000.0 as decimal(14,2))",
+            shouldBe: {
+                json: {
+                    operand: {
+                        cast: {
+                            left: {column: [
+                                {name: "fin_oper_buy"},
+                                {name: "sum_with_vat"}
+                            ]},
+                            operator: "/",
+                            right: {number: "10000.0"}
+                        },
+                        as: {type: "decimal(14, 2)"}
+                    }
+                },
+                pretty: "cast( fin_oper_buy.sum_with_vat / 10000.0 as decimal(14, 2) )",
+                minify: "cast(fin_oper_buy.sum_with_vat/10000.0 as decimal(14, 2))"
             }
         });
 
