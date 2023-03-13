@@ -3,7 +3,7 @@ import { Expression } from "../Expression";
 
 describe("Expression.castAs.spec.ts", () => {
 
-    it.only("valid inputs", () => {
+    it("valid inputs", () => {
 
         Sql.assertNode(Expression, {
             input: "cast( 'hello' as text )",
