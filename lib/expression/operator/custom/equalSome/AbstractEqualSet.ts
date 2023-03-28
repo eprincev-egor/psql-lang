@@ -1,8 +1,8 @@
-import { AbstractNode, Cursor } from "abstract-lang";
+import { AbstractNode, AnyRow, Cursor } from "abstract-lang";
 import { Select } from "../../../../select";
 import { Expression, Operand } from "../../../Expression";
 
-export abstract class AbstractEqualSet<TRow>
+export abstract class AbstractEqualSet<TRow extends AnyRow>
     extends AbstractNode<TRow> {
 
     static parseContent(cursor: Cursor): Operand | Select {
