@@ -11,7 +11,16 @@ export interface ArrayLiteralRow {
 export class ArrayLiteral extends AbstractNode<ArrayLiteralRow> {
 
     static entry(cursor: Cursor): boolean {
-        return cursor.beforeWord("array");
+        if ( !cursor.beforeWord("array") ) {
+            return false;
+        }
+        const startToken = cursor.nextToken;
+
+        cursor.readWord("array");
+        const isArrayLiteral = cursor.beforeValue("[");
+
+        cursor.setPositionBefore(startToken);
+        return isArrayLiteral;
     }
 
     static parse(cursor: Cursor): ArrayLiteralRow {

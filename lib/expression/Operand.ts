@@ -31,6 +31,7 @@ import { Overlay } from "./likeAreFunction/Overlay";
 import { CastAs } from "./likeAreFunction/CastAs";
 import { CastTo } from "./operator/custom/CastTo";
 import { Exists } from "./likeAreFunction/Exists";
+import { ArrayQuery } from "./likeAreFunction/ArrayQuery";
 import { Between } from "./operator/custom/Between";
 import { NotBetween } from "./operator/custom/NotBetween";
 import { Collate } from "./operator/custom/Collate";
@@ -72,6 +73,7 @@ export type Operand = (
     CastTo |
     CastAs |
     Exists |
+    ArrayQuery |
     Between |
     NotBetween |
     Collate |

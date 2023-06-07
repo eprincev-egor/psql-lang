@@ -6,5 +6,6 @@ import "./Overlay";
 import "./Exists";
 import "./Trim";
 import "./CastAs";
+import "./ArrayQuery";
 
 export * from "./likeAreFunction";
