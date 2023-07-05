@@ -63,11 +63,10 @@ export class ColumnReference extends AbstractDependencyNode<ColumnReferenceRow> 
 
         if (
             fromItem.row.hasOwnProperty("as") &&
-            fromItem.row.as &&
-            !thirdName
+            fromItem.row.as
         ) {
             const alias = fromItem.row.as;
-            return alias.equal(firstName);
+            return !thirdName && alias.equal(firstName);
         }
 
         const {schema, name: table} = (fromItem as FromTable).row.table.row;
