@@ -104,6 +104,15 @@ describe("PgType", () => {
         });
 
         Sql.assertNode(PgType, {
+            input: "float",
+            shouldBe: {
+                json: {type: "float"},
+                pretty: "float",
+                minify: "float"
+            }
+        });
+
+        Sql.assertNode(PgType, {
             input: "DOUBLE \nPrecision",
             shouldBe: {
                 json: {type: "double precision"},
