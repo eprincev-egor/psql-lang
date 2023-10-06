@@ -31,6 +31,8 @@ export class CreateTrigger extends AbstractNode<CreateTriggerRow> {
     static entry(cursor: Cursor): boolean {
         return (
             cursor.beforePhrase("create", "trigger") ||
+            cursor.beforePhrase("trigger") ||
+            cursor.beforePhrase("constraint", "trigger") ||
             cursor.beforePhrase("create", "constraint", "trigger")
         );
     }
