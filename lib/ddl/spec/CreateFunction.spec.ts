@@ -4,7 +4,7 @@ import { NodeJson } from "abstract-lang";
 import { StringLiteralRow } from "../../expression";
 import { CreateFunctionReturnsRow } from "../CreateFunctionReturns";
 
-describe.only("CreateFunction.spec.ts", () => {
+describe("CreateFunction.spec.ts", () => {
 
     const bodyJson: NodeJson<StringLiteralRow> = {
         tag: "body",
@@ -35,6 +35,29 @@ describe.only("CreateFunction.spec.ts", () => {
                 },
                 minify: [
                     "create or replace function test()returns integer",
+                    `as ${$body$}`,
+                    "language plpgsql"
+                ].join(" ")
+            }
+        });
+
+        Sql.assertNode(CreateFunction, {
+            input: [
+                "create or replace function operation.test()",
+                `returns integer as ${$body$}`,
+                "language plpgsql"
+            ].join("\n"),
+            shouldBe: {
+                json: {
+                    schema: {name: "operation"},
+                    name: {name: "test"},
+                    args: [],
+                    body: bodyJson,
+                    returns: returnsJson,
+                    language: "plpgsql"
+                },
+                minify: [
+                    "create or replace function operation.test()returns integer",
                     `as ${$body$}`,
                     "language plpgsql"
                 ].join(" ")

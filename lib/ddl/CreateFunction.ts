@@ -3,12 +3,13 @@ import {
     TemplateElement,
     eol, keyword, printChain, tab, _
 } from "abstract-lang";
-import { Name } from "../base";
+import { Name, SchemaName } from "../base";
 import { Expression, Operand, StringLiteral } from "../expression";
 import { CreateFunctionArgument } from "./CreateFunctionArgument";
 import { CreateFunctionReturns } from "./CreateFunctionReturns";
 
 export interface CreateFunctionRow {
+    schema?: Name;
     name: Name;
     args: CreateFunctionArgument[];
     returns: CreateFunctionReturns;
@@ -38,8 +39,13 @@ export class CreateFunction extends AbstractNode<CreateFunctionRow> {
 
         this.parseEntry(cursor);
 
-        const name = cursor.parse(Name);
+        const {schema, name} = cursor.parse(SchemaName).row;
         cursor.skipSpaces();
+
+        if ( schema ) {
+            options.schema = schema;
+        }
+
 
         const args = this.parseArguments(cursor);
 
@@ -248,11 +254,19 @@ export class CreateFunction extends AbstractNode<CreateFunctionRow> {
 
         return [
             ...phrase("create or replace function"),
-            function_.name, ...this.printArgs(),
+            ...this.printName(), ...this.printArgs(),
             function_.returns, _,
             keyword("as"), function_.body, eol,
             ...this.printOptions()
         ];
+    }
+
+    private printName() {
+        const procedure = this.row;
+        if ( procedure.schema ) {
+            return [procedure.schema, ".", procedure.name];
+        }
+        return [procedure.name];
     }
 
     private printArgs() {
