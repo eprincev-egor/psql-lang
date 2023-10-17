@@ -12,18 +12,36 @@ describe("Expression.makeInterval.spec.ts", () => {
                     operand: {
                         intervalArguments: [
                             {
-                                interval: "week",
+                                interval: "weeks",
                                 value: {number: "2"}
                             },
                             {
-                                interval: "day",
+                                interval: "days",
                                 value: {number: "3"}
                             }
                         ]
                     }
                 },
-                pretty: "make_interval(week => 2, day => 3)",
-                minify: "make_interval(week=>2,day=>3)"
+                pretty: "make_interval(weeks => 2, days => 3)",
+                minify: "make_interval(weeks=>2,days=>3)"
+            }
+        });
+
+        Sql.assertNode(Expression, {
+            input: "make_interval(days => 2)",
+            shouldBe: {
+                json: {
+                    operand: {
+                        intervalArguments: [
+                            {
+                                interval: "days",
+                                value: {number: "2"}
+                            }
+                        ]
+                    }
+                },
+                pretty: "make_interval(days => 2)",
+                minify: "make_interval(days=>2)"
             }
         });
 
@@ -72,14 +90,14 @@ describe("Expression.makeInterval.spec.ts", () => {
                     operand: {
                         intervalArguments: [
                             {
-                                interval: "hour",
+                                interval: "hours",
                                 value: {number: "24"}
                             }
                         ]
                     }
                 },
-                pretty: "make_interval(hour => 24)",
-                minify: "make_interval(hour=>24)"
+                pretty: "make_interval(hours => 24)",
+                minify: "make_interval(hours=>24)"
             }
         });
 

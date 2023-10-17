@@ -3,12 +3,16 @@ import {
     TemplateElement, keyword, _
 } from "abstract-lang";
 import { Expression, Operand } from "../Expression";
-import { IntervalType, tryParseInterval } from "./intervals";
+import { IntervalType, intervals, intervalsAliases } from "./intervals";
 
 export interface MakeIntervalArgumentRow {
-    interval?: IntervalType;
+    interval?: MakeIntervalArgumentIntervalType;
     value: Operand;
 }
+export type MakeIntervalArgumentIntervalType = (
+    IntervalType |
+    keyof typeof intervalsAliases
+);
 
 export class MakeIntervalArgument extends AbstractNode<MakeIntervalArgumentRow> {
 
@@ -17,10 +21,11 @@ export class MakeIntervalArgument extends AbstractNode<MakeIntervalArgumentRow> 
     }
 
     static parse(cursor: Cursor): MakeIntervalArgumentRow {
-        const interval = tryParseInterval(cursor);
-        if ( interval ) {
-
+        const nextToken = cursor.nextToken.value.toLowerCase();
+        if ( intervals.includes(nextToken as any) || nextToken in intervalsAliases ) {
+            cursor.next();
             cursor.skipSpaces();
+
             if ( cursor.beforeValue(":") ) {
                 cursor.readValue(":");
                 cursor.readValue("=");
@@ -32,7 +37,10 @@ export class MakeIntervalArgument extends AbstractNode<MakeIntervalArgumentRow> 
             cursor.skipSpaces();
 
             const value = cursor.parse(Expression).operand();
-            return {interval, value};
+            return {
+                interval: nextToken as MakeIntervalArgumentIntervalType,
+                value
+            };
         }
 
         const value = cursor.parse(Expression).operand();
