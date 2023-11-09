@@ -6,40 +6,12 @@ import {
 import { Expression, Operand } from "../expression";
 import { SelectColumn } from "./SelectColumn";
 import { OrderByItem } from "./OrderByItem";
-import { FromItemType, parseFromItem } from "./FromItem";
+import { FromItemType, parseFromItems } from "./FromItem";
 import { With } from "./With";
 import { Fetch } from "./Fetch";
 import { GroupByElement } from "./GroupByElement";
 import { WindowItem } from "./WindowItem";
 import { FromSubQuery } from "./FromSubQuery";
-
-export interface SelectRow {
-    distinct?: SelectDistinctType;
-    with?: With;
-    select: SelectColumn[];
-    from: FromItemType[];
-    where?: Operand;
-    groupBy?: GroupByElement[];
-    having?: Operand;
-    window?: WindowItem[];
-    orderBy?: OrderByItem[];
-    offset?: Operand;
-    limit?: Operand;
-    fetch?: Fetch;
-    union?: SelectUnion;
-    bracketsBeforeWith?: number;
-    bracketsBeforeSelect?: number;
-}
-
-export type SelectDistinctType = {all: true} | {on: Operand[]};
-export interface SelectUnion {
-    type: SelectUnionType;
-    option?: SelectUnionOption;
-    select: Select;
-}
-export type SelectUnionType = "union" | "intersect" | "except";
-export type SelectUnionOption = "all" | "distinct";
-
 
 // https://www.postgresql.org/docs/9.5/static/sql-select.html
 /*
@@ -80,11 +52,50 @@ and with_query is:
 TABLE [ ONLY ] table_name [ * ]
  */
 
+export interface SelectRow {
+    distinct?: SelectDistinctType;
+    with?: With;
+    select: SelectColumn[];
+    from: FromItemType[];
+    where?: Operand;
+    groupBy?: GroupByElement[];
+    having?: Operand;
+    window?: WindowItem[];
+    orderBy?: OrderByItem[];
+    offset?: Operand;
+    limit?: Operand;
+    fetch?: Fetch;
+    union?: SelectUnion;
+    bracketsBeforeWith?: number;
+    bracketsBeforeSelect?: number;
+}
+
+export type SelectDistinctType = {all: true} | {on: Operand[]};
+export interface SelectUnion {
+    type: SelectUnionType;
+    option?: SelectUnionOption;
+    select: Select;
+}
+export type SelectUnionType = "union" | "intersect" | "except";
+export type SelectUnionOption = "all" | "distinct";
+
+
 export class Select extends AbstractScopeNode<SelectRow> {
 
     static entry(cursor: Cursor): boolean {
-        if ( cursor.beforeWord("select") || cursor.before(With) ) {
+        if ( cursor.beforeWord("select") ) {
             return true;
+        }
+
+        if ( cursor.before(With) ) {
+            const startToken = cursor.nextToken;
+            cursor.parse(With);
+            cursor.skipSpaces();
+
+            const isSelect = cursor.beforeWord("select");
+            cursor.setPositionBefore(startToken);
+
+            return isSelect;
         }
 
         if ( cursor.beforeValue("(") ) {
@@ -216,24 +227,7 @@ export class Select extends AbstractScopeNode<SelectRow> {
 
     private static parseFrom(cursor: Cursor) {
         cursor.readWord("from");
-
-        const fromItems: FromItemType[] = [];
-
-        do {
-            const fromItem = parseFromItem(cursor);
-            fromItems.push(fromItem);
-
-            cursor.skipSpaces();
-
-            if ( !cursor.beforeValue(",") ) {
-                break;
-            }
-            cursor.readValue(",");
-            cursor.skipSpaces();
-
-        } while ( !cursor.beforeEnd() );
-
-        return fromItems;
+        return parseFromItems(cursor);
     }
 
     private static parseOffsetLimit(cursor: Cursor, selectRow: SelectRow) {

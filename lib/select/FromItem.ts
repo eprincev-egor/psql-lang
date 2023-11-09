@@ -21,3 +21,23 @@ export function parseFromItem(cursor: Cursor): FromItemType {
 
     return fromItem;
 }
+
+export function parseFromItems(cursor: Cursor, delimiter = ","): FromItemType[] {
+    const fromItems: FromItemType[] = [];
+
+    do {
+        const fromItem = parseFromItem(cursor);
+        fromItems.push(fromItem);
+
+        cursor.skipSpaces();
+
+        if ( !cursor.beforeValue(delimiter) ) {
+            break;
+        }
+        cursor.readValue(delimiter);
+        cursor.skipSpaces();
+
+    } while ( !cursor.beforeEnd() );
+
+    return fromItems;
+}
