@@ -12,3 +12,4 @@ export * from "./Variable";
 export * from "./likeAreFunction";
 export * from "./literal";
 export * from "./operator";
+export * from "./JsTemplateValue";
