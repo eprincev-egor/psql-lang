@@ -48,6 +48,6 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "abstract-lang": "^0.4.4"
+    "abstract-lang": "^0.4.5"
   }
 }
