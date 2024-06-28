@@ -24,6 +24,7 @@ import { likeAreFunction } from "./likeAreFunction";
 import { CurrentDate } from "./literal/CurrentDate";
 import { Timestamp } from "./Timestamp";
 import { customOperators } from "./operator/custom";
+import { JsTemplateValue } from "./JsTemplateValue";
 
 export {Operand};
 
@@ -45,7 +46,8 @@ export class Expression extends AbstractNode<ExpressionRow> {
             cursor.before(ByteStringLiteral) ||
             cursor.before(Variable) ||
             cursor.before(PreUnaryOperator) ||
-            cursor.before(SubExpression)
+            cursor.before(SubExpression) ||
+            cursor.before(JsTemplateValue)
         );
     }
 
@@ -132,6 +134,7 @@ export class Expression extends AbstractNode<ExpressionRow> {
             NumberLiteral, Variable,
             ArrayLiteral, CaseWhen,
             CurrentDate, Timestamp,
+            JsTemplateValue,
             ColumnReference
         ], "expected expression operand");
 

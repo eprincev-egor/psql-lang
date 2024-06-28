@@ -39,6 +39,7 @@ import { SquareBrackets } from "./operator/custom/SquareBrackets";
 import { Trim } from "./likeAreFunction/Trim";
 import { CurrentDate } from "./literal/CurrentDate";
 import { Timestamp } from "./Timestamp";
+import { JsTemplateValue } from "./JsTemplateValue";
 
 export type Operand = (
     NumberLiteral |
@@ -81,5 +82,6 @@ export type Operand = (
     Trim |
     CurrentDate |
     Timestamp |
-    AtTimeZone
+    AtTimeZone |
+    JsTemplateValue
 );
