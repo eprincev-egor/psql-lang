@@ -568,6 +568,16 @@ describe("StringLiteral", () => {
             }
         });
 
+        Sql.assertNode(StringLiteral, {
+            input: "$tag$hello$$tag$",
+            shouldBe: {
+                json: {
+                    tag: "tag",
+                    string: "hello$"
+                }
+            }
+        });
+
     });
 
     it("invalid inputs", () => {

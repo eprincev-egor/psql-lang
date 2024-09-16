@@ -110,23 +110,33 @@ export class StringLiteral extends AbstractNode<StringLiteralRow> {
     }
 
     private static parseDollarString(cursor: Cursor, tag: string) {
-
-        let string = "";
+        const start = cursor.nextToken;
+        let end = start;
         while ( !cursor.beforeEnd() ) {
-
-            if ( cursor.before(DollarStringTag) ) {
-                const tagNode = cursor.parse(DollarStringTag);
-                if ( tagNode.row.tag === tag ) {
-                    break;
-                }
-
-                string += tagNode.toString();
+            if ( !cursor.before(DollarStringTag) ) {
+                cursor.readAnyOne();
                 continue;
             }
 
-            string += cursor.readAnyOne().value;
+            const prev = cursor.nextToken;
+            const tagNode = cursor.parse(DollarStringTag);
+            if ( tagNode.row.tag === tag ) {
+                end = prev;
+                break;
+            }
+
+            cursor.setPositionBefore(prev);
+            cursor.readAnyOne();
+            end = cursor.nextToken;
         }
 
+        const contentTokens = cursor.source.tokens.slice(
+            cursor.source.tokens.indexOf(start),
+            cursor.source.tokens.indexOf(end)
+        );
+        const string = contentTokens.map((token) =>
+            token.value
+        ).join("");
         return string;
     }
 
